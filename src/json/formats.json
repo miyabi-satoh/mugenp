@@ -1,0 +1,16 @@
+[
+  {
+    "id": "mini-test",
+    "description": "小テスト用",
+    "helper": "最大6問まで設定できます。",
+    "max": 6
+  },
+  {
+    "id": "contest",
+    "description": "計算コンテスト用"
+  },
+  {
+    "id": "training",
+    "description": "特訓用"
+  }
+]
