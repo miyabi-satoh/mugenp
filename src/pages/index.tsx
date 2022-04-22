@@ -1,11 +1,11 @@
 import {
   Box,
+  Button,
   Center,
   Flex,
   FormControl,
   FormLabel,
   Heading,
-  Icon,
   IconButton,
   Input,
   NumberDecrementStepper,
@@ -18,18 +18,31 @@ import {
 } from "@chakra-ui/react";
 import { readFileSync } from "fs";
 import type { GetStaticProps, NextPage } from "next";
+import Head from "next/head";
 import path from "path";
 import { PropsWithChildren } from "react";
-import { FaPlus } from "react-icons/fa";
+import { FaPlus, FaMinus } from "react-icons/fa";
 // import Head from "next/head";
 // import Image from "next/image";
 // import styles from "../styles/Home.module.css";
 
-type Format = {
+type IdName = {
   id: string;
-  description: string;
+  name: string;
+};
+
+type Format = IdName & {
   helper?: string;
   max?: number;
+};
+type Section = IdName & {
+  format?: string;
+};
+type Chapter = IdName & {
+  sections?: Section[];
+};
+type Unit = IdName & {
+  chapters?: Chapter[];
 };
 
 const Container = ({ children }: PropsWithChildren<{}>) => {
@@ -64,8 +77,9 @@ const Main = ({ children }: PropsWithChildren<{}>) => {
 
 type SettingsPaneProps = {
   formats: Format[];
+  units: Unit[];
 };
-const SettingsPane = ({ formats }: SettingsPaneProps) => {
+const SettingsPane = ({ formats, units }: SettingsPaneProps) => {
   return (
     <Box flex="1" p={4}>
       <FormControl mb={4}>
@@ -78,7 +92,7 @@ const SettingsPane = ({ formats }: SettingsPaneProps) => {
           {formats.map((f) => {
             return (
               <option key={f.id} value={f.id}>
-                {f.description}
+                {f.name}
               </option>
             );
           })}
@@ -88,13 +102,14 @@ const SettingsPane = ({ formats }: SettingsPaneProps) => {
         <FormLabel as="legend">単元と問題数</FormLabel>
         <VStack align="flex-start">
           <IconButton
-            icon={<FaPlus />}
-            colorScheme="green"
-            aria-label={"add"}
+            icon={<FaMinus />}
+            colorScheme="red"
+            aria-label={"remove"}
             size="xs"
           />
         </VStack>
       </FormControl>
+      <Button leftIcon={<FaPlus />}>単元を追加</Button>
     </Box>
   );
 };
@@ -105,13 +120,17 @@ const PreviewPane = () => {
 
 type HomeProps = {
   formats: Format[];
+  units: Unit[];
 };
-const Home: NextPage<HomeProps> = ({ formats }) => {
+const Home: NextPage<HomeProps> = ({ formats, units }) => {
   return (
     <Container>
+      <Head>
+        <title>MuGenP</title>
+      </Head>
       <Header />
       <Main>
-        <SettingsPane formats={formats} />
+        <SettingsPane formats={formats} units={units} />
         <PreviewPane />
       </Main>
       <Footer />
@@ -119,15 +138,20 @@ const Home: NextPage<HomeProps> = ({ formats }) => {
   );
 };
 
+function parseJson(name: string) {
+  const jsonPath = path.join(process.cwd(), "src", "json", name);
+  const jsonText = readFileSync(jsonPath, "utf-8");
+  return JSON.parse(jsonText);
+}
+
 export const getStaticProps: GetStaticProps<HomeProps> = async (context) => {
   // JSON ファイルを読み込む
-  const jsonPath = path.join(process.cwd(), "src", "json", "formats.json");
-  const jsonText = readFileSync(jsonPath, "utf-8");
-  const formats = JSON.parse(jsonText) as Format[];
+  const formats = parseJson("formats.json");
+  const units = parseJson("units.json");
 
   // ページコンポーネントに渡す props オブジェクトを設定する
   return {
-    props: { formats },
+    props: { formats, units },
   };
 };
 
