@@ -1,5 +1,6 @@
 import {
   extendTheme,
+  withDefaultColorScheme,
   withDefaultSize,
   type ThemeConfig,
 } from "@chakra-ui/react";
@@ -43,6 +44,10 @@ const fonts = {
 
 export const theme = extendTheme(
   { config, fonts },
+  withDefaultColorScheme({
+    colorScheme: "blue",
+    components: ["Button"],
+  }),
   withDefaultSize({
     size: "sm",
     components: ["Input", "NumberInput", "Select", "Button"],
