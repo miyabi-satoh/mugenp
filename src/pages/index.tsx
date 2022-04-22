@@ -46,9 +46,11 @@ const Home: NextPage = () => {
   const [showAnswer, setShowAnswer] = useState(false);
   const [questions, setQuestions] = useState<string[]>([]);
   const [answers, setAnswers] = useState<string[]>([]);
+  const [stock, setStock] = useState<string[]>([]);
 
   const handleNext = () => {
-    console.log(score);
+    console.log(stock.length);
+
     if (score < 0) {
       alert("正解数を選択してください。");
       return;
@@ -78,6 +80,8 @@ const Home: NextPage = () => {
     if (refresh) {
       const newQuestions: string[] = [];
       const newAnswers: string[] = [];
+      let _stock = [...stock];
+      let retryCount = 0;
       while (newQuestions.length < 10) {
         const af = getRandomInt(2) == 0 ? 1 : -1;
         const bf = getRandomInt(2) == 0 ? 1 : -1;
@@ -90,14 +94,28 @@ const Home: NextPage = () => {
         } else {
           q = `\\left(x ${kou(a)}\\right)\\left(x ${kou(b)}\\right)`;
         }
+
+        if (_stock.includes(q)) {
+          retryCount++;
+          if (retryCount > 18 * 18 - 50) {
+            _stock = [];
+            retryCount = 0;
+            console.log("give up!");
+          }
+          continue;
+        }
+
         newQuestions.push(q);
         newAnswers.push(`x^2 ${kou(a + b, "x")} ${kou(a * b)}`);
+        _stock.push(q);
       }
 
       setQuestions([...newQuestions]);
       setAnswers([...newAnswers]);
+      setStock([..._stock]);
       setRefresh(false);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [refresh]);
 
   return (
@@ -114,7 +132,7 @@ const Home: NextPage = () => {
         </Flex>
         <Flex wrap="wrap" mb={4}>
           {questions.map((q, index) => (
-            <Box key={index} my={2} mr={4} w="200px">
+            <Box key={`${q}${index}`} my={2} mr={4} w="200px">
               <Flex>
                 <Box w="2em" textAlign="center" mr={2}>
                   ({index + 1})
@@ -137,7 +155,9 @@ const Home: NextPage = () => {
               </option>
             ))}
           </Select>
-          <Button onClick={handleNext}>次の問題</Button>
+          <Button disabled={score < 0} onClick={handleNext}>
+            次の問題
+          </Button>
         </Flex>
       </Box>
     </Layout>
