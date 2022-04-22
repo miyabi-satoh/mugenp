@@ -1,158 +1,147 @@
 import {
   Box,
   Button,
-  Center,
   Flex,
   FormControl,
   FormLabel,
-  Heading,
-  IconButton,
-  Input,
-  NumberDecrementStepper,
-  NumberIncrementStepper,
-  NumberInput,
-  NumberInputField,
-  NumberInputStepper,
+  Link,
+  ListItem,
+  OrderedList,
   Select,
-  VStack,
+  Stack,
 } from "@chakra-ui/react";
-import { readFileSync } from "fs";
-import type { GetStaticProps, NextPage } from "next";
+import { MathJax } from "better-react-mathjax";
+import type { NextPage } from "next";
 import Head from "next/head";
-import path from "path";
-import { PropsWithChildren } from "react";
-import { FaPlus, FaMinus } from "react-icons/fa";
-// import Head from "next/head";
-// import Image from "next/image";
-// import styles from "../styles/Home.module.css";
+import NextLink from "next/link";
+import { ChangeEventHandler, useEffect, useState } from "react";
+import Layout from "~/components/layout";
 
-type IdName = {
-  id: string;
-  name: string;
-};
+function getRandomInt(max: number): number {
+  return Math.floor(Math.random() * max);
+}
 
-type Format = IdName & {
-  helper?: string;
-  max?: number;
-};
-type Section = IdName & {
-  format?: string;
-};
-type Chapter = IdName & {
-  sections?: Section[];
-};
-type Unit = IdName & {
-  chapters?: Chapter[];
-};
+function kou(n: number, x: string = ""): string {
+  if (n == 0) {
+    return "";
+  }
 
-const Container = ({ children }: PropsWithChildren<{}>) => {
+  if (x) {
+    if (n > 0) {
+      return `+${n > 1 ? n : ""}${x}`;
+    }
+    return `${n == -1 ? "-" : n}${x}`;
+  }
+
+  if (n > 0) {
+    return `+${n}`;
+  }
+  return `${n}`;
+}
+
+const Home: NextPage = () => {
+  const [level, setLevel] = useState(1);
+  const [score, setScore] = useState(-1);
+  const [refresh, setRefresh] = useState(true);
+  const [showAnswer, setShowAnswer] = useState(false);
+  const [questions, setQuestions] = useState<string[]>([]);
+  const [answers, setAnswers] = useState<string[]>([]);
+
+  const handleNext = () => {
+    console.log(score);
+    if (score < 0) {
+      alert("正解数を選択してください。");
+      return;
+    }
+
+    let newLevel = level;
+    if (score < 5) {
+      newLevel = level - 1;
+    } else {
+      newLevel = level + 1;
+    }
+    if (newLevel < 1) {
+      newLevel = 1;
+    }
+
+    setLevel(newLevel);
+    setShowAnswer(false);
+    setScore(-1);
+    setRefresh(true);
+  };
+
+  const handleChangeScore: ChangeEventHandler<HTMLSelectElement> = (ev) => {
+    setScore(Number(ev.target.value));
+  };
+
+  useEffect(() => {
+    if (refresh) {
+      const newQuestions: string[] = [];
+      const newAnswers: string[] = [];
+      while (newQuestions.length < 10) {
+        const af = getRandomInt(2) == 0 ? 1 : -1;
+        const bf = getRandomInt(2) == 0 ? 1 : -1;
+        const a = (1 + getRandomInt(9)) * af;
+        const b = (1 + getRandomInt(9)) * bf;
+
+        let q;
+        if (a == b) {
+          q = `\\left(x ${kou(a)}\\right)^2`;
+        } else {
+          q = `\\left(x ${kou(a)}\\right)\\left(x ${kou(b)}\\right)`;
+        }
+        newQuestions.push(q);
+        newAnswers.push(`x^2 ${kou(a + b, "x")} ${kou(a * b)}`);
+      }
+
+      setQuestions([...newQuestions]);
+      setAnswers([...newAnswers]);
+      setRefresh(false);
+    }
+  }, [refresh]);
+
   return (
-    <Flex direction="column" h="100vh">
-      {children}
-    </Flex>
-  );
-};
-
-const Header = () => {
-  return (
-    <Flex shadow="sm" py={2} px={4}>
-      <Heading as="h1" size="lg">
-        MuGenP
-      </Heading>
-    </Flex>
-  );
-};
-
-const Footer = () => {
-  return <Center py={1}>Copyright &copy; miyabi-satoh</Center>;
-};
-
-const Main = ({ children }: PropsWithChildren<{}>) => {
-  return (
-    <Flex flex="1" shadow="sm">
-      {children}
-    </Flex>
-  );
-};
-
-type SettingsPaneProps = {
-  formats: Format[];
-  units: Unit[];
-};
-const SettingsPane = ({ formats, units }: SettingsPaneProps) => {
-  return (
-    <Box flex="1" p={4}>
-      <FormControl mb={4}>
-        <FormLabel htmlFor="title">タイトル</FormLabel>
-        <Input id="title" />
-      </FormControl>
-      <FormControl mb={4}>
-        <FormLabel htmlFor="format">フォーマット</FormLabel>
-        <Select id="format" placeholder="フォーマットを選択...">
-          {formats.map((f) => {
-            return (
-              <option key={f.id} value={f.id}>
-                {f.name}
-              </option>
-            );
-          })}
-        </Select>
-      </FormControl>
-      <FormControl mb={4} as="fieldset">
-        <FormLabel as="legend">単元と問題数</FormLabel>
-        <VStack align="flex-start">
-          <IconButton
-            icon={<FaMinus />}
-            colorScheme="red"
-            aria-label={"remove"}
-            size="xs"
-          />
-        </VStack>
-      </FormControl>
-      <Button leftIcon={<FaPlus />}>単元を追加</Button>
-    </Box>
-  );
-};
-
-const PreviewPane = () => {
-  return <Flex flex="1">プレビュー</Flex>;
-};
-
-type HomeProps = {
-  formats: Format[];
-  units: Unit[];
-};
-const Home: NextPage<HomeProps> = ({ formats, units }) => {
-  return (
-    <Container>
+    <Layout>
       <Head>
         <title>MuGenP</title>
       </Head>
-      <Header />
-      <Main>
-        <SettingsPane formats={formats} units={units} />
-        <PreviewPane />
-      </Main>
-      <Footer />
-    </Container>
+      <Box p={4}>
+        <Flex align="center" mb={6}>
+          <Box>【乗法公式Lv{level}】次の式を展開しなさい。</Box>
+          <Button onClick={() => setShowAnswer(!showAnswer)}>
+            解答を{`${showAnswer ? "隠す" : "表示"}`}
+          </Button>
+        </Flex>
+        <Flex wrap="wrap" mb={4}>
+          {questions.map((q, index) => (
+            <Box key={index} my={2} mr={4} w="200px">
+              <Flex>
+                <Box w="2em" textAlign="center" mr={2}>
+                  ({index + 1})
+                </Box>
+                <MathJax>{`\\(${q}\\)`}</MathJax>
+              </Flex>
+              <Box h="1em" mt={1} ml={6} color="red">
+                {showAnswer && <MathJax>{`\\(= ${answers[index]}\\)`}</MathJax>}
+              </Box>
+            </Box>
+          ))}
+        </Flex>
+        <Flex align="center" ml={2}>
+          <Box mr={2}>正解数</Box>
+          <Select w="4em" mr={4} onChange={handleChangeScore} value={score}>
+            <option value="-1"></option>
+            {Array.from(Array(11).keys()).map((i) => (
+              <option key={i} value={i}>
+                {i}
+              </option>
+            ))}
+          </Select>
+          <Button onClick={handleNext}>次の問題</Button>
+        </Flex>
+      </Box>
+    </Layout>
   );
-};
-
-function parseJson(name: string) {
-  const jsonPath = path.join(process.cwd(), "src", "json", name);
-  const jsonText = readFileSync(jsonPath, "utf-8");
-  return JSON.parse(jsonText);
-}
-
-export const getStaticProps: GetStaticProps<HomeProps> = async (context) => {
-  // JSON ファイルを読み込む
-  const formats = parseJson("formats.json");
-  const units = parseJson("units.json");
-
-  // ページコンポーネントに渡す props オブジェクトを設定する
-  return {
-    props: { formats, units },
-  };
 };
 
 export default Home;
