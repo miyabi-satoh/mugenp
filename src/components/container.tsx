@@ -1,0 +1,152 @@
+import {
+  Box,
+  Button,
+  Container,
+  Flex,
+  Select,
+  SimpleGrid,
+} from "@chakra-ui/react";
+import { MathJax } from "better-react-mathjax";
+import { ChangeEventHandler, useEffect, useState } from "react";
+import { RefreshFunction } from "~/interfaces/types";
+import { Layout } from "./layout";
+
+type Props = {
+  title: string;
+  onRefresh: RefreshFunction;
+};
+
+const NUM_OF_Q = process.env.NODE_ENV !== "production" ? 10 : 4;
+
+export const MugenContainer = ({ title, onRefresh }: Props) => {
+  const [score, setScore] = useState(-1);
+  const [totalScore, setTotalScore] = useState(0);
+  const [refresh, setRefresh] = useState(true);
+  const [showAnswer, setShowAnswer] = useState(false);
+  const [questions, setQuestions] = useState<string[]>([]);
+  const [answers, setAnswers] = useState<string[]>([]);
+  const [stock, setStock] = useState<string[]>([]);
+
+  const handleLevelDown = () => {
+    if (totalScore > 0) {
+      setTotalScore(totalScore - 10);
+      setRefresh(true);
+    }
+  };
+
+  const handleLevelUp = () => {
+    setTotalScore(totalScore + 10);
+    setRefresh(true);
+  };
+
+  const handleNext = () => {
+    if (score < 0) {
+      alert("正解数を選択してください。");
+      return;
+    }
+
+    const total = totalScore + (score - Math.floor(NUM_OF_Q / 2));
+    setTotalScore(total);
+    setShowAnswer(false);
+    setScore(-1);
+    setRefresh(true);
+  };
+
+  const handleChangeScore: ChangeEventHandler<HTMLSelectElement> = (ev) => {
+    setScore(Number(ev.target.value));
+  };
+
+  useEffect(() => {
+    if (refresh) {
+      // console.log(totalScore);
+      const newQuestions: string[] = [];
+      const newAnswers: string[] = [];
+      let _stock = [...stock];
+      let retryCount = 0;
+      while (newQuestions.length < NUM_OF_Q) {
+        const [question, answer] = onRefresh(totalScore);
+
+        if (_stock.includes(question) || _stock.includes(answer)) {
+          retryCount++;
+          if (retryCount > 18 * 18) {
+            _stock = [];
+            retryCount = 0;
+            // console.log("give up!");
+          }
+          continue;
+        }
+
+        newQuestions.push(question);
+        newAnswers.push(answer);
+        _stock.push(question, answer);
+      }
+
+      setShowAnswer(false);
+      setQuestions([...newQuestions]);
+      setAnswers([...newAnswers]);
+      setStock(_stock.slice(-4 * NUM_OF_Q));
+      setRefresh(false);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [refresh]);
+
+  return (
+    <Layout>
+      <Container p={4} maxW="container.md">
+        <Box mb={6}>{title}</Box>
+        {/* <Box mb={6}>
+          <Button
+            disabled={totalScore <= 0}
+            onClick={handleLevelDown}
+            leftIcon={<FaArrowDown />}
+            colorScheme="green"
+            mr={3}
+          >
+            難易度を下げる
+          </Button>
+          <Button
+            onClick={handleLevelUp}
+            leftIcon={<FaArrowUp />}
+            colorScheme="red"
+          >
+            難易度を上げる
+          </Button>
+        </Box> */}
+        <SimpleGrid columns={2} mb={4}>
+          {questions.map((q, index) => (
+            <Box key={`${q}${index}`}>
+              <Flex h="3em" align="center">
+                <Box w="2em" textAlign="center" mr={2}>
+                  ({index + 1})
+                </Box>
+                <MathJax>{`\\(\\displaystyle ${q}\\)`}</MathJax>
+              </Flex>
+              <Box h="3em" my={2} ml={6} color="red">
+                {showAnswer && (
+                  <MathJax>{`\\(\\displaystyle = ${answers[index]}\\)`}</MathJax>
+                )}
+              </Box>
+            </Box>
+          ))}
+        </SimpleGrid>
+        <Flex align="center" ml={2}>
+          <Button onClick={() => setShowAnswer(!showAnswer)}>
+            解答を{`${showAnswer ? "隠す" : "表示"}`}
+          </Button>
+          <Box mx={3}>正解数</Box>
+          <Select w="4em" mr={4} onChange={handleChangeScore} value={score}>
+            <option value="-1"></option>
+            {Array.from(Array(NUM_OF_Q + 1).keys()).map((i) => (
+              <option key={i} value={i}>
+                {i}
+              </option>
+            ))}
+          </Select>
+          <Button disabled={score < 0} onClick={handleNext}>
+            次の問題
+          </Button>
+        </Flex>
+      </Container>
+    </Layout>
+  );
+};
