@@ -23,7 +23,7 @@ export class Fraction {
     return this.numerator / this.denominator;
   }
   get abs(): number {
-    return Math.abs(this.numerator / this.denominator);
+    return Math.abs(this.value);
   }
 
   get isInteger(): boolean {
@@ -109,7 +109,7 @@ export class Fraction {
 
   // 約分
   private reduction() {
-    // 0/m の扱いはどうしたものか？
+    // 0/m -> +0/1として扱う
     if (this._numerator == 0) {
       this._denominator = 1;
       this._sign = 1;

@@ -10,7 +10,7 @@ import { MathJax } from "better-react-mathjax";
 import { ChangeEventHandler, useEffect, useState } from "react";
 import { RefreshFunction } from "~/interfaces/types";
 import { Layout } from "./layout";
-
+import { FaArrowUp, FaArrowDown } from "react-icons/fa";
 type Props = {
   title: string;
   onRefresh: RefreshFunction;
@@ -29,13 +29,13 @@ export const MugenContainer = ({ title, onRefresh }: Props) => {
 
   const handleLevelDown = () => {
     if (totalScore > 0) {
-      setTotalScore(totalScore - 10);
+      setTotalScore(totalScore - NUM_OF_Q);
       setRefresh(true);
     }
   };
 
   const handleLevelUp = () => {
-    setTotalScore(totalScore + 10);
+    setTotalScore(totalScore + NUM_OF_Q);
     setRefresh(true);
   };
 
@@ -92,8 +92,8 @@ export const MugenContainer = ({ title, onRefresh }: Props) => {
 
   return (
     <Layout>
-      <Container p={4} maxW="container.md">
-        <Box mb={6}>{title}</Box>
+      <Container my={4} p={4} maxW="container.md" shadow="base">
+        <Box mb={4}>{title}</Box>
         {/* <Box mb={6}>
           <Button
             disabled={totalScore <= 0}
