@@ -1,5 +1,5 @@
 import { MugenContainer } from "~/components/container";
-import { heihou_kousiki } from "~/core/09/01/heihou_kousiki";
+import { heihou_kousiki } from "~/core/09/01/02/heihou_kousiki";
 
 const Mugen = () => {
   return (

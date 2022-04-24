@@ -1,7 +1,7 @@
 import { MugenContainer } from "~/components/container";
-import { heihou_kousiki } from "~/core/09/01/heihou_kousiki";
-import { waseki_no_kousiki } from "~/core/09/01/waseki_no_kousiki";
-import { wa_to_sa_no_seki } from "~/core/09/01/wa_to_sa_no_seki";
+import { heihou_kousiki } from "~/core/09/01/02/heihou_kousiki";
+import { waseki_no_kousiki } from "~/core/09/01/02/waseki_no_kousiki";
+import { wa_to_sa_no_seki } from "~/core/09/01/02/wa_to_sa_no_seki";
 import { RefreshFunction } from "~/interfaces/types";
 import { ifUnder } from "~/utils";
 

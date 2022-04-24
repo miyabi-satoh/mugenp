@@ -1,7 +1,11 @@
 import { Fraction } from "./fraction";
 
+export function getRandomInt(max: number): number {
+  return Math.floor(Math.random() * max);
+}
+
 export function ifUnder<T1, T2>(percentage: number, v1: T1, v2: T2): T1 | T2 {
-  return Math.floor(Math.random() * 100) < percentage ? v1 : v2;
+  return getRandomInt(100) < percentage ? v1 : v2;
 }
 
 export function checkParam(p: Fraction): boolean {

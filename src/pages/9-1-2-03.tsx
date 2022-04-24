@@ -1,11 +1,11 @@
 import { MugenContainer } from "~/components/container";
-import { waseki_no_kousiki } from "~/core/09/01/waseki_no_kousiki";
+import { wa_to_sa_no_seki } from "~/core/09/01/02/wa_to_sa_no_seki";
 
 const Mugen = () => {
   return (
     <MugenContainer
       title="次の式を展開しなさい。"
-      onRefresh={waseki_no_kousiki}
+      onRefresh={wa_to_sa_no_seki}
     />
   );
 };
