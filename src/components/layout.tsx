@@ -1,4 +1,5 @@
 import { Flex, Heading, Center, Link, Box } from "@chakra-ui/react";
+import Head from "next/head";
 import NextLink from "next/link";
 import { PropsWithChildren } from "react";
 
@@ -14,7 +15,9 @@ const Header = () => {
   return (
     <Flex shadow="sm" py={2} px={4}>
       <Heading as="h1" size="lg">
-        MuGenP
+        <NextLink href="/" passHref>
+          <Link _hover={{ textDecorationLine: "none" }}>MuGenP</Link>
+        </NextLink>
       </Heading>
     </Flex>
   );
@@ -32,14 +35,21 @@ const Main = ({ children }: PropsWithChildren<{}>) => {
   );
 };
 
-const Layout = ({ children }: PropsWithChildren<{}>) => {
+type Props = {
+  title?: string;
+};
+export const Layout = ({
+  children,
+  title = "MuGenP",
+}: PropsWithChildren<Props>) => {
   return (
     <Container>
+      <Head>
+        <title>{title}</title>
+      </Head>
       <Header />
       <Main>{children}</Main>
       <Footer />
     </Container>
   );
 };
-
-export default Layout;

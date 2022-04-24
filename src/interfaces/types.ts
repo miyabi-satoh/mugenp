@@ -1,14 +1,8 @@
-export type IdName = {
+export type Page = {
   id: string;
-  name: string;
+  title: string;
+  grade: string;
+  chapter: string;
 };
 
-type Section = IdName & {
-  format?: string;
-};
-export type Chapter = IdName & {
-  sections?: Section[];
-};
-export type Unit = IdName & {
-  chapters?: Chapter[];
-};
+export type RefreshFunction = (score: number) => [string, string];
