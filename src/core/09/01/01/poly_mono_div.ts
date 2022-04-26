@@ -3,12 +3,12 @@ import { checkParam, getRandomInt, ifUnder } from "~/utils";
 import { Fraction, getRandomFraction } from "~/utils/fraction";
 import { Monomial } from "~/utils/mojisiki";
 
-export const poly_mono_mul: RefreshFunction = (score) => {
+export const poly_mono_div: RefreshFunction = (score) => {
   let question = "";
   let answer = "";
 
   while (1) {
-    // 多項式 × 単項式
+    // 多項式 ÷ 単項式
 
     // 単項式の係数
     const mono_keisuu = getRandomFraction();
@@ -29,14 +29,10 @@ export const poly_mono_mul: RefreshFunction = (score) => {
       }
     }
 
-    // 多項式の係数
+    // 多項式(答え)の係数
     const maxKousuu = score > 10 ? 3 : 2;
     const kousuu = ifUnder(score > 5 ? 50 : 10 * score, maxKousuu, 2);
     const keisuu: Fraction[] = [];
-    // 3項で分数は気持ち悪い
-    if (kousuu == 3 && mono_keisuu.isFrac) {
-      continue;
-    }
 
     for (let i = 0; i < kousuu; i++) {
       const a = getRandomFraction();
@@ -79,7 +75,13 @@ export const poly_mono_mul: RefreshFunction = (score) => {
       continue;
     }
 
-    // 多項式の文字
+    // 単項式の文字
+    let mono_moji = ["a", "b"].map((m) => ifUnder(33, m, "")).join("");
+    if (mono_moji.length == 0) {
+      mono_moji = ifUnder(50, "a", "b");
+    }
+
+    // 多項式(答え)の文字
     const moji: string[] = ["a"];
     if (kousuu > 2) {
       moji.push("b");
@@ -88,37 +90,31 @@ export const poly_mono_mul: RefreshFunction = (score) => {
       moji.push(ifUnder(5 * score, "b", ""));
     }
 
-    // 単項式の文字
-    const moji_count = moji.filter((m) => !!m).length; // 1,2,3
-    const mono_moji = moji[ifUnder(score * 5, getRandomInt(moji_count), 0)];
-
     // 式として作成
-    const mono = new Monomial(mono_keisuu, [
-      { moji: mono_moji, dimension: new Fraction(1) },
-    ]);
-    const poly = keisuu.map((k, i) => {
+    const mono = new Monomial(
+      mono_keisuu,
+      mono_moji.split("").map((m) => {
+        return {
+          moji: m,
+          dimension: new Fraction(1),
+        };
+      })
+    );
+    const polyAns = keisuu.map((k, i) => {
       return new Monomial(k, [{ moji: moji[i], dimension: new Fraction(1) }]);
     });
-    const front = ifUnder(50, true, false);
-    if (front) {
-      question =
-        mono.toTex() +
-        "\\left(" +
-        poly.map((m, i) => m.toTex(i != 0)).join("") +
-        "\\right)";
-    } else {
-      question =
-        "\\left(" +
-        poly.map((m, i) => m.toTex(i != 0)).join("") +
-        "\\right)" +
-        " \\times " +
-        mono.toTexKakkoIfNegative();
+    const poly = [];
+    for (let i = 0; i < kousuu; i++) {
+      poly.push(mono.mul(polyAns[i]));
     }
 
-    const polyAns = [];
-    for (let i = 0; i < kousuu; i++) {
-      polyAns.push(mono.mul(poly[i]));
-    }
+    question =
+      "\\left(" +
+      poly.map((m, i) => m.toTex(i != 0)).join("") +
+      "\\right)" +
+      " \\div " +
+      mono.toTexKakkoIfNegative();
+
     answer = polyAns.map((p, i) => p.toTex(i != 0)).join("");
     break;
   }
