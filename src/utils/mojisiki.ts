@@ -34,6 +34,15 @@ export class Monomial {
       .join("");
   }
 
+  invert(): Monomial {
+    return new Monomial(
+      this.coefficient.invert(),
+      this._variables.map((v: Variable) => ({
+        moji: v.moji,
+        dimension: v.dimension.mul(-1),
+      }))
+    );
+  }
   toTex(showPlus: boolean = false): string {
     return this.coefficient.toTex(this.variable, showPlus);
   }

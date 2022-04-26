@@ -42,6 +42,10 @@ export class Fraction {
     return this.numerator < 0;
   }
 
+  invert(): Fraction {
+    return new Fraction(this.denominator, this.numerator);
+  }
+
   isEqualTo(other: number | Fraction): boolean {
     if (typeof other === "number") {
       return other * this.denominator == this.numerator;
