@@ -15,7 +15,19 @@ export class Monomial {
   ) {
     // console.log(variables);
     this._coefficient = coefficient;
-    this._variables = [...variables];
+    variables.forEach((v) => {
+      if (v.moji.length > 1) {
+        v.moji.split("").forEach((m) => {
+          this._variables.push({
+            moji: m,
+            dimension: v.dimension,
+          });
+        });
+      } else {
+        this._variables.push(v);
+      }
+    });
+    // this._variables = [...variables];
     this.compact();
   }
 
