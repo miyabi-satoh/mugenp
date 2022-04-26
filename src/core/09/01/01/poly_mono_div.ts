@@ -11,113 +11,128 @@ export const poly_mono_div: RefreshFunction = (score) => {
     // 多項式 ÷ 単項式
 
     // 単項式の係数
-    const mono_keisuu = getRandomFraction();
-    if (!checkParam(mono_keisuu)) {
-      continue;
-    }
+    const mono_keisuu = getRandomFraction((f) => {
+      if (!checkParam(f)) {
+        return false;
+      }
+      if (score < 10) {
+        // 自然数のみ
+        return f.isNatural;
+      }
+      if (score < 15) {
+        // 整数のみ
+        return f.isInteger;
+      }
+      if (score < 20) {
+        // 整数か、正の分数
+        return f.isInteger || f.isPositive;
+      }
+      return true;
+    });
+
     // 単項式の文字
     const mono_variables = [];
     if (score < 5) {
-      if (!mono_keisuu.isNatural) {
-        continue;
-      }
+      // 文字は x のみ
       mono_variables.push({
-        moji: "a",
-        dimension: new Fraction(1),
-      });
-    } else if (score < 10) {
-      if (!mono_keisuu.isNatural) {
-        continue;
-      }
-      mono_variables.push({
-        moji: ifUnder(50, "a", "b"),
+        moji: "x",
         dimension: new Fraction(1),
       });
     } else if (score < 15) {
-      if (!mono_keisuu.isInteger) {
-        continue;
-      }
+      // 文字は x か y
       mono_variables.push({
-        moji: ifUnder(50, "a", "b"),
+        moji: ifUnder(50, "x", "y"),
         dimension: new Fraction(1),
       });
-    } else if (score < 20) {
-      if (mono_keisuu.isFrac && mono_keisuu.isNegative) {
-        continue;
-      }
     }
 
+    // 文字未設定の場合、文字は x か y か xy
     if (mono_variables.length === 0) {
       if (ifUnder(33, true, false)) {
         mono_variables.push({
-          moji: "b",
+          moji: "y",
           dimension: new Fraction(1),
         });
       }
       if (mono_variables.length === 0 || ifUnder(33, true, false)) {
         mono_variables.push({
-          moji: "a",
+          moji: "x",
           dimension: new Fraction(1),
         });
       }
     }
 
     // 多項式(答え)の係数
-    const maxKousuu = score > 10 ? 3 : 2;
-    const kousuu = ifUnder(score > 5 ? 50 : 10 * score, maxKousuu, 2);
+    const per = Math.min(50, score * 5);
+    const kousuu = ifUnder(per, 3, 2);
     const keisuu: Fraction[] = [];
 
     for (let i = 0; i < kousuu; i++) {
-      const a = getRandomFraction();
-      if (!checkParam(a)) {
-        break;
-      }
-      // 係数が似てると気持ち悪い
-      if (i > 0 && a.isSimilarTo(keisuu[i - 1])) {
-        break;
-      }
-      // 3項で分数は気持ち悪い
-      if (kousuu == 3) {
-        if (a.isFrac) {
-          break;
+      const a = getRandomFraction((f) => {
+        if (!checkParam(f)) {
+          return false;
         }
-      }
-      if (score < 10) {
-        if (!a.isInteger) {
-          break;
+
+        // 分数は気持ち悪い
+        if (f.isFrac) {
+          return false;
         }
-      } else if (score < 15) {
-        if (!a.mul(mono_keisuu).isInteger) {
-          break;
+        // 問題が分数になるのも気持ち悪い
+        if (f.mul(mono_keisuu).isFrac) {
+          return false;
         }
-      }
+
+        if (i == 0) {
+          // 初項がマイナスは気持ち悪い
+          if (f.mul(mono_keisuu).isNegative) {
+            return false;
+          }
+        }
+        if (score < 15) {
+          return f.mul(mono_keisuu).isInteger;
+        }
+        return true;
+      });
 
       keisuu.push(a);
     }
 
-    if (keisuu.length != kousuu) {
-      continue;
-    }
-    if (score < 15) {
-      if (mono_keisuu.isNegative && keisuu[0].isPositive) {
-        continue;
-      }
-    }
-
-    // 係数が似てると気持ち悪い
-    const retry = keisuu.find((k) => k.isSimilarTo(mono_keisuu));
-    if (retry) {
+    // 多項式間の係数が似てると気持ち悪い
+    if (keisuu.slice(1).find((k) => k.isSimilarTo(keisuu[0]))) {
       continue;
     }
 
     // 多項式(答え)の文字
-    const moji: string[] = ["a"];
-    if (kousuu > 2) {
-      moji.push("b");
-      moji.push(ifUnder(Math.min(50, 5 * score), "c", ""));
+    const moji: string[] = [];
+    if (kousuu == 2) {
+      if (score < 5) {
+        moji.push("x", "");
+      } else if (score < 10) {
+        moji.push(ifUnder(50, "x", "y"), "");
+      }
     } else {
-      moji.push(ifUnder(Math.min(50, 5 * score), "b", ""));
+      if (score < 10) {
+        moji.push("x", "y", "");
+      }
     }
+    if (moji.length !== kousuu) {
+      const mojiList = ["xy", "x", "y", ""];
+      for (let i = 0; i < kousuu; i++) {
+        moji.push(mojiList.splice(getRandomInt(mojiList.length - 1), 1)[0]);
+      }
+    }
+    moji.sort((a, b) => {
+      if (a === "" && b === "") {
+        return 0;
+      }
+      if (a === "") {
+        return 1;
+      }
+      if (b === "") {
+        return -1;
+      }
+      return a < b ? -1 : 1;
+    });
 
     // 式として作成
     const mono = new Monomial(mono_keisuu, mono_variables);
