@@ -15,17 +15,50 @@ export const poly_mono_div: RefreshFunction = (score) => {
     if (!checkParam(mono_keisuu)) {
       continue;
     }
+    // 単項式の文字
+    const mono_variables = [];
     if (score < 5) {
       if (!mono_keisuu.isNatural) {
         continue;
       }
+      mono_variables.push({
+        moji: "a",
+        dimension: new Fraction(1),
+      });
     } else if (score < 10) {
+      if (!mono_keisuu.isNatural) {
+        continue;
+      }
+      mono_variables.push({
+        moji: ifUnder(50, "a", "b"),
+        dimension: new Fraction(1),
+      });
+    } else if (score < 15) {
       if (!mono_keisuu.isInteger) {
         continue;
       }
-    } else if (score < 15) {
+      mono_variables.push({
+        moji: ifUnder(50, "a", "b"),
+        dimension: new Fraction(1),
+      });
+    } else if (score < 20) {
       if (mono_keisuu.isFrac && mono_keisuu.isNegative) {
         continue;
+      }
+    }
+
+    if (mono_variables.length === 0) {
+      if (ifUnder(33, true, false)) {
+        mono_variables.push({
+          moji: "b",
+          dimension: new Fraction(1),
+        });
+      }
+      if (mono_variables.length === 0 || ifUnder(33, true, false)) {
+        mono_variables.push({
+          moji: "a",
+          dimension: new Fraction(1),
+        });
       }
     }
 
@@ -65,8 +98,10 @@ export const poly_mono_div: RefreshFunction = (score) => {
     if (keisuu.length != kousuu) {
       continue;
     }
-    if (keisuu[0].isNegative) {
-      continue;
+    if (score < 15) {
+      if (mono_keisuu.isNegative && keisuu[0].isPositive) {
+        continue;
+      }
     }
 
     // 係数が似てると気持ち悪い
@@ -75,31 +110,17 @@ export const poly_mono_div: RefreshFunction = (score) => {
       continue;
     }
 
-    // 単項式の文字
-    let mono_moji = ["a", "b"].map((m) => ifUnder(33, m, "")).join("");
-    if (mono_moji.length == 0) {
-      mono_moji = ifUnder(50, "a", "b");
-    }
-
     // 多項式(答え)の文字
     const moji: string[] = ["a"];
     if (kousuu > 2) {
       moji.push("b");
-      moji.push(ifUnder(5 * score, "c", ""));
+      moji.push(ifUnder(Math.min(50, 5 * score), "c", ""));
     } else {
-      moji.push(ifUnder(5 * score, "b", ""));
+      moji.push(ifUnder(Math.min(50, 5 * score), "b", ""));
     }
 
     // 式として作成
-    const mono = new Monomial(
-      mono_keisuu,
-      mono_moji.split("").map((m) => {
-        return {
-          moji: m,
-          dimension: new Fraction(1),
-        };
-      })
-    );
+    const mono = new Monomial(mono_keisuu, mono_variables);
     const polyAns = keisuu.map((k, i) => {
       return new Monomial(k, [{ moji: moji[i], dimension: new Fraction(1) }]);
     });
