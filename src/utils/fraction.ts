@@ -1,3 +1,5 @@
+import { getRandomInt } from ".";
+
 export class Fraction {
   private _numerator: number = 0;
   private _denominator: number = 1;
@@ -40,6 +42,10 @@ export class Fraction {
   }
   get isNegative(): boolean {
     return this.numerator < 0;
+  }
+
+  invert(): Fraction {
+    return new Fraction(this.denominator, this.numerator);
   }
 
   isEqualTo(other: number | Fraction): boolean {
@@ -128,15 +134,17 @@ export class Fraction {
   }
 }
 
-export function getRandomFraction(): Fraction {
-  let m: number = 0;
-  let n: number = 0;
-  while (1) {
-    m = Math.floor(Math.random() * 19) - 9;
-    n = Math.floor(Math.random() * 19) - 9;
-    if (m * n != 0) {
-      break;
+type Filter = undefined | ((f: Fraction) => boolean);
+export function getRandomFraction(f: Filter = undefined): Fraction {
+  do {
+    const n = getRandomInt(9, -9);
+    if (n != 0) {
+      const m = getRandomInt(9, 1);
+      const frac = new Fraction(n, m);
+      if (!f || f(frac)) {
+        return frac;
+      }
     }
-  }
-  return new Fraction(n, m);
+  } while (1);
+  return new Fraction(1);
 }

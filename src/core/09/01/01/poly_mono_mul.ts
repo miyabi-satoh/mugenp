@@ -1,7 +1,7 @@
 import { RefreshFunction } from "~/interfaces/types";
 import { checkParam, getRandomInt, ifUnder } from "~/utils";
 import { Fraction, getRandomFraction } from "~/utils/fraction";
-import { Monomial, Polynomial } from "~/utils/mojisiki";
+import { Monomial } from "~/utils/mojisiki";
 
 export const poly_mono_mul: RefreshFunction = (score) => {
   let question = "";

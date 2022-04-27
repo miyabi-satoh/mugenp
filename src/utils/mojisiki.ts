@@ -15,7 +15,19 @@ export class Monomial {
   ) {
     // console.log(variables);
     this._coefficient = coefficient;
-    this._variables = [...variables];
+    variables.forEach((v) => {
+      if (v.moji.length > 1) {
+        v.moji.split("").forEach((m) => {
+          this._variables.push({
+            moji: m,
+            dimension: v.dimension,
+          });
+        });
+      } else {
+        this._variables.push(v);
+      }
+    });
+    // this._variables = [...variables];
     this.compact();
   }
 
@@ -34,6 +46,15 @@ export class Monomial {
       .join("");
   }
 
+  invert(): Monomial {
+    return new Monomial(
+      this.coefficient.invert(),
+      this._variables.map((v: Variable) => ({
+        moji: v.moji,
+        dimension: v.dimension.mul(-1),
+      }))
+    );
+  }
   toTex(showPlus: boolean = false): string {
     return this.coefficient.toTex(this.variable, showPlus);
   }
