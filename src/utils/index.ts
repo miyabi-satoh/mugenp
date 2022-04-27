@@ -24,3 +24,29 @@ export function checkParam(p: Fraction): boolean {
   }
   return true;
 }
+
+// 最小公約数
+export function getMinCoprime(a: number, b: number) {
+  a = Math.abs(a);
+  b = Math.abs(b);
+  const min = Math.min(a, b);
+  for (let i = 2; i <= min; i++) {
+    if (a % i == 0 && b % i == 0) {
+      return i;
+    }
+  }
+  return 1;
+}
+
+// 最大公約数
+export function getMaxCoprime(a: number, b: number) {
+  a = Math.abs(a);
+  b = Math.abs(b);
+  const min = Math.min(a, b);
+  for (let i = min; i > 1; i--) {
+    if (a % i == 0 && b % i == 0) {
+      return i;
+    }
+  }
+  return 1;
+}
