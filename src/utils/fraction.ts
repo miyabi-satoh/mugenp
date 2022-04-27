@@ -137,9 +137,9 @@ export class Fraction {
 type Filter = undefined | ((f: Fraction) => boolean);
 export function getRandomFraction(f: Filter = undefined): Fraction {
   do {
-    const m = getRandomInt(9, -9);
     const n = getRandomInt(9, -9);
-    if (m * n != 0) {
+    if (n != 0) {
+      const m = getRandomInt(9, 1);
       const frac = new Fraction(n, m);
       if (!f || f(frac)) {
         return frac;
