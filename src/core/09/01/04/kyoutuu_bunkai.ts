@@ -60,6 +60,12 @@ export const kyoutuu_bunkai: RefreshFunction = (score) => {
       });
     }
 
+    // 単項式
+    const mono = new Monomial(mono_keisuu, mono_variables);
+    if (mono.toTex() == "1") {
+      continue;
+    }
+
     // 多項式(答え)の係数
     const per = Math.min(50, score * 5);
     const kousuu = ifUnder(per, 3, 2);
@@ -97,10 +103,10 @@ export const kyoutuu_bunkai: RefreshFunction = (score) => {
       continue;
     }
     // 多項式中に共通因数があったらアカン
-    const min = Math.min(...keisuu.map((k) => k.value));
+    const min = Math.min(...keisuu.map((k) => Math.abs(k.value)));
     let retry = false;
-    for (let i = min; i > 1; i--) {
-      if (keisuu.find((n) => n.value % i !== 0)) {
+    for (let i = 2; i <= min; i++) {
+      if (keisuu.find((k) => Math.abs(k.value) % i != 0)) {
         continue;
       }
       retry = true;
@@ -143,7 +149,6 @@ export const kyoutuu_bunkai: RefreshFunction = (score) => {
     });
 
     // 式として作成
-    const mono = new Monomial(mono_keisuu, mono_variables);
     const polyAns = keisuu.map((k, i) => {
       return new Monomial(k, [{ moji: moji[i], dimension: new Fraction(1) }]);
     });
