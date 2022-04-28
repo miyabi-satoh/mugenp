@@ -1,82 +1,157 @@
 import { Fraction } from "./fraction";
 
-describe("Fraction()", () => {
-  const f = new Fraction();
-  test("denominator = 1", () => {
-    expect(f.denominator).toBe(1);
+describe("Fractionクラス", () => {
+  describe("分母=0の例外をテスト", () => {
+    test("new Fraction(1, 0)は例外を送出する", () => {
+      expect(() => new Fraction(1, 0)).toThrow(Error);
+    });
+    test("分子=0でのinvert()は例外を送出する", () => {
+      const f = new Fraction();
+      expect(f.numerator).toBe(0);
+      expect(() => f.invert()).toThrow(Error);
+    });
   });
-  test("numerator = 0", () => {
-    expect(f.numerator).toBe(0);
+
+  describe("構築時の約分をテスト", () => {
+    test.each([
+      [0, 1, 0], // 0/1 = 0
+      [1, 1, 1], // 1/1 = 1
+      [2, 2, 1], // 2/2 = 1
+      [4, 8, 0.5], // 4/8 = 0.5
+    ])("%d / %d = %d", (a, b, expected) => {
+      const f = new Fraction(a, b);
+      expect(f.value).toBe(expected);
+      expect(f.isEqualTo(expected)).toBeTruthy();
+      expect(f.isEqualTo(expected + 1)).toBeFalsy();
+      expect(f.isSimilarTo(expected)).toBeTruthy();
+      expect(f.isSimilarTo(-expected)).toBeTruthy();
+      expect(f.isSimilarTo(expected + 1)).toBeFalsy();
+      expect(f.isSimilarTo(-expected - 1)).toBeFalsy();
+    });
   });
-  test("value = 0", () => {
-    expect(f.value).toBe(0);
+
+  describe("toTex()をテスト", () => {
+    test.each([
+      [1, 1, "1"], // 1/1
+      [5, 1, "5"], // 5/1
+      [1, 5, "\\frac{1}{5}"], // 1/5
+      [3, 5, "\\frac{3}{5}"], // 3/5
+      [-1, 1, "-1"], // -1/1
+      [-5, 1, "-5"], // -5/1
+      [-1, 5, "-\\frac{1}{5}"], // -1/5
+      [-3, 5, "-\\frac{3}{5}"], // -3/5
+    ])("%d / %d = %s", (a, b, expected) => {
+      const f = new Fraction(a, b);
+      expect(f.toTex()).toBe(expected);
+    });
   });
-  test("abs = 0", () => {
-    expect(f.abs).toBe(0);
+  describe("toTex('', true)をテスト", () => {
+    test.each([
+      [1, 1, "+1"], // 1/1
+      [5, 1, "+5"], // 5/1
+      [1, 5, "+\\frac{1}{5}"], // 1/5
+      [3, 5, "+\\frac{3}{5}"], // 3/5
+      [-1, 1, "-1"], // -1/1
+      [-5, 1, "-5"], // -5/1
+      [-1, 5, "-\\frac{1}{5}"], // -1/5
+      [-3, 5, "-\\frac{3}{5}"], // -3/5
+    ])("%d / %d = %s", (a, b, expected) => {
+      const f = new Fraction(a, b);
+      expect(f.toTex("", true)).toBe(expected);
+    });
   });
-  test("isInteger = true", () => {
-    expect(f.isInteger).toBeTruthy();
+
+  describe("toTex('x')をテスト", () => {
+    test.each([
+      [1, 1, "x"], // 1/1
+      [5, 1, "5x"], // 5/1
+      [1, 5, "\\frac{1}{5}x"], // 1/5
+      [3, 5, "\\frac{3}{5}x"], // 3/5
+      [-1, 1, "-x"], // -1/1
+      [-5, 1, "-5x"], // -5/1
+      [-1, 5, "-\\frac{1}{5}x"], // -1/5
+      [-3, 5, "-\\frac{3}{5}x"], // -3/5
+    ])("%d / %d = %s", (a, b, expected) => {
+      const f = new Fraction(a, b);
+      expect(f.toTex("x")).toBe(expected);
+    });
   });
-  test("isNatural = false", () => {
-    expect(f.isNatural).toBeFalsy();
+
+  describe("toTex('x', true)をテスト", () => {
+    test.each([
+      [1, 1, "+x"], // 1/1
+      [5, 1, "+5x"], // 5/1
+      [1, 5, "+\\frac{1}{5}x"], // 1/5
+      [3, 5, "+\\frac{3}{5}x"], // 3/5
+      [-1, 1, "-x"], // -1/1
+      [-5, 1, "-5x"], // -5/1
+      [-1, 5, "-\\frac{1}{5}x"], // -1/5
+      [-3, 5, "-\\frac{3}{5}x"], // -3/5
+    ])("%d / %d = %s", (a, b, expected) => {
+      const f = new Fraction(a, b);
+      expect(f.toTex("x", true)).toBe(expected);
+    });
   });
-  test("isFrac = false", () => {
-    expect(f.isFrac).toBeFalsy();
+
+  describe.each([0, 1, -1])("add()をテスト", (p) => {
+    test.each([
+      [1, 1, 1], // 1/1
+      [5, 1, 5], // 5/1
+      [1, 5, 0.2], // 1/5
+      [3, 5, 0.6], // 3/5
+      [-1, 1, -1], // -1/1
+      [-5, 1, -5], // -5/1
+      [-1, 5, -0.2], // -1/5
+      [-3, 5, -0.6], // -3/5
+    ])(`Frac(%d / %d).add(${p})`, (a, b, c) => {
+      const f = new Fraction(a, b);
+      expect(f.add(p).value).toBe(c + p);
+    });
+
+    test.each([
+      [1, 1, 1], // 1/1
+      [5, 1, 5], // 5/1
+      [1, 5, 0.2], // 1/5
+      [3, 5, 0.6], // 3/5
+      [-1, 1, -1], // -1/1
+      [-5, 1, -5], // -5/1
+      [-1, 5, -0.2], // -1/5
+      [-3, 5, -0.6], // -3/5
+    ])(`Frac(%d / %d).add(${p}/5)`, (a, b, c) => {
+      const f = new Fraction(a, b);
+      const g = new Fraction(p, 5);
+      expect(f.add(g).value).toBe((5 * c + p) / 5);
+    });
   });
-  test("isPositive = false", () => {
-    expect(f.isPositive).toBeFalsy();
-  });
-  test("isNegative = false", () => {
-    expect(f.isNegative).toBeFalsy();
-  });
-  test("invert() => Error", () => {
-    expect(() => f.invert()).toThrow(Error);
-  });
-  test("isEqualTo(0) = true", () => {
-    expect(f.isEqualTo(0)).toBeTruthy();
-  });
-  test("isEqualTo(1) = false", () => {
-    expect(f.isEqualTo(1)).toBeFalsy();
-  });
-  test("isEqualTo(-1) = false", () => {
-    expect(f.isEqualTo(-1)).toBeFalsy();
-  });
-  test("isEqualTo(self) = true", () => {
-    expect(f.isEqualTo(f)).toBeTruthy();
-  });
-  test("isSimilarTo(0) = true", () => {
-    expect(f.isSimilarTo(0)).toBeTruthy();
-  });
-  test("isSimilarTo(1) = false", () => {
-    expect(f.isSimilarTo(1)).toBeFalsy();
-  });
-  test("isSimilarTo(-1) = false", () => {
-    expect(f.isSimilarTo(-1)).toBeFalsy();
-  });
-  test("isSimilarTo(self) = true", () => {
-    expect(f.isSimilarTo(f)).toBeTruthy();
-  });
-  test("toString() = 0/1", () => {
-    expect(f.toString()).toBe("0/1");
-  });
-  test("toTex() = '0'", () => {
-    expect(f.toTex()).toBe("0");
-  });
-  test("toTex('x') = '0'", () => {
-    expect(f.toTex("x")).toBe("0");
-  });
-  test("toTex('', true) = '+0'", () => {
-    expect(f.toTex("", true)).toBe("+0");
-  });
-  test("toTex('x', true) = '+0'", () => {
-    expect(f.toTex("x", true)).toBe("+0");
-  });
-  test("add(1) = 1", () => {
-    expect(f.add(1).value).toBe(1);
-    expect(f.add(new Fraction(1)).value).toBe(1);
-  });
-  test("mul(1) = 0", () => {
-    expect(f.mul(1).value).toBe(0);
-    expect(f.mul(new Fraction(1)).value).toBe(0);
+
+  describe.each([0, 2, -2])("mul()をテスト", (p) => {
+    test.each([
+      [1, 1, 1], // 1/1
+      [5, 1, 5], // 5/1
+      [1, 5, 0.2], // 1/5
+      [3, 5, 0.6], // 3/5
+      [-1, 1, -1], // -1/1
+      [-5, 1, -5], // -5/1
+      [-1, 5, -0.2], // -1/5
+      [-3, 5, -0.6], // -3/5
+    ])(`Frac(%d / %d).mul(${p})`, (a, b, c) => {
+      const f = new Fraction(a, b);
+      expect(f.mul(p).value).toBe(c * p);
+    });
+
+    test.each([
+      [1, 1, 1], // 1/1
+      [5, 1, 5], // 5/1
+      [1, 5, 0.2], // 1/5
+      [3, 5, 0.6], // 3/5
+      [-1, 1, -1], // -1/1
+      [-5, 1, -5], // -5/1
+      [-1, 5, -0.2], // -1/5
+      [-3, 5, -0.6], // -3/5
+    ])(`Frac(%d / %d).mul(${p}/5)`, (a, b, c) => {
+      const f = new Fraction(a, b);
+      const g = new Fraction(p, 5);
+      expect(f.mul(g).value).toBe((c * p) / 5);
+    });
   });
 });

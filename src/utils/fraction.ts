@@ -3,13 +3,13 @@ import { getMaxCoprime, getRandomInt } from ".";
 export class Fraction {
   private _numerator: number = 0;
   private _denominator: number = 1;
-  private _sign: number = 1;
+  private _sign: number = 0;
 
   constructor(numerator: number = 0, denominator: number = 1) {
     if (denominator === 0) {
       throw new Error(`Invalid denominator: ${denominator}`);
     }
-    this._sign = numerator * denominator > 0 ? 1 : -1;
+    this._sign = Math.sign(numerator * denominator);
     this._numerator = Math.abs(numerator);
     this._denominator = Math.abs(denominator);
     this.reduction();
@@ -32,16 +32,16 @@ export class Fraction {
     return this.denominator == 1;
   }
   get isNatural(): boolean {
-    return this.denominator == 1 && this.numerator > 0;
+    return this.denominator == 1 && this._sign > 0;
   }
   get isFrac(): boolean {
     return this.denominator != 1;
   }
   get isPositive(): boolean {
-    return this.numerator > 0;
+    return this._sign > 0;
   }
   get isNegative(): boolean {
-    return this.numerator < 0;
+    return this._sign < 0;
   }
 
   invert(): Fraction {
@@ -72,7 +72,7 @@ export class Fraction {
   }
 
   toTex(moji: string = "", showPlus: boolean = false): string {
-    const sign = this.numerator < 0 ? "-" : showPlus ? "+" : "";
+    const sign = this._sign < 0 ? "-" : showPlus ? "+" : "";
     if (this.isInteger) {
       if (this.numerator == 0) {
         return sign + "0";
@@ -118,10 +118,9 @@ export class Fraction {
 
   // 約分
   private reduction() {
-    // 0/m -> +0/1として扱う
+    // 0/m -> 0/1として扱う
     if (this._numerator == 0) {
       this._denominator = 1;
-      this._sign = 1;
       return;
     }
     const coprime = getMaxCoprime(this._numerator, this._denominator);
