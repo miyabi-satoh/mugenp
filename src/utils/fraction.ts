@@ -1,4 +1,4 @@
-import { getRandomInt } from ".";
+import { getMaxCoprime, getRandomInt } from ".";
 
 export class Fraction {
   private _numerator: number = 0;
@@ -74,6 +74,9 @@ export class Fraction {
   toTex(moji: string = "", showPlus: boolean = false): string {
     const sign = this.numerator < 0 ? "-" : showPlus ? "+" : "";
     if (this.isInteger) {
+      if (this.numerator == 0) {
+        return sign + "0";
+      }
       if (Math.abs(this.numerator) == 1) {
         return sign + (moji ? moji : "1");
       }
@@ -121,15 +124,12 @@ export class Fraction {
       this._sign = 1;
       return;
     }
-
-    const end = Math.min(this._numerator, this._denominator);
-    for (let i = end; i > 1; i--) {
-      if (this._numerator % i == 0 && this._denominator % i == 0) {
-        this._numerator = this._numerator / i;
-        this._denominator = this._denominator / i;
-        this.reduction();
-        return;
-      }
+    const coprime = getMaxCoprime(this._numerator, this._denominator);
+    if (coprime != 1) {
+      this._numerator = this._numerator / coprime;
+      this._denominator = this._denominator / coprime;
+      this.reduction();
+      return;
     }
   }
 }
