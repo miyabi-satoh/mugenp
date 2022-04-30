@@ -1,9 +1,25 @@
+import { MugenContainer } from "~/components/container";
 import { RefreshFunction } from "~/interfaces/types";
 import { checkParam, drawLots, getRandomFraction, getRandomInt } from "~/utils";
 import { Fraction } from "~/utils/fraction";
 import { Monomial } from "~/utils/mojisiki";
 
-export const kyoutuu_bunkai: RefreshFunction = (score) => {
+// "id": "91401",
+// "module": "kyoutuu_bunkai",
+// "grade": "中3",
+// "chapter": "式の展開と因数分解",
+// "title": "共通因数でくくる",
+// "message": "次の式を因数分解しなさい。"
+type Props = {
+  message: string;
+};
+const Mugen = ({ message }: Props) => {
+  return <MugenContainer message={message} onRefresh={onRefresh} />;
+};
+
+export { Mugen as M91401 };
+
+const onRefresh: RefreshFunction = (score) => {
   let question = "";
   let answer = "";
 

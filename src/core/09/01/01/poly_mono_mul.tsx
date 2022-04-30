@@ -1,9 +1,25 @@
+import { MugenContainer } from "~/components/container";
 import { RefreshFunction } from "~/interfaces/types";
 import { checkParam, drawLots, getRandomFraction, getRandomInt } from "~/utils";
 import { Fraction } from "~/utils/fraction";
 import { Monomial } from "~/utils/mojisiki";
 
-export const poly_mono_mul: RefreshFunction = (score) => {
+// "id": "91101",
+// "module": "poly_mono_mul",
+// "grade": "中3",
+// "chapter": "式の展開と因数分解",
+// "title": "\\( (a+b)\\times c \\) の計算",
+// "message": "次の計算をしなさい。"
+type Props = {
+  message: string;
+};
+const Mugen = ({ message }: Props) => {
+  return <MugenContainer message={message} onRefresh={onRefresh} />;
+};
+
+export { Mugen as M91101 };
+
+const onRefresh: RefreshFunction = (score) => {
   let question = "";
   let answer = "";
 

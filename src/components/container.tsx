@@ -12,13 +12,13 @@ import { RefreshFunction } from "~/interfaces/types";
 import { Layout } from "./layout";
 import { FaArrowUp, FaArrowDown } from "react-icons/fa";
 type Props = {
-  title: string;
+  message: string;
   onRefresh: RefreshFunction;
 };
 
 const NUM_OF_Q = process.env.NODE_ENV !== "production" ? 10 : 4;
 
-export const MugenContainer = ({ title, onRefresh }: Props) => {
+export const MugenContainer = ({ message, onRefresh }: Props) => {
   const [score, setScore] = useState(-1);
   const [totalScore, setTotalScore] = useState(0);
   const [refresh, setRefresh] = useState(true);
@@ -93,7 +93,7 @@ export const MugenContainer = ({ title, onRefresh }: Props) => {
   return (
     <Layout>
       <Container my={4} p={4} maxW="container.md" shadow="base">
-        <Box mb={4}>{title}</Box>
+        <Box mb={4}>{message}</Box>
         {/* <Box mb={6}>
           <Button
             disabled={totalScore <= 0}

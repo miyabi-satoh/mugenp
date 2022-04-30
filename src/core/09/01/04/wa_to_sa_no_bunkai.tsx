@@ -5,8 +5,24 @@ import {
   getRandomFraction,
 } from "~/utils";
 import { RefreshFunction } from "~/interfaces/types";
+import { MugenContainer } from "~/components/container";
 
-export const wa_to_sa_no_bunkai: RefreshFunction = (score) => {
+// "id": "91402",
+// "module": "wa_to_sa_no_bunkai",
+// "grade": "中3",
+// "chapter": "式の展開と因数分解",
+// "title": "\\( (a^2 - b^2) \\) の因数分解",
+// "message": "次の式を因数分解しなさい。"
+type Props = {
+  message: string;
+};
+const Mugen = ({ message }: Props) => {
+  return <MugenContainer message={message} onRefresh={onRefresh} />;
+};
+
+export { Mugen as M91402 };
+
+const onRefresh: RefreshFunction = (score) => {
   let question = "";
   let answer = "";
   while (1) {

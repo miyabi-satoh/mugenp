@@ -1,7 +1,24 @@
 import { checkParam, drawLots, getRandomFraction } from "~/utils";
 import { RefreshFunction } from "~/interfaces/types";
+import { MugenContainer } from "~/components/container";
 
-export const wa_to_sa_no_seki: RefreshFunction = (score) => {
+// "id": "91203",
+// "module": "wa_to_sa_no_seki",
+// "grade": "中3",
+// "chapter": "式の展開と因数分解",
+// "title": "\\((a + b)(a - b)\\) の展開",
+// "message": "次の式を展開しなさい。"
+type Props = {
+  message: string;
+};
+const Mugen = ({ message }: Props) => {
+  return <MugenContainer message={message} onRefresh={onRefresh} />;
+};
+
+export { Mugen as M91203 };
+export { onRefresh as wa_to_sa_no_seki };
+
+const onRefresh: RefreshFunction = (score) => {
   let question = "";
   let answer = "";
   while (1) {

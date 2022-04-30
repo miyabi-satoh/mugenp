@@ -1,50 +1,66 @@
 [
   {
-    "id": "9-1-1-01",
+    "id": "91101",
+    "module": "poly_mono_mul",
     "grade": "中3",
     "chapter": "式の展開と因数分解",
-    "title": "\\( (a+b)\\times c \\) の計算"
+    "title": "\\( (a+b)\\times c \\) の計算",
+    "message": "次の計算をしなさい。"
   },
   {
-    "id": "9-1-1-02",
+    "id": "91102",
+    "module": "poly_mono_div",
     "grade": "中3",
     "chapter": "式の展開と因数分解",
-    "title": "\\( (a+b)\\div c \\) の計算"
+    "title": "\\( (a+b)\\div c \\) の計算",
+    "message": "次の計算をしなさい。"
   },
   {
-    "id": "9-1-2-01",
+    "id": "91201",
+    "module": "waseki_no_kousiki",
     "grade": "中3",
     "chapter": "式の展開と因数分解",
-    "title": "\\((x+a)(x+b)\\) の展開"
+    "title": "\\((x+a)(x+b)\\) の展開",
+    "message": "次の式を展開しなさい。"
   },
   {
-    "id": "9-1-2-02",
+    "id": "91202",
+    "module": "heihou_kousiki",
     "grade": "中3",
     "chapter": "式の展開と因数分解",
-    "title": "\\((a\\pm b)^2\\) の展開"
+    "title": "\\((a\\pm b)^2\\) の展開",
+    "message": "次の式を展開しなさい。"
   },
   {
-    "id": "9-1-2-03",
+    "id": "91203",
+    "module": "wa_to_sa_no_seki",
     "grade": "中3",
     "chapter": "式の展開と因数分解",
-    "title": "\\((a + b)(a - b)\\) の展開"
+    "title": "\\((a + b)(a - b)\\) の展開",
+    "message": "次の式を展開しなさい。"
   },
   {
-    "id": "9-1-2-04",
+    "id": "91204",
+    "module": "jyouhou_kousiki",
     "grade": "中3",
     "chapter": "式の展開と因数分解",
-    "title": "乗法公式まとめ"
+    "title": "乗法公式まとめ",
+    "message": "次の式を展開しなさい。"
   },
   {
-    "id": "9-1-4-01",
+    "id": "91401",
+    "module": "kyoutuu_bunkai",
     "grade": "中3",
     "chapter": "式の展開と因数分解",
-    "title": "共通因数でくくる"
+    "title": "共通因数でくくる",
+    "message": "次の式を因数分解しなさい。"
   },
   {
-    "id": "9-1-4-02",
+    "id": "91402",
+    "module": "wa_to_sa_no_bunkai",
     "grade": "中3",
     "chapter": "式の展開と因数分解",
-    "title": "\\( (a^2 - b^2) \\) の因数分解"
+    "title": "\\( (a^2 - b^2) \\) の因数分解",
+    "message": "次の式を因数分解しなさい。"
   }
 ]

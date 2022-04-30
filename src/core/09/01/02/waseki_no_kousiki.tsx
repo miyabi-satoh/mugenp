@@ -1,7 +1,24 @@
+import { MugenContainer } from "~/components/container";
 import { RefreshFunction } from "~/interfaces/types";
 import { checkParam, drawLots, getRandomFraction } from "~/utils";
 
-export const waseki_no_kousiki: RefreshFunction = (score) => {
+// "id": "91201",
+// "module": "waseki_no_kousiki",
+// "grade": "中3",
+// "chapter": "式の展開と因数分解",
+// "title": "\\((x+a)(x+b)\\) の展開",
+// "message": "次の式を展開しなさい。"
+type Props = {
+  message: string;
+};
+const Mugen = ({ message }: Props) => {
+  return <MugenContainer message={message} onRefresh={onRefresh} />;
+};
+
+export { Mugen as M91201 };
+export { onRefresh as waseki_no_kousiki };
+
+const onRefresh: RefreshFunction = (score) => {
   let question = "";
   let answer = "";
   while (1) {
