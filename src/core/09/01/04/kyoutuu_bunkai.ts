@@ -1,6 +1,6 @@
 import { RefreshFunction } from "~/interfaces/types";
-import { checkParam, getRandomInt, ifUnder } from "~/utils";
-import { Fraction, getRandomFraction } from "~/utils/fraction";
+import { checkParam, drawLots, getRandomFraction, getRandomInt } from "~/utils";
+import { Fraction } from "~/utils/fraction";
 import { Monomial } from "~/utils/mojisiki";
 
 export const kyoutuu_bunkai: RefreshFunction = (score) => {
@@ -17,7 +17,7 @@ export const kyoutuu_bunkai: RefreshFunction = (score) => {
       }
       if (score < 5) {
         // 1のみ
-        return f.isEqualTo(1);
+        return f.equals(1);
       }
       // 自然数のみ
       return f.isNatural;
@@ -33,9 +33,9 @@ export const kyoutuu_bunkai: RefreshFunction = (score) => {
       });
     } else if (score < 10) {
       // 文字は x か y か 無し
-      if (mono_keisuu.isSimilarTo(1)) {
+      if (mono_keisuu.resembles(1)) {
         mono_variables.push({
-          moji: ifUnder(50, "x", "y"),
+          moji: drawLots(50, "x", "y"),
           dimension: new Fraction(1),
         });
       }
@@ -62,13 +62,12 @@ export const kyoutuu_bunkai: RefreshFunction = (score) => {
 
     // 単項式
     const mono = new Monomial(mono_keisuu, mono_variables);
-    if (mono.toTex() == "1") {
+    if (mono.toLatex() == "1") {
       continue;
     }
 
     // 多項式(答え)の係数
-    const per = Math.min(50, score * 5);
-    const kousuu = ifUnder(per, 3, 2);
+    const kousuu = drawLots(Math.min(50, score * 5), 3, 2);
     const keisuu: Fraction[] = [];
 
     for (let i = 0; i < kousuu; i++) {
@@ -99,14 +98,14 @@ export const kyoutuu_bunkai: RefreshFunction = (score) => {
     }
 
     // 多項式間の係数が似てると気持ち悪い
-    if (keisuu.slice(1).find((k) => k.isSimilarTo(keisuu[0]))) {
+    if (keisuu.slice(1).find((k) => k.resembles(keisuu[0]))) {
       continue;
     }
     // 多項式中に共通因数があったらアカン
-    const min = Math.min(...keisuu.map((k) => Math.abs(k.value)));
+    const min = Math.min(...keisuu.map((k) => Math.abs(k.valueOf)));
     let retry = false;
     for (let i = 2; i <= min; i++) {
-      if (keisuu.find((k) => Math.abs(k.value) % i != 0)) {
+      if (keisuu.find((k) => Math.abs(k.valueOf) % i != 0)) {
         continue;
       }
       retry = true;
@@ -122,7 +121,7 @@ export const kyoutuu_bunkai: RefreshFunction = (score) => {
       if (score < 5) {
         moji.push("x", "");
       } else if (score < 10) {
-        moji.push(ifUnder(50, "x", "y"), "");
+        moji.push(drawLots(50, "x", "y"), "");
       }
     } else {
       if (score < 10) {
@@ -157,11 +156,11 @@ export const kyoutuu_bunkai: RefreshFunction = (score) => {
       poly.push(mono.mul(polyAns[i]));
     }
 
-    question = poly.map((m, i) => m.toTex(i != 0)).join("");
+    question = poly.map((m, i) => m.toLatex(i != 0)).join("");
     answer =
-      mono.toTex() +
+      mono.toLatex() +
       "\\left(" +
-      polyAns.map((p, i) => p.toTex(i != 0)).join("") +
+      polyAns.map((p, i) => p.toLatex(i != 0)).join("") +
       "\\right)";
     break;
   }

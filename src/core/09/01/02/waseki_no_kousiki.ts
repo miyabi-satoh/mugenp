@@ -1,6 +1,5 @@
 import { RefreshFunction } from "~/interfaces/types";
-import { checkParam, ifUnder } from "~/utils";
-import { getRandomFraction } from "~/utils/fraction";
+import { checkParam, drawLots, getRandomFraction } from "~/utils";
 
 export const waseki_no_kousiki: RefreshFunction = (score) => {
   let question = "";
@@ -16,7 +15,7 @@ export const waseki_no_kousiki: RefreshFunction = (score) => {
     if (!checkParam(c)) {
       continue;
     }
-    if (b.isSimilarTo(c)) {
+    if (b.resembles(c)) {
       // 平方公式、和と差の公式の問題になってしまうのでスキップ
       continue;
     }
@@ -27,7 +26,7 @@ export const waseki_no_kousiki: RefreshFunction = (score) => {
     }
 
     if (score < 5) {
-      if (!a.isEqualTo(1) || b.isFrac || c.isFrac) {
+      if (!a.equals(1) || b.isFrac || c.isFrac) {
         continue;
       }
     } else if (score < 10) {
@@ -39,7 +38,7 @@ export const waseki_no_kousiki: RefreshFunction = (score) => {
         continue;
       }
       if (b.isFrac || c.isFrac) {
-        if (!a.isEqualTo(1) || b.denominator != c.denominator) {
+        if (!a.equals(1) || b.d != c.d) {
           continue;
         }
       }
@@ -47,25 +46,25 @@ export const waseki_no_kousiki: RefreshFunction = (score) => {
       if (b.isInteger && c.isInteger) {
         // 制限なし
       } else if (b.isFrac && c.isFrac) {
-        if (a.isNegative || b.denominator != c.denominator) {
+        if (a.isNegative || b.d != c.d) {
           continue;
         }
       } else {
-        if (!a.isEqualTo(1)) {
+        if (!a.equals(1)) {
           continue;
         }
       }
     }
 
-    const y = ifUnder(score + 2, "y", "");
+    const y = drawLots(Math.min(50, score * 2), "y", "");
     question =
-      `\\left(${a.toTex("x")} ${b.toTex(y, true)}\\right)` +
-      `\\left(${a.toTex("x")} ${c.toTex(y, true)}\\right)`;
+      `\\left(${a.toLatex("x")} ${b.toLatex(y, true)}\\right)` +
+      `\\left(${a.toLatex("x")} ${c.toLatex(y, true)}\\right)`;
 
     const k1 = a.mul(a);
     const k2 = b.add(c).mul(a);
     const k3 = b.mul(c);
-    answer = `${k1.toTex("x^2")} ${k2.toTex(`x${y}`, true)} ${k3.toTex(
+    answer = `${k1.toLatex("x^2")} ${k2.toLatex(`x${y}`, true)} ${k3.toLatex(
       `${y ? "y^2" : ""}`,
       true
     )}`;

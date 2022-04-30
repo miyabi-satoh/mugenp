@@ -5,10 +5,10 @@ describe("Fractionクラス", () => {
     test("new Fraction(1, 0)は例外を送出する", () => {
       expect(() => new Fraction(1, 0)).toThrow(Error);
     });
-    test("分子=0でのinvert()は例外を送出する", () => {
+    test("分子=0でのinverse()は例外を送出する", () => {
       const f = new Fraction();
-      expect(f.numerator).toBe(0);
-      expect(() => f.invert()).toThrow(Error);
+      expect(f.n).toBe(0);
+      expect(() => f.inverse()).toThrow(Error);
     });
   });
 
@@ -20,17 +20,17 @@ describe("Fractionクラス", () => {
       [4, 8, 0.5], // 4/8 = 0.5
     ])("%d / %d = %d", (a, b, expected) => {
       const f = new Fraction(a, b);
-      expect(f.value).toBe(expected);
-      expect(f.isEqualTo(expected)).toBeTruthy();
-      expect(f.isEqualTo(expected + 1)).toBeFalsy();
-      expect(f.isSimilarTo(expected)).toBeTruthy();
-      expect(f.isSimilarTo(-expected)).toBeTruthy();
-      expect(f.isSimilarTo(expected + 1)).toBeFalsy();
-      expect(f.isSimilarTo(-expected - 1)).toBeFalsy();
+      expect(f.valueOf).toBe(expected);
+      expect(f.equals(expected)).toBeTruthy();
+      expect(f.equals(expected + 1)).toBeFalsy();
+      expect(f.resembles(expected)).toBeTruthy();
+      expect(f.resembles(-expected)).toBeTruthy();
+      expect(f.resembles(expected + 1)).toBeFalsy();
+      expect(f.resembles(-expected - 1)).toBeFalsy();
     });
   });
 
-  describe("toTex()をテスト", () => {
+  describe("toLatex()をテスト", () => {
     test.each([
       [1, 1, "1"], // 1/1
       [5, 1, "5"], // 5/1
@@ -42,10 +42,10 @@ describe("Fractionクラス", () => {
       [-3, 5, "-\\frac{3}{5}"], // -3/5
     ])("%d / %d = %s", (a, b, expected) => {
       const f = new Fraction(a, b);
-      expect(f.toTex()).toBe(expected);
+      expect(f.toLatex()).toBe(expected);
     });
   });
-  describe("toTex('', true)をテスト", () => {
+  describe("toLatex('', true)をテスト", () => {
     test.each([
       [1, 1, "+1"], // 1/1
       [5, 1, "+5"], // 5/1
@@ -57,11 +57,11 @@ describe("Fractionクラス", () => {
       [-3, 5, "-\\frac{3}{5}"], // -3/5
     ])("%d / %d = %s", (a, b, expected) => {
       const f = new Fraction(a, b);
-      expect(f.toTex("", true)).toBe(expected);
+      expect(f.toLatex("", true)).toBe(expected);
     });
   });
 
-  describe("toTex('x')をテスト", () => {
+  describe("toLatex('x')をテスト", () => {
     test.each([
       [1, 1, "x"], // 1/1
       [5, 1, "5x"], // 5/1
@@ -73,11 +73,11 @@ describe("Fractionクラス", () => {
       [-3, 5, "-\\frac{3}{5}x"], // -3/5
     ])("%d / %d = %s", (a, b, expected) => {
       const f = new Fraction(a, b);
-      expect(f.toTex("x")).toBe(expected);
+      expect(f.toLatex("x")).toBe(expected);
     });
   });
 
-  describe("toTex('x', true)をテスト", () => {
+  describe("toLatex('x', true)をテスト", () => {
     test.each([
       [1, 1, "+x"], // 1/1
       [5, 1, "+5x"], // 5/1
@@ -89,7 +89,7 @@ describe("Fractionクラス", () => {
       [-3, 5, "-\\frac{3}{5}x"], // -3/5
     ])("%d / %d = %s", (a, b, expected) => {
       const f = new Fraction(a, b);
-      expect(f.toTex("x", true)).toBe(expected);
+      expect(f.toLatex("x", true)).toBe(expected);
     });
   });
 
@@ -105,7 +105,7 @@ describe("Fractionクラス", () => {
       [-3, 5, -0.6], // -3/5
     ])(`Frac(%d / %d).add(${p})`, (a, b, c) => {
       const f = new Fraction(a, b);
-      expect(f.add(p).value).toBe(c + p);
+      expect(f.add(p).valueOf).toBe(c + p);
     });
 
     test.each([
@@ -120,7 +120,7 @@ describe("Fractionクラス", () => {
     ])(`Frac(%d / %d).add(${p}/5)`, (a, b, c) => {
       const f = new Fraction(a, b);
       const g = new Fraction(p, 5);
-      expect(f.add(g).value).toBe((5 * c + p) / 5);
+      expect(f.add(g).valueOf).toBe((5 * c + p) / 5);
     });
   });
 
@@ -136,7 +136,7 @@ describe("Fractionクラス", () => {
       [-3, 5, -0.6], // -3/5
     ])(`Frac(%d / %d).mul(${p})`, (a, b, c) => {
       const f = new Fraction(a, b);
-      expect(f.mul(p).value).toBe(c * p);
+      expect(f.mul(p).valueOf).toBe(c * p);
     });
 
     test.each([
@@ -151,7 +151,20 @@ describe("Fractionクラス", () => {
     ])(`Frac(%d / %d).mul(${p}/5)`, (a, b, c) => {
       const f = new Fraction(a, b);
       const g = new Fraction(p, 5);
-      expect(f.mul(g).value).toBe((c * p) / 5);
+      expect(f.mul(g).valueOf).toBe((c * p) / 5);
+    });
+  });
+
+  describe("compare()をテスト", () => {
+    test.each([
+      [10, false, false, true],
+      [1, false, true, false],
+      [-10, true, false, false],
+    ])("compare(%d)", (x, e1, e2, e3) => {
+      const f = new Fraction(1);
+      expect(f.compare(x) > 0).toBe(e1);
+      expect(f.compare(x) == 0).toBe(e2);
+      expect(f.compare(x) < 0).toBe(e3);
     });
   });
 });

@@ -9,17 +9,24 @@ export function getRandomInt(max: number, min: number = 0): number {
   return Math.floor(Math.random() * (max - min + 1) + min);
 }
 
-export function ifUnder<T1, T2>(percentage: number, v1: T1, v2: T2): T1 | T2 {
-  return getRandomInt(100) <= percentage ? v1 : v2;
+export function drawLots<T>(threshold: number, ...lots: T[]): T {
+  const len = lots.length;
+  let i = 0;
+  for (; i < len - 1; i++) {
+    if (getRandomInt(100) < threshold) {
+      return lots[i];
+    }
+  }
+  return lots[i];
 }
 
 export function checkParam(p: Fraction): boolean {
   // 大きめの仮分数は気持ち悪い
-  if (p.isFrac && p.abs > 1.5) {
+  if (p.isFrac && p.abs.compare(1.5) > 0) {
     return false;
   }
   // 分母は5まで
-  if (p.denominator > 5) {
+  if (p.d > 5) {
     return false;
   }
   return true;
@@ -49,4 +56,19 @@ export function getMaxCoprime(a: number, b: number) {
     }
   }
   return 1;
+}
+
+type Filter = undefined | ((f: Fraction) => boolean);
+export function getRandomFraction(f: Filter = undefined): Fraction {
+  do {
+    const n = getRandomInt(9, -9);
+    if (n != 0) {
+      const m = getRandomInt(9, 1);
+      const frac = new Fraction(n, m);
+      if (!f || f(frac)) {
+        return frac;
+      }
+    }
+  } while (1);
+  return new Fraction(1);
 }

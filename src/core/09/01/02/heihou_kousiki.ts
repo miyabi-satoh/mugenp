@@ -1,6 +1,5 @@
 import { RefreshFunction } from "~/interfaces/types";
-import { checkParam, ifUnder } from "~/utils";
-import { getRandomFraction } from "~/utils/fraction";
+import { checkParam, drawLots, getRandomFraction } from "~/utils";
 
 export const heihou_kousiki: RefreshFunction = (score) => {
   let question = "";
@@ -18,12 +17,12 @@ export const heihou_kousiki: RefreshFunction = (score) => {
       continue;
     }
 
-    if (!a.isEqualTo(1) && a.isSimilarTo(b)) {
+    if (!a.equals(1) && a.resembles(b)) {
       continue;
     }
 
     if (score < 5) {
-      if (!a.isEqualTo(1) || b.isFrac) {
+      if (!a.equals(1) || b.isFrac) {
         continue;
       }
     } else if (score < 10) {
@@ -34,7 +33,7 @@ export const heihou_kousiki: RefreshFunction = (score) => {
       if (!a.isNatural) {
         continue;
       }
-      if (b.isFrac && !a.isEqualTo(1)) {
+      if (b.isFrac && !a.equals(1)) {
         continue;
       }
     } else if (score < 20) {
@@ -50,14 +49,14 @@ export const heihou_kousiki: RefreshFunction = (score) => {
       }
     }
 
-    const y = ifUnder(score + 2, "y", "");
+    const y = drawLots(Math.min(50, score * 2), "y", "");
 
-    question = `\\left(${a.toTex("x")} ${b.toTex(y, true)}\\right)^2`;
+    question = `\\left(${a.toLatex("x")} ${b.toLatex(y, true)}\\right)^2`;
 
     const k1 = a.mul(a);
     const k2 = a.mul(b).mul(2);
     const k3 = b.mul(b);
-    answer = `${k1.toTex("x^2")} ${k2.toTex(`x${y}`, true)} ${k3.toTex(
+    answer = `${k1.toLatex("x^2")} ${k2.toLatex(`x${y}`, true)} ${k3.toLatex(
       `${y ? "y^2" : ""}`,
       true
     )}`;

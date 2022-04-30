@@ -1,6 +1,6 @@
 import { RefreshFunction } from "~/interfaces/types";
-import { checkParam, getRandomInt, ifUnder } from "~/utils";
-import { Fraction, getRandomFraction } from "~/utils/fraction";
+import { checkParam, drawLots, getRandomFraction, getRandomInt } from "~/utils";
+import { Fraction } from "~/utils/fraction";
 import { Monomial } from "~/utils/mojisiki";
 
 export const poly_mono_mul: RefreshFunction = (score) => {
@@ -31,7 +31,7 @@ export const poly_mono_mul: RefreshFunction = (score) => {
 
     // 多項式の係数
     const maxKousuu = score > 10 ? 3 : 2;
-    const kousuu = ifUnder(score > 5 ? 50 : 10 * score, maxKousuu, 2);
+    const kousuu = drawLots(Math.min(50, score * 5), maxKousuu, 2);
     const keisuu: Fraction[] = [];
     // 3項で分数は気持ち悪い
     if (kousuu == 3 && mono_keisuu.isFrac) {
@@ -44,7 +44,7 @@ export const poly_mono_mul: RefreshFunction = (score) => {
         break;
       }
       // 係数が似てると気持ち悪い
-      if (i > 0 && a.isSimilarTo(keisuu[i - 1])) {
+      if (i > 0 && a.resembles(keisuu[i - 1])) {
         break;
       }
       // 3項で分数は気持ち悪い
@@ -74,7 +74,7 @@ export const poly_mono_mul: RefreshFunction = (score) => {
     }
 
     // 係数が似てると気持ち悪い
-    const retry = keisuu.find((k) => k.isSimilarTo(mono_keisuu));
+    const retry = keisuu.find((k) => k.resembles(mono_keisuu));
     if (retry) {
       continue;
     }
@@ -83,14 +83,17 @@ export const poly_mono_mul: RefreshFunction = (score) => {
     const moji: string[] = ["a"];
     if (kousuu > 2) {
       moji.push("b");
-      moji.push(ifUnder(5 * score, "c", ""));
+      moji.push(drawLots(Math.min(50, 5 * score), "c", ""));
     } else {
-      moji.push(ifUnder(5 * score, "b", ""));
+      moji.push(drawLots(Math.min(50, 5 * score), "b", ""));
     }
 
     // 単項式の文字
     const moji_count = moji.filter((m) => !!m).length; // 1,2,3
-    const mono_moji = moji[ifUnder(score * 5, getRandomInt(moji_count), 0)];
+    const mono_moji = drawLots(
+      Math.min(33, score * 5),
+      ...moji.filter((x) => !!x)
+    );
 
     // 式として作成
     const mono = new Monomial(mono_keisuu, [
@@ -99,27 +102,27 @@ export const poly_mono_mul: RefreshFunction = (score) => {
     const poly = keisuu.map((k, i) => {
       return new Monomial(k, [{ moji: moji[i], dimension: new Fraction(1) }]);
     });
-    const front = ifUnder(50, true, false);
+    const front = drawLots(50, true, false);
     if (front) {
       question =
-        mono.toTex() +
+        mono.toLatex() +
         "\\left(" +
-        poly.map((m, i) => m.toTex(i != 0)).join("") +
+        poly.map((m, i) => m.toLatex(i != 0)).join("") +
         "\\right)";
     } else {
       question =
         "\\left(" +
-        poly.map((m, i) => m.toTex(i != 0)).join("") +
+        poly.map((m, i) => m.toLatex(i != 0)).join("") +
         "\\right)" +
         " \\times " +
-        mono.toTexKakkoIfNegative();
+        mono.toLatex(mono.coeff.isNegative ? "()" : "");
     }
 
     const polyAns = [];
     for (let i = 0; i < kousuu; i++) {
       polyAns.push(mono.mul(poly[i]));
     }
-    answer = polyAns.map((p, i) => p.toTex(i != 0)).join("");
+    answer = polyAns.map((p, i) => p.toLatex(i != 0)).join("");
     break;
   }
   return [question, answer];

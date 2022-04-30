@@ -1,5 +1,4 @@
-import { getRandomFraction } from "~/utils/fraction";
-import { checkParam, ifUnder } from "~/utils";
+import { checkParam, drawLots, getRandomFraction } from "~/utils";
 import { RefreshFunction } from "~/interfaces/types";
 
 export const wa_to_sa_no_seki: RefreshFunction = (score) => {
@@ -18,13 +17,13 @@ export const wa_to_sa_no_seki: RefreshFunction = (score) => {
     }
 
     // 1と1以外で同数は気持ち悪い
-    if (!a.isEqualTo(1) && a.isSimilarTo(b)) {
+    if (!a.equals(1) && a.resembles(b)) {
       continue;
     }
 
     if (score < 5) {
       // 1と整数
-      if (!a.isEqualTo(1) || b.isFrac) {
+      if (!a.equals(1) || b.isFrac) {
         continue;
       }
     } else if (score < 10) {
@@ -48,15 +47,15 @@ export const wa_to_sa_no_seki: RefreshFunction = (score) => {
       }
     }
 
-    const y = ifUnder(score + 2, "y", "");
+    const y = drawLots(Math.min(50, score * 2), "y", "");
 
     question =
-      `\\left(${a.toTex("x")} ${b.toTex(y, true)}\\right)` +
-      `\\left(${a.toTex("x")} ${b.mul(-1).toTex(y, true)}\\right)`;
+      `\\left(${a.toLatex("x")} ${b.toLatex(y, true)}\\right)` +
+      `\\left(${a.toLatex("x")} ${b.mul(-1).toLatex(y, true)}\\right)`;
 
     const k1 = a.mul(a);
     const k2 = b.mul(b);
-    answer = `${k1.toTex("x^2")} - ${k2.toTex(`${y ? "y^2" : ""}`)}`;
+    answer = `${k1.toLatex("x^2")} - ${k2.toLatex(`${y ? "y^2" : ""}`)}`;
     break;
   }
 

@@ -31,46 +31,59 @@ export class Monomial {
     this.compact();
   }
 
-  get coefficient(): Fraction {
+  get coeff(): Fraction {
     return this._coefficient;
   }
 
   get variable(): string {
     return this._variables
       .map((v) => {
-        if (v.dimension.isEqualTo(1)) {
+        if (v.dimension.equals(1)) {
           return v.moji;
         }
-        return v.moji + "^" + v.dimension.toTex();
+        return v.moji + "^" + v.dimension.toLatex();
       })
       .join("");
   }
 
-  invert(): Monomial {
+  inverse(): Monomial {
     return new Monomial(
-      this.coefficient.invert(),
+      this.coeff.inverse(),
       this._variables.map((v: Variable) => ({
         moji: v.moji,
         dimension: v.dimension.mul(-1),
       }))
     );
   }
-  toTex(showPlus: boolean = false): string {
-    return this.coefficient.toTex(this.variable, showPlus);
-  }
 
-  toTexKakkoIfNegative(): string {
-    if (this.coefficient.isNegative) {
-      return "\\left(" + this.toTex() + "\\right)";
+  toLatex(showPlus?: string | boolean, brackets?: string | boolean): string {
+    if (typeof showPlus === "string") {
+      [showPlus, brackets] = [brackets, showPlus];
     }
-    return this.toTex();
+
+    if (showPlus === undefined) {
+      showPlus = false;
+    }
+    if (brackets === undefined) {
+      brackets = "";
+    }
+
+    if (typeof showPlus != "boolean" || typeof brackets != "string") {
+      throw new Error("Invalid argument");
+    }
+    let left = "";
+    let right = "";
+    if (brackets.length == 2) {
+      [left, right] = [`\\left${brackets[0]}`, `\\right${brackets[1]}`];
+    }
+    return left + this.coeff.toLatex(this.variable, showPlus) + right;
   }
 
   mul(lhs: Monomial | number): Monomial {
     if (typeof lhs === "number") {
-      return new Monomial(this.coefficient.mul(lhs), this._variables);
+      return new Monomial(this.coeff.mul(lhs), this._variables);
     }
-    return new Monomial(this.coefficient.mul(lhs._coefficient), [
+    return new Monomial(this.coeff.mul(lhs._coefficient), [
       ...this._variables,
       ...lhs._variables,
     ]);
@@ -92,7 +105,7 @@ export class Monomial {
       }
     });
     // 次数0を削除してからアルファベット順にする
-    this._variables = newVariables.filter((v) => !v.dimension.isEqualTo(0));
+    this._variables = newVariables.filter((v) => !v.dimension.equals(0));
     this._variables.sort((a, b) => {
       var mojiA = a.moji.toUpperCase(); // 大文字と小文字を無視する
       var mojiB = b.moji.toUpperCase(); // 大文字と小文字を無視する
