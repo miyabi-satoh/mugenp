@@ -1,5 +1,7 @@
 import { Fraction } from "./fraction";
 
+export const isDev = process.env.NODE_ENV !== "production";
+
 export function getRandomInt(max: number, min: number = 0): number {
   if (min > max) {
     [max, min] = [min, max];

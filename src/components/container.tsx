@@ -11,12 +11,13 @@ import { ChangeEventHandler, useEffect, useState } from "react";
 import { RefreshFunction } from "~/interfaces/types";
 import { Layout } from "./layout";
 import { FaArrowUp, FaArrowDown } from "react-icons/fa";
+import { isDev } from "~/utils";
 type Props = {
   message: string;
   onRefresh: RefreshFunction;
 };
 
-const NUM_OF_Q = process.env.NODE_ENV !== "production" ? 10 : 4;
+const NUM_OF_Q = isDev ? 10 : 4;
 
 export const MugenContainer = ({ message, onRefresh }: Props) => {
   const [score, setScore] = useState(-1);
@@ -58,7 +59,9 @@ export const MugenContainer = ({ message, onRefresh }: Props) => {
 
   useEffect(() => {
     if (refresh) {
-      // console.log(totalScore);
+      if (isDev) {
+        console.log(totalScore);
+      }
       const newQuestions: string[] = [];
       const newAnswers: string[] = [];
       let _stock = [...stock];

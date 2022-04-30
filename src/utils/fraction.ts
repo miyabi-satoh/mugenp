@@ -1,15 +1,44 @@
+type FractionConstructor = string | number | Fraction;
+
 export class Fraction {
   private _numerator: number = 0;
   private _denominator: number = 1;
   private _sign: number = 0;
 
-  constructor(n: number = 0, d: number = 1) {
+  constructor(x: FractionConstructor);
+  constructor(n: number, d: number);
+  constructor(n: FractionConstructor = 0, d?: number) {
+    if (d === undefined) {
+      switch (typeof n) {
+        case "string":
+          const tmp = n.split("/");
+          switch (tmp.length) {
+            case 0:
+              return new Fraction(0, 1);
+            case 1:
+              return new Fraction(Number(n), 1);
+            case 2:
+              return new Fraction(Number(tmp[0]), Number(tmp[1]));
+          }
+          throw new Error("Invalid argument");
+
+        case "number":
+          return new Fraction(n, 1);
+
+        case "object":
+          if (n instanceof Fraction) {
+            return new Fraction(n.s * n.n, n.d);
+          }
+          throw new Error("Invalid argument");
+      }
+    }
     if (d === 0) {
       throw new Error("Division by Zero");
     }
-    const s = Math.sign(n * d);
+    n = Number(n);
+    const s = Math.sign(n * d!);
     n = Math.abs(n);
-    d = Math.abs(d);
+    d = Math.abs(d!);
 
     // ユークリッドの互除法で最大公約数を取得する
     // https://blog.beatdjam.com/entry/2017/11/07/190000
@@ -102,9 +131,12 @@ export class Fraction {
   /**
    * Check if two rational numbers are the same
    */
-  equals(other: number | Fraction): boolean {
-    if (typeof other === "number") {
-      other = new Fraction(other);
+  equals(other: FractionConstructor): boolean {
+    switch (typeof other) {
+      case "number":
+      case "string":
+        other = new Fraction(other);
+        break;
     }
     return (
       // a/b = A/B -> a*B = A*b
@@ -115,16 +147,22 @@ export class Fraction {
   /**
    * Check if the absolute values ​​of the two rational numbers are the same
    */
-  resembles(other: number | Fraction): boolean {
-    if (typeof other === "number") {
-      other = new Fraction(other);
+  resembles(other: FractionConstructor): boolean {
+    switch (typeof other) {
+      case "number":
+      case "string":
+        other = new Fraction(other);
+        break;
     }
     return this.n * other.d === other.n * this.d;
   }
 
-  compare(other: number | Fraction): number {
-    if (typeof other === "number") {
-      other = new Fraction(other);
+  compare(other: FractionConstructor): number {
+    switch (typeof other) {
+      case "number":
+      case "string":
+        other = new Fraction(other);
+        break;
     }
     return this.s * this.n * other.d - other.s * other.n * this.d;
   }
@@ -155,9 +193,12 @@ export class Fraction {
   /**
    * Adds two rational numbers
    */
-  add(other: Fraction | number): Fraction {
-    if (typeof other === "number") {
-      other = new Fraction(other);
+  add(other: FractionConstructor): Fraction {
+    switch (typeof other) {
+      case "number":
+      case "string":
+        other = new Fraction(other);
+        break;
     }
     return new Fraction(
       this.s * this.n * other.d + other.s * other.n * this.d,
@@ -168,9 +209,12 @@ export class Fraction {
   /**
    * Multiplies two rational numbers
    */
-  mul(other: Fraction | number): Fraction {
-    if (typeof other === "number") {
-      other = new Fraction(other);
+  mul(other: FractionConstructor): Fraction {
+    switch (typeof other) {
+      case "number":
+      case "string":
+        other = new Fraction(other);
+        break;
     }
     return new Fraction(this.s * other.s * this.n * other.n, this.d * other.d);
   }

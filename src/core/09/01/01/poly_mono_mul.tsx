@@ -2,7 +2,8 @@ import { MugenContainer } from "~/components/container";
 import { RefreshFunction } from "~/interfaces/types";
 import { checkParam, drawLots, getRandomFraction, getRandomInt } from "~/utils";
 import { Fraction } from "~/utils/fraction";
-import { Monomial } from "~/utils/mojisiki";
+import { Monomial } from "~/utils/monomial";
+import { Polynomial } from "~/utils/polynomial";
 
 // "id": "91101",
 // "module": "poly_mono_mul",
@@ -20,29 +21,36 @@ const Mugen = ({ message }: Props) => {
 export { Mugen as M91101 };
 
 const onRefresh: RefreshFunction = (score) => {
-  let question = "";
-  let answer = "";
-
   while (1) {
     // 多項式 × 単項式
 
     // 単項式の係数
-    const mono_keisuu = getRandomFraction();
-    if (!checkParam(mono_keisuu)) {
-      continue;
-    }
+    let mono = new Monomial(
+      getRandomFraction((x) => {
+        if (!checkParam(x)) {
+          return false;
+        }
+        if (score < 5) {
+          return x.isNatural;
+        } else if (score < 10) {
+          return x.isInteger;
+        } else if (score < 15) {
+          return x.isInteger || x.isPositive;
+        }
+        return true;
+      })
+    );
+
+    // 単項式の文字
     if (score < 5) {
-      if (!mono_keisuu.isNatural) {
-        continue;
-      }
-    } else if (score < 10) {
-      if (!mono_keisuu.isInteger) {
-        continue;
-      }
+      // 文字は x のみ
+      mono = mono.mul("x");
     } else if (score < 15) {
-      if (mono_keisuu.isFrac && mono_keisuu.isNegative) {
-        continue;
-      }
+      // 文字は x か y
+      mono = mono.mul(drawLots(50, "x", "y"));
+    } else {
+      // 文字は x か y か xy
+      mono = mono.mul(drawLots(33, "x", "y", "xy"));
     }
 
     // 多項式の係数
@@ -50,96 +58,80 @@ const onRefresh: RefreshFunction = (score) => {
     const kousuu = drawLots(Math.min(50, score * 5), maxKousuu, 2);
     const keisuu: Fraction[] = [];
     // 3項で分数は気持ち悪い
-    if (kousuu == 3 && mono_keisuu.isFrac) {
+    if (kousuu == 3 && mono.coeff.isFrac) {
       continue;
     }
 
-    for (let i = 0; i < kousuu; i++) {
-      const a = getRandomFraction();
-      if (!checkParam(a)) {
-        break;
-      }
-      // 係数が似てると気持ち悪い
-      if (i > 0 && a.resembles(keisuu[i - 1])) {
-        break;
-      }
-      // 3項で分数は気持ち悪い
-      if (kousuu == 3) {
-        if (a.isFrac) {
-          break;
+    do {
+      const a = getRandomFraction((x) => {
+        if (!checkParam(x)) {
+          return false;
         }
-      }
-      if (score < 10) {
-        if (!a.isInteger) {
-          break;
+        // 3項で分数は気持ち悪い
+        if (kousuu == 3 && x.isFrac) {
+          return false;
         }
-      } else if (score < 15) {
-        if (!a.mul(mono_keisuu).isInteger) {
-          break;
+        // 初項がマイナスは気持ち悪い
+        if (keisuu.length == 0 && x.isNegative) {
+          return false;
         }
+
+        if (score < 10) {
+          return x.isInteger;
+        } else if (score < 15) {
+          return x.mul(mono.coeff).isInteger;
+        }
+        return true;
+      });
+
+      // 似た数がいなければ追加
+      if (!keisuu.find((x) => x.resembles(a))) {
+        keisuu.push(a);
       }
-
-      keisuu.push(a);
-    }
-
-    if (keisuu.length != kousuu) {
-      continue;
-    }
-    if (keisuu[0].isNegative) {
-      continue;
-    }
-
-    // 係数が似てると気持ち悪い
-    const retry = keisuu.find((k) => k.resembles(mono_keisuu));
-    if (retry) {
-      continue;
-    }
+    } while (keisuu.length < kousuu);
 
     // 多項式の文字
-    const moji: string[] = ["a"];
-    if (kousuu > 2) {
-      moji.push("b");
-      moji.push(drawLots(Math.min(50, 5 * score), "c", ""));
+    const moji: string[] = [];
+    if (kousuu == 2) {
+      if (score < 5) {
+        moji.push("x", "");
+      } else if (score < 10) {
+        moji.push(drawLots(50, "x", "y"), "");
+      }
     } else {
-      moji.push(drawLots(Math.min(50, 5 * score), "b", ""));
+      if (score < 10) {
+        moji.push("x", "y", "");
+      }
+    }
+    if (moji.length !== kousuu) {
+      const mojiList = ["xy", "x", "y", ""];
+      do {
+        mojiList.splice(getRandomInt(mojiList.length - 1), 1);
+      } while (mojiList.length > kousuu);
+      moji.push(...mojiList);
     }
 
-    // 単項式の文字
-    const moji_count = moji.filter((m) => !!m).length; // 1,2,3
-    const mono_moji = drawLots(
-      Math.min(33, score * 5),
-      ...moji.filter((x) => !!x)
-    );
-
     // 式として作成
-    const mono = new Monomial(mono_keisuu, [
-      { moji: mono_moji, dimension: new Fraction(1) },
-    ]);
-    const poly = keisuu.map((k, i) => {
-      return new Monomial(k, [{ moji: moji[i], dimension: new Fraction(1) }]);
-    });
-    const front = drawLots(50, true, false);
-    if (front) {
-      question =
-        mono.toLatex() +
-        "\\left(" +
-        poly.map((m, i) => m.toLatex(i != 0)).join("") +
-        "\\right)";
-    } else {
+    let poly = new Polynomial();
+    for (let i = 0; i < kousuu; i++) {
+      poly = poly.add(new Monomial(keisuu[i], moji[i]));
+    }
+
+    let polyAns = poly.mul(mono);
+
+    let question;
+    if (drawLots(50, true, false)) {
       question =
         "\\left(" +
-        poly.map((m, i) => m.toLatex(i != 0)).join("") +
+        poly.toLatex() +
         "\\right)" +
         " \\times " +
         mono.toLatex(mono.coeff.isNegative ? "()" : "");
+    } else {
+      question = mono.toLatex() + "\\left(" + poly.toLatex() + "\\right)";
     }
-
-    const polyAns = [];
-    for (let i = 0; i < kousuu; i++) {
-      polyAns.push(mono.mul(poly[i]));
-    }
-    answer = polyAns.map((p, i) => p.toLatex(i != 0)).join("");
-    break;
+    const answer = polyAns.toLatex();
+    return [question, answer];
   }
-  return [question, answer];
+  throw new Error("What's wrong?");
 };
