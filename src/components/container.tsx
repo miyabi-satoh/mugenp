@@ -59,29 +59,29 @@ export const MugenContainer = ({ message, onRefresh }: Props) => {
 
   useEffect(() => {
     if (refresh) {
-      if (isDev) {
-        console.log(totalScore);
-      }
       const newQuestions: string[] = [];
       const newAnswers: string[] = [];
       let _stock = [...stock];
       let retryCount = 0;
       while (newQuestions.length < NUM_OF_Q) {
         const [question, answer] = onRefresh(totalScore);
-
-        if (_stock.includes(question) || _stock.includes(answer)) {
-          retryCount++;
-          if (retryCount > 18 * 18) {
-            _stock = [];
-            retryCount = 0;
-            // console.log("give up!");
+        if (!!question && !!answer) {
+          if (_stock.includes(question) || _stock.includes(answer)) {
+            retryCount++;
+            if (retryCount > NUM_OF_Q * 4) {
+              _stock = [];
+              retryCount = 0;
+              if (isDev) {
+                console.log("give up!");
+              }
+            }
+            continue;
           }
-          continue;
-        }
 
-        newQuestions.push(question);
-        newAnswers.push(answer);
-        _stock.push(question, answer);
+          newQuestions.push(question);
+          newAnswers.push(answer);
+          _stock.push(question, answer);
+        }
       }
 
       setShowAnswer(false);
@@ -137,7 +137,13 @@ export const MugenContainer = ({ message, onRefresh }: Props) => {
             解答を{`${showAnswer ? "隠す" : "表示"}`}
           </Button>
           <Box mx={3}>正解数</Box>
-          <Select w="4em" mr={4} onChange={handleChangeScore} value={score}>
+          <Select
+            data-testid="correct-answers"
+            w="4em"
+            mr={4}
+            onChange={handleChangeScore}
+            value={score}
+          >
             <option value="-1"></option>
             {Array.from(Array(NUM_OF_Q + 1).keys()).map((i) => (
               <option key={i} value={i}>
@@ -148,6 +154,7 @@ export const MugenContainer = ({ message, onRefresh }: Props) => {
           <Button disabled={score < 0} onClick={handleNext}>
             次の問題
           </Button>
+          {isDev && <Box>スコア：{totalScore}</Box>}
         </Flex>
       </Container>
     </Layout>

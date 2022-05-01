@@ -1,4 +1,4 @@
-import { Fraction } from "./fraction";
+import { Fraction } from "~/utils/fraction";
 
 describe("Fractionクラス", () => {
   describe("分母=0の例外をテスト", () => {
@@ -6,7 +6,7 @@ describe("Fractionクラス", () => {
       expect(() => new Fraction(1, 0)).toThrow(Error);
     });
     test("分子=0でのinverse()は例外を送出する", () => {
-      const f = new Fraction();
+      const f = new Fraction(0, 1);
       expect(f.n).toBe(0);
       expect(() => f.inverse()).toThrow(Error);
     });
@@ -162,6 +162,8 @@ describe("Fractionクラス", () => {
       [-10, true, false, false],
     ])("compare(%d)", (x, e1, e2, e3) => {
       const f = new Fraction(1);
+      // console.log(f.compare(x));
+
       expect(f.compare(x) > 0).toBe(e1);
       expect(f.compare(x) == 0).toBe(e2);
       expect(f.compare(x) < 0).toBe(e3);

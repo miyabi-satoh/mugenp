@@ -1,3 +1,4 @@
+import { ParameterCondition } from "~/interfaces/types";
 import { Fraction } from "./fraction";
 
 export const isDev = process.env.NODE_ENV !== "production";
@@ -71,6 +72,24 @@ export function getRandomFraction(f: Filter = undefined): Fraction {
         return frac;
       }
     }
+  } while (1);
+  return new Fraction(1);
+}
+
+export function getParam(condition: ParameterCondition): Fraction {
+  do {
+    // 分母
+    const m = getRandomInt(condition.maxD, 1);
+    // 分子
+    const maxN = m === 1 ? condition.max : condition.maxN;
+    const minN = condition.allowNegative ? maxN * -1 : 0;
+    const n = getRandomInt(maxN, minN);
+
+    if (n === 0 && !condition.allowZero) {
+      continue;
+    }
+
+    return new Fraction(n, m);
   } while (1);
   return new Fraction(1);
 }

@@ -75,13 +75,24 @@ export class Monomial {
     }
   }
 
+  /**
+   * 係数を返す
+   */
   get coeff(): Fraction {
     return this._coeff;
   }
+  /**
+   * 文字(元)をアルファベット順で返す
+   */
   get factors(): string[] {
     return Object.keys(this._factors).sort();
   }
 
+  /**
+   * 全体または特定文字の次数を返す
+   * @param key 特定文字
+   * @returns
+   */
   degree(key?: string): Fraction {
     let degree = new Fraction(0);
     if (key !== undefined) {
@@ -187,6 +198,32 @@ export class Monomial {
     const factors = Monomial.mergeFactors(this._factors, other._factors);
 
     return new Monomial(coeff, factors);
+  }
+
+  static merge(...monomials: Monomial[]): Monomial[] {
+    const ret: Monomial[] = [];
+
+    monomials.forEach((a) => {
+      const i = ret.findIndex((b) => {
+        const keysA = a.factors;
+        const keysB = b.factors;
+        if (JSON.stringify(keysA) !== JSON.stringify(keysB)) {
+          return false;
+        }
+        if (keysA.length === 0) {
+          return true;
+        }
+        return !keysA.find((key) => !a.degree(key).equals(b.degree(key)));
+      });
+
+      if (i === -1) {
+        ret.push(new Monomial(a));
+      } else {
+        ret[i] = new Monomial(ret[i].coeff.add(a.coeff), a._factors);
+      }
+    });
+
+    return ret;
   }
 
   private static mergeFactors(...factors: Factor[]): Factor {

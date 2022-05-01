@@ -1,4 +1,4 @@
-import { Monomial } from "./monomial";
+import { Monomial } from "~/utils/monomial";
 
 describe("Monomialクラス", () => {
   test.each([
@@ -27,6 +27,8 @@ describe("Monomialクラス", () => {
     ["1", "x", "x"],
     ["x", "-2", "-2x"],
     ["x", "x", "x^{2}"],
+    ["2", "", "2"],
+    ["x", "", "x"],
   ])("mul() %s x %s", (a, b, expected) => {
     const x = new Monomial(a);
     expect(x.mul(b).toString()).toBe(expected);

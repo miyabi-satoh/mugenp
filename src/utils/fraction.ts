@@ -164,7 +164,8 @@ export class Fraction {
         other = new Fraction(other);
         break;
     }
-    return this.s * this.n * other.d - other.s * other.n * this.d;
+    const t = this.s * this.n * other.d - other.s * other.n * this.d;
+    return Number(0 < t) - Number(t < 0);
   }
   /**
    * Creates a string representation of a fraction
