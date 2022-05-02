@@ -1,150 +1,234 @@
-import { getRandomInt } from ".";
+import { gcd } from ".";
+
+type FractionConstructor = string | number | Fraction;
 
 export class Fraction {
   private _numerator: number = 0;
   private _denominator: number = 1;
-  private _sign: number = 1;
+  private _sign: number = 0;
 
-  constructor(numerator: number = 0, denominator: number = 1) {
-    if (denominator === 0) {
-      throw new Error(`Invalid denominator: ${denominator}`);
+  constructor(x: FractionConstructor);
+  constructor(n: number, d: number);
+  constructor(n: FractionConstructor = 0, d?: number) {
+    if (d === undefined) {
+      switch (typeof n) {
+        case "string":
+          const tmp = n.split("/");
+          switch (tmp.length) {
+            case 0:
+              return new Fraction(0, 1);
+            case 1:
+              return new Fraction(Number(n), 1);
+            case 2:
+              return new Fraction(Number(tmp[0]), Number(tmp[1]));
+          }
+          throw new Error("Invalid argument");
+
+        case "number":
+          return new Fraction(n, 1);
+
+        case "object":
+          if (n instanceof Fraction) {
+            return new Fraction(n.s * n.n, n.d);
+          }
+          throw new Error("Invalid argument");
+      }
     }
-    this._sign = numerator * denominator > 0 ? 1 : -1;
-    this._numerator = Math.abs(numerator);
-    this._denominator = Math.abs(denominator);
-    this.reduction();
+    if (d === 0) {
+      throw new Error("Division by Zero");
+    }
+    n = Number(n);
+    const s = Math.sign(n * d!);
+    n = Math.abs(n);
+    d = Math.abs(d!);
+
+    const g = gcd(n, d);
+
+    this._numerator = n / g;
+    this._denominator = d / g;
+    this._sign = s;
   }
 
-  get numerator(): number {
-    return this._numerator * this._sign;
+  /**
+   * Gets the numerator of the fraction
+   */
+  get n(): number {
+    return this._numerator;
   }
-  get denominator(): number {
+
+  /**
+   * Gets the denominator of the fraction
+   */
+  get d(): number {
     return this._denominator;
   }
-  get value(): number {
-    return this.numerator / this.denominator;
-  }
-  get abs(): number {
-    return Math.abs(this.value);
+
+  /**
+   * Gets the sign of the fraction
+   * @return 1, -1, 0, -0
+   */
+  get s(): number {
+    return this._sign;
   }
 
+  /**
+   * Returns a decimal representation of the fraction
+   */
+  get valueOf(): number {
+    return (this.s * this.n) / this.d;
+  }
+
+  /**
+   * Calculates the absolute value
+   */
+  get abs(): Fraction {
+    return new Fraction(this.n, this.d);
+  }
+
+  /**
+   * Returns true if the fraction is integer
+   */
   get isInteger(): boolean {
-    return this.denominator == 1;
+    return this.d == 1;
   }
+
+  /**
+   * Returns true if the fraction is natural number
+   */
   get isNatural(): boolean {
-    return this.denominator == 1 && this.numerator > 0;
+    return this.d == 1 && this.s > 0;
   }
+
+  /**
+   * Returns true if the fraction is not integer
+   */
   get isFrac(): boolean {
-    return this.denominator != 1;
+    return this.d != 1;
   }
+
+  /**
+   * Returns true if the fraction is greater than 0
+   */
   get isPositive(): boolean {
-    return this.numerator > 0;
+    return this.s > 0;
   }
+
+  /**
+   * Returns true if the fraction is less than 0
+   */
   get isNegative(): boolean {
-    return this.numerator < 0;
+    return this.s < 0;
   }
 
-  invert(): Fraction {
-    return new Fraction(this.denominator, this.numerator);
+  /**
+   * Gets the inverse of the fraction, means numerator and denominator are exchanged
+   */
+  inverse(): Fraction {
+    return new Fraction(this.s * this.d, this.n);
   }
 
-  isEqualTo(other: number | Fraction): boolean {
-    if (typeof other === "number") {
-      return other * this.denominator == this.numerator;
+  /**
+   * Check if two rational numbers are the same
+   */
+  equals(other: FractionConstructor): boolean {
+    switch (typeof other) {
+      case "number":
+      case "string":
+        other = new Fraction(other);
+        break;
     }
     return (
-      this.numerator == other.numerator && this.denominator == other.denominator
+      // a/b = A/B -> a*B = A*b
+      this.s * this.n * other.d === other.s * other.n * this.d
     );
   }
 
-  isSimilarTo(other: number | Fraction): boolean {
-    if (typeof other === "number") {
-      return Math.abs(other * this.denominator) == Math.abs(this.numerator);
+  /**
+   * Check if the absolute values ​​of the two rational numbers are the same
+   */
+  resembles(other: FractionConstructor): boolean {
+    switch (typeof other) {
+      case "number":
+      case "string":
+        other = new Fraction(other);
+        break;
     }
-    return (
-      Math.abs(this.numerator) == Math.abs(other.numerator) &&
-      this.denominator == other.denominator
-    );
+    return this.n * other.d === other.n * this.d;
   }
 
+  compare(other: FractionConstructor): number {
+    switch (typeof other) {
+      case "number":
+      case "string":
+        other = new Fraction(other);
+        break;
+    }
+    const t = this.s * this.n * other.d - other.s * other.n * this.d;
+    return Number(0 < t) - Number(t < 0);
+  }
+  /**
+   * Creates a string representation of a fraction
+   */
   toString(): string {
-    return `${this.numerator}/${this.denominator}`;
+    return String(this.valueOf);
   }
 
-  toTex(moji: string = "", showPlus: boolean = false): string {
-    const sign = this.numerator < 0 ? "-" : showPlus ? "+" : "";
+  /**
+   * Returns a latex representation of a Fraction object
+   */
+  toLatex(moji: string = "", showPlus: boolean = false): string {
+    const sign = this._sign < 0 ? "-" : showPlus ? "+" : "";
     if (this.isInteger) {
-      if (Math.abs(this.numerator) == 1) {
+      if (this.n == 0) {
+        return sign + "0";
+      }
+      if (Math.abs(this.n) == 1) {
         return sign + (moji ? moji : "1");
       }
-      return sign + Math.abs(this.numerator) + moji;
+      return sign + this.n + moji;
     }
-    return (
-      sign +
-      `\\frac{` +
-      Math.abs(this.numerator) +
-      `}{` +
-      this.denominator +
-      `}` +
-      moji
-    );
+    return sign + `\\frac{` + this.n + `}{` + this.d + `}` + moji;
   }
 
-  add(lhs: Fraction | number): Fraction {
-    if (typeof lhs === "number") {
-      return new Fraction(
-        this.numerator + lhs * this.denominator,
-        this.denominator
-      );
+  /**
+   * Adds two rational numbers
+   */
+  add(other: FractionConstructor): Fraction {
+    switch (typeof other) {
+      case "number":
+      case "string":
+        other = new Fraction(other);
+        break;
     }
     return new Fraction(
-      this.numerator * lhs.denominator + lhs.numerator * this.denominator,
-      this.denominator * lhs.denominator
+      this.s * this.n * other.d + other.s * other.n * this.d,
+      this.d * other.d
     );
   }
 
-  mul(lhs: Fraction | number): Fraction {
-    if (typeof lhs === "number") {
-      return new Fraction(this.numerator * lhs, this.denominator);
+  /**
+   * Multiplies two rational numbers
+   */
+  mul(other: FractionConstructor): Fraction {
+    switch (typeof other) {
+      case "number":
+      case "string":
+        other = new Fraction(other);
+        break;
     }
-    return new Fraction(
-      this.numerator * lhs.numerator,
-      this.denominator * lhs.denominator
-    );
+    return new Fraction(this.s * other.s * this.n * other.n, this.d * other.d);
   }
 
-  // 約分
-  private reduction() {
-    // 0/m -> +0/1として扱う
-    if (this._numerator == 0) {
-      this._denominator = 1;
-      this._sign = 1;
-      return;
+  /**
+   * Divides two rational numbers
+   */
+  div(other: FractionConstructor): Fraction {
+    switch (typeof other) {
+      case "number":
+      case "string":
+        other = new Fraction(other);
+        break;
     }
-
-    const end = Math.min(this._numerator, this._denominator);
-    for (let i = end; i > 1; i--) {
-      if (this._numerator % i == 0 && this._denominator % i == 0) {
-        this._numerator = this._numerator / i;
-        this._denominator = this._denominator / i;
-        this.reduction();
-        return;
-      }
-    }
+    return new Fraction(this.s * other.s * this.n * other.d, this.d * other.n);
   }
-}
-
-type Filter = undefined | ((f: Fraction) => boolean);
-export function getRandomFraction(f: Filter = undefined): Fraction {
-  do {
-    const n = getRandomInt(9, -9);
-    if (n != 0) {
-      const m = getRandomInt(9, 1);
-      const frac = new Fraction(n, m);
-      if (!f || f(frac)) {
-        return frac;
-      }
-    }
-  } while (1);
-  return new Fraction(1);
 }

@@ -7,18 +7,20 @@ import {
   SimpleGrid,
 } from "@chakra-ui/react";
 import { MathJax } from "better-react-mathjax";
-import { ChangeEventHandler, useEffect, useState } from "react";
+import { ChangeEventHandler, useEffect, useMemo, useState } from "react";
 import { RefreshFunction } from "~/interfaces/types";
 import { Layout } from "./layout";
 import { FaArrowUp, FaArrowDown } from "react-icons/fa";
+import { isDev } from "~/utils";
 type Props = {
-  title: string;
+  maxLv?: number;
+  message: string;
   onRefresh: RefreshFunction;
 };
 
-const NUM_OF_Q = process.env.NODE_ENV !== "production" ? 10 : 4;
+const NUM_OF_Q = isDev ? 10 : 4;
 
-export const MugenContainer = ({ title, onRefresh }: Props) => {
+export const MugenContainer = ({ maxLv = 5, message, onRefresh }: Props) => {
   const [score, setScore] = useState(-1);
   const [totalScore, setTotalScore] = useState(0);
   const [refresh, setRefresh] = useState(true);
@@ -26,6 +28,10 @@ export const MugenContainer = ({ title, onRefresh }: Props) => {
   const [questions, setQuestions] = useState<string[]>([]);
   const [answers, setAnswers] = useState<string[]>([]);
   const [stock, setStock] = useState<string[]>([]);
+
+  const level = useMemo(() => {
+    return Math.max(0, Math.min(Math.floor(totalScore / 5), maxLv - 1)) + 1;
+  }, [maxLv, totalScore]);
 
   const handleLevelDown = () => {
     if (totalScore > 0) {
@@ -58,27 +64,30 @@ export const MugenContainer = ({ title, onRefresh }: Props) => {
 
   useEffect(() => {
     if (refresh) {
-      // console.log(totalScore);
       const newQuestions: string[] = [];
       const newAnswers: string[] = [];
       let _stock = [...stock];
-      let retryCount = 0;
+      let s_time = new Date();
       while (newQuestions.length < NUM_OF_Q) {
-        const [question, answer] = onRefresh(totalScore);
-
-        if (_stock.includes(question) || _stock.includes(answer)) {
-          retryCount++;
-          if (retryCount > 18 * 18) {
-            _stock = [];
-            retryCount = 0;
-            // console.log("give up!");
+        const [question, answer] = onRefresh(level, totalScore);
+        if (!!question && !!answer) {
+          if (_stock.includes(question) || _stock.includes(answer)) {
+            const e_time = new Date();
+            const diff = e_time.getTime() - s_time.getTime();
+            if (diff > 50) {
+              _stock = _stock.slice(-1 * Math.floor(_stock.length / 2));
+              s_time = new Date();
+              // if (isDev) {
+              //   console.log(`Level ${level}: give up!`);
+              // }
+            }
+            continue;
           }
-          continue;
-        }
 
-        newQuestions.push(question);
-        newAnswers.push(answer);
-        _stock.push(question, answer);
+          newQuestions.push(question);
+          newAnswers.push(answer);
+          _stock.push(question, answer);
+        }
       }
 
       setShowAnswer(false);
@@ -93,7 +102,7 @@ export const MugenContainer = ({ title, onRefresh }: Props) => {
   return (
     <Layout>
       <Container my={4} p={4} maxW="container.md" shadow="base">
-        <Box mb={4}>{title}</Box>
+        <Box mb={4}>{message}</Box>
         {/* <Box mb={6}>
           <Button
             disabled={totalScore <= 0}
@@ -134,7 +143,13 @@ export const MugenContainer = ({ title, onRefresh }: Props) => {
             解答を{`${showAnswer ? "隠す" : "表示"}`}
           </Button>
           <Box mx={3}>正解数</Box>
-          <Select w="4em" mr={4} onChange={handleChangeScore} value={score}>
+          <Select
+            data-testid="correct-answers"
+            w="4em"
+            mr={4}
+            onChange={handleChangeScore}
+            value={score}
+          >
             <option value="-1"></option>
             {Array.from(Array(NUM_OF_Q + 1).keys()).map((i) => (
               <option key={i} value={i}>
@@ -145,6 +160,8 @@ export const MugenContainer = ({ title, onRefresh }: Props) => {
           <Button disabled={score < 0} onClick={handleNext}>
             次の問題
           </Button>
+          {isDev && <Box>スコア：{totalScore}</Box>}
+          {isDev && <Box>レベル：{level}</Box>}
         </Flex>
       </Container>
     </Layout>
