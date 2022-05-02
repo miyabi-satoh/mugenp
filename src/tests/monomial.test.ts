@@ -1,3 +1,4 @@
+import { Fraction } from "~/utils/fraction";
 import { Monomial } from "~/utils/monomial";
 
 describe("Monomialクラス", () => {
@@ -22,6 +23,11 @@ describe("Monomialクラス", () => {
     expect(x.toString()).toBe(expected);
   });
 
+  test("コンストラクタ", () => {
+    const x = new Monomial(new Fraction(1), "");
+    expect(x.toString()).toBe("1");
+  });
+
   test.each([
     ["2", "3", "6"],
     ["1", "x", "x"],
@@ -32,5 +38,84 @@ describe("Monomialクラス", () => {
   ])("mul() %s x %s", (a, b, expected) => {
     const x = new Monomial(a);
     expect(x.mul(b).toString()).toBe(expected);
+  });
+});
+
+describe("create()のテスト", () => {
+  test("1のみ", () => {
+    for (let i = 0; i < 100; i++) {
+      const x = Monomial.create({
+        max: 1,
+        maxD: 1,
+        maxN: 1,
+        allowZero: false,
+        allowNegative: false,
+      });
+      expect(x.coeff.equals(1)).toBeTruthy();
+    }
+  });
+
+  test("1か-1のみ", () => {
+    for (let i = 0; i < 100; i++) {
+      const x = Monomial.create({
+        max: 1,
+        maxD: 1,
+        maxN: 1,
+        allowZero: false,
+        allowNegative: true,
+      });
+      expect(x.coeff.resembles(1)).toBeTruthy();
+    }
+  });
+
+  test("自然数のみ", () => {
+    for (let i = 0; i < 100; i++) {
+      const x = Monomial.create({
+        max: 10,
+        maxD: 1,
+        maxN: 1,
+        allowZero: false,
+        allowNegative: false,
+      });
+      expect(x.coeff.compare(0) > 0).toBeTruthy();
+      expect(x.coeff.compare(10) <= 0).toBeTruthy();
+    }
+  });
+
+  test("整数のみ", () => {
+    for (let i = 0; i < 100; i++) {
+      const x = Monomial.create({
+        max: 10,
+        maxD: 1,
+        maxN: 1,
+        allowZero: true,
+        allowNegative: true,
+      });
+      expect(x.coeff.compare(-10) >= 0).toBeTruthy();
+      expect(x.coeff.compare(10) <= 0).toBeTruthy();
+    }
+  });
+
+  test("分数あり", () => {
+    let cntF = 0;
+    let cntI = 0;
+    for (let i = 0; i < 100; i++) {
+      const x = Monomial.create({
+        max: 5,
+        maxD: 5,
+        maxN: 5,
+        allowZero: false,
+        allowNegative: true,
+      });
+      if (x.coeff.isFrac) {
+        cntF++;
+      }
+      if (x.coeff.isInteger) {
+        cntI++;
+      }
+      expect(x.coeff.compare(-10) >= 0).toBeTruthy();
+      expect(x.coeff.compare(10) <= 0).toBeTruthy();
+    }
+    // console.log(cntF, cntI);
   });
 });

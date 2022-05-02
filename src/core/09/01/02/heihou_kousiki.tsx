@@ -1,6 +1,6 @@
 import { MugenContainer } from "~/components/container";
 import { RefreshFunction } from "~/interfaces/types";
-import { checkParam, drawLots, getRandomFraction } from "~/utils";
+import { drawLots } from "~/utils";
 import { Monomial } from "~/utils/monomial";
 import { Polynomial } from "~/utils/polynomial";
 
@@ -14,68 +14,46 @@ type Props = {
   message: string;
 };
 const Mugen = ({ message }: Props) => {
-  return <MugenContainer message={message} onRefresh={onRefresh} />;
+  return <MugenContainer message={message} onRefresh={handleRefresh} />;
 };
 
 export { Mugen as M91202 };
-export { onRefresh as heihou_kousiki };
+export { handleRefresh as heihou_kousiki };
 
-const onRefresh: RefreshFunction = (score) => {
-  while (1) {
-    // 平方公式：(a + b)^2
-    let a = new Monomial(
-      getRandomFraction((x) => {
-        if (!checkParam(x)) {
-          return false;
-        }
-        if (score < 5) {
-          return x.equals(1);
-        } else if (score < 15) {
-          return x.isNatural;
-        }
-        return true;
-      })
-    );
+// 平方公式：(a + b)^2
+const handleRefresh: RefreshFunction = (level, score) => {
+  const ax = Monomial.create({
+    factors: "x",
+    max: [1, 1, 2, 3, 3, 9, 9][level - 1],
+    maxD: [1, 1, 1, 1, 5, 5, 5][level - 1],
+    maxN: [1, 1, 1, 1, 5, 5, 5][level - 1],
+    allowNegative: level > 4,
+  });
+  const b = Monomial.create({
+    factors: drawLots(Math.max(50, 100 - level * 10), "", "y"),
+    max: [5, 6, 7, 8, 9, 9, 9][level - 1],
+    maxD: [1, 1, 1, 2, 5, 5, 5][level - 1],
+    maxN: [1, 1, 1, 3, 5, 5, 5][level - 1],
+    allowNegative: true,
+  });
 
-    let b = new Monomial(
-      getRandomFraction((x) => {
-        if (!checkParam(x)) {
-          return false;
-        }
-        if (score < 15) {
-          return x.isInteger;
-        }
-
-        return true;
-      })
-    );
-
-    if (!a.coeff.equals(1) && a.coeff.resembles(b.coeff)) {
-      continue;
-    }
-    if (score < 20) {
-      if (a.coeff.isNegative && (a.coeff.isFrac || b.coeff.isFrac)) {
-        continue;
-      }
-      if (a.coeff.isFrac && b.coeff.isFrac) {
-        continue;
-      }
-    } else if (score < 25) {
-      if (a.coeff.isNegative && b.coeff.isFrac) {
-        continue;
-      }
-    }
-
-    // const y = drawLots(Math.min(50, score * 2), "y", "");
-
-    a = a.mul("x");
-    b = b.mul(drawLots(Math.min(50, score * 2), "y", ""));
-    const polyQ = new Polynomial(a, b);
-    const question = "\\left(" + polyQ.toLatex() + "\\right)^2";
-
-    const polyA = polyQ.mul(polyQ).compact();
-    const answer = polyA.toLatex();
-    return [question, answer];
+  // 絶対値が同じだと、変な感じがする
+  if (!ax.coeff.resembles(1) && ax.coeff.resembles(b.coeff)) {
+    return ["", ""];
   }
-  throw new Error("What's wrong?");
+
+  if (level === 4) {
+    if (b.isFrac && !ax.coeff.equals(1)) {
+      return ["", ""];
+    }
+  } else if (level === 5) {
+    if (ax.isNegative && (ax.isFrac || b.isFrac)) {
+      return ["", ""];
+    }
+  }
+
+  const p = new Polynomial(ax, b);
+  const question = p.toLatex("()") + "^2";
+  const answer = p.mul(p).compact().toLatex();
+  return [question, answer];
 };

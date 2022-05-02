@@ -16,6 +16,14 @@
     "message": "次の計算をしなさい。"
   },
   {
+    "id": "91103",
+    "module": "poly_poly_div",
+    "grade": "中3",
+    "chapter": "式の展開と因数分解",
+    "title": "\\( (a+b)(c+d) \\) の展開",
+    "message": "次の式を展開しなさい。"
+  },
+  {
     "id": "91201",
     "module": "waseki_no_kousiki",
     "grade": "中3",
@@ -60,7 +68,15 @@
     "module": "wa_to_sa_no_bunkai",
     "grade": "中3",
     "chapter": "式の展開と因数分解",
-    "title": "\\( (a^2 - b^2) \\) の因数分解",
+    "title": "\\( a^2 - b^2 \\) の因数分解",
+    "message": "次の式を因数分解しなさい。"
+  },
+  {
+    "id": "91403",
+    "module": "heihou_bunkai",
+    "grade": "中3",
+    "chapter": "式の展開と因数分解",
+    "title": "\\( a^2 \\pm 2ab +b^2 \\) の因数分解",
     "message": "次の式を因数分解しなさい。"
   }
 ]

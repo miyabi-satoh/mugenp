@@ -1,6 +1,6 @@
 import { MugenContainer } from "~/components/container";
-import { RefreshFunction } from "~/interfaces/types";
-import { drawLots, getParam, getRandomInt } from "~/utils";
+import { RefreshFunction, TermSpec } from "~/interfaces/types";
+import { drawLots, getRandomInt } from "~/utils";
 import { Fraction } from "~/utils/fraction";
 import { Monomial } from "~/utils/monomial";
 import { Polynomial } from "~/utils/polynomial";
@@ -15,44 +15,91 @@ type Props = {
   message: string;
 };
 const Mugen = ({ message }: Props) => {
-  return <MugenContainer message={message} onRefresh={onRefresh} />;
+  return <MugenContainer message={message} onRefresh={handleRefresh} />;
 };
 
 export { Mugen as M91101 };
 
-const onRefresh: RefreshFunction = (score) => {
-  // 多項式 × 単項式
+// 多項式 × 単項式
+const handleRefresh: RefreshFunction = (level, score) => {
+  let [poly, mono] = poly_mono(level, score);
+  if (level < 5 && poly.terms[0].isNegative) {
+    poly = poly.mul(-1);
+  }
+
+  const polyAns = poly.mul(mono).compact().orderTo();
+
+  let question;
+  if (drawLots(50, true, false)) {
+    question =
+      poly.toLatex("()") +
+      " \\times " +
+      mono.toLatex(mono.isNegative ? "()" : "");
+  } else {
+    question = mono.toLatex() + poly.toLatex("()");
+  }
+  const answer = polyAns.toLatex();
+  return [question, answer];
+};
+
+export const poly_mono = (
+  level: number,
+  score: number
+): [Polynomial, Monomial] => {
+  // 単項式の文字
+  const monoVars: string[] = [];
+  if (level == 1) {
+    monoVars.push("x");
+  } else if (level == 2) {
+    monoVars.push("x", "y");
+  } else {
+    monoVars.push("x", "y", "xy");
+  }
+  // 多項式の文字
+  const polyVars: string[] = [];
+  if (level == 1) {
+    polyVars.push("x", "");
+  } else if (level == 2) {
+    polyVars.push(drawLots(50, "x", "y"), "");
+  } else if (level == 3) {
+    polyVars.push("x", "y", "");
+  } else {
+    polyVars.push("x", "y", "xy", "");
+  }
 
   // 多項式の項数
-  const maxKousuu = score > 10 ? 3 : 2;
-  const kousuu = drawLots(Math.min(50, score * 5), maxKousuu, 2);
+  const kousuuSeed = Math.max(50, 100 - score * 5);
+  const kousuu = drawLots(kousuuSeed, 2, Math.min(3, polyVars.length));
 
-  // 単項式の係数
-  let mono = new Monomial(
-    getParam({
-      max: Math.min(Math.max(2, score), 5),
-      maxD: kousuu == 3 || score < 10 ? 1 : 5,
-      maxN: 5,
-      allowZero: false,
-      allowNegative: score >= 5,
-    })
-  );
-  // 単項式の文字
-  mono = mono.mul(drawLots(Math.max(33, 100 - score * 5), "x", "y", "xy"));
+  const monoSpec: TermSpec = {
+    max: [2, 3, 4, 5, 5][level - 1],
+    maxD: kousuu == 3 ? 1 : [1, 1, 2, 3, 5][level - 1],
+    maxN: [1, 1, 2, 3, 5][level - 1],
+    allowNegative: level >= 2,
+  };
+  const polySpec: TermSpec = {
+    max: [3, 5, 9, 9, 9][level - 1],
+    maxD: kousuu == 3 ? 1 : [1, 1, 1, 3, 5][level - 1],
+    maxN: [1, 1, 1, 2, 5][level - 1],
+    allowNegative: true,
+  };
 
-  // 多項式の係数
-  const keisuu: Fraction[] = [];
+  // 単項式
+  // const mono = new Monomial(
+  //   getParam(monoParam),
+  //   drawLots(100 / monoVars.length, ...monoVars)
+  // );
+  const mono = Monomial.create({
+    ...monoSpec,
+    factors: drawLots(100 / monoVars.length, ...monoVars),
+  });
 
+  // 多項式を作成
+  let poly = new Polynomial();
   do {
-    let p = getParam({
-      max: Math.min(Math.max(3, score), 9),
-      maxD: kousuu == 3 || score < 20 ? 1 : 5,
-      maxN: 5,
-      allowZero: false,
-      allowNegative: keisuu.length > 0,
-    });
-    if (score < 20) {
-      if (mono.coeff.isFrac) {
+    let p = Monomial.create(polySpec);
+    if (level < 5) {
+      if (mono.isFrac) {
         // 乗算の結果が分数になる場合は、あらかじめ分母をかけておき
         // 答えが整数になるようにする
         const a = p.mul(mono.coeff);
@@ -61,62 +108,26 @@ const onRefresh: RefreshFunction = (score) => {
         }
       }
     } else {
-      if (p.isFrac || mono.coeff.isFrac) {
+      if (p.isFrac || mono.isFrac) {
         // 分数の乗算で約分が発生しないのは面白くない
         const a = p.mul(mono.coeff);
-        if (a.d == p.d * mono.coeff.d && a.n == p.n * mono.coeff.n) {
+        if (a.d == p.d * mono.d && a.n == p.n * mono.n) {
           continue;
         }
       }
     }
 
     // ±1以外は同じような数が並ばないようにする
-    if (p.resembles(1) || !keisuu.find((x) => x.resembles(p))) {
-      keisuu.push(p);
+    if (
+      p.coeff.resembles(1) ||
+      !poly.terms.find((x) => x.coeff.resembles(p.coeff))
+    ) {
+      const moji = polyVars.splice(getRandomInt(polyVars.length - 1), 1)[0];
+      poly = poly.append(p.mul(moji));
     }
-  } while (keisuu.length < kousuu);
+  } while (poly.length < kousuu);
 
-  // 多項式の文字
-  const moji: string[] = [];
-  if (kousuu == 2) {
-    if (score < 5) {
-      moji.push("x", "");
-    } else if (score < 10) {
-      moji.push(drawLots(50, "x", "y"), "");
-    }
-  } else {
-    if (score < 10) {
-      moji.push("x", "y", "");
-    }
-  }
-  if (moji.length !== kousuu) {
-    const mojiList = ["xy", "x", "y", ""];
-    do {
-      mojiList.splice(getRandomInt(mojiList.length - 1), 1);
-    } while (mojiList.length > kousuu);
-    moji.push(...mojiList);
-  }
+  poly = poly.compact().orderTo();
 
-  // 式として作成
-  let poly = new Polynomial();
-  for (let i = 0; i < kousuu; i++) {
-    poly = poly.append(new Monomial(keisuu[i], moji[i]));
-  }
-  poly = poly.orderTo();
-
-  let polyAns = poly.mul(mono).compact().orderTo();
-
-  let question;
-  if (drawLots(50, true, false)) {
-    question =
-      "\\left(" +
-      poly.toLatex() +
-      "\\right)" +
-      " \\times " +
-      mono.toLatex(mono.coeff.isNegative ? "()" : "");
-  } else {
-    question = mono.toLatex() + "\\left(" + poly.toLatex() + "\\right)";
-  }
-  const answer = polyAns.toLatex();
-  return [question, answer];
+  return [poly, mono];
 };

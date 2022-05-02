@@ -6,14 +6,14 @@ import {
   waitFor,
 } from "@testing-library/react";
 import { MathJaxContext } from "better-react-mathjax";
-import { M91101 } from "~/core";
+import { M91201 } from "~/core";
 import userEvent from "@testing-library/user-event";
 
-describe("M91101コンポーネント", () => {
+describe("M91201コンポーネント", () => {
   let renderResult: RenderResult;
   beforeEach(() => {
     // 準備処理 テスト対象Componentの描画
-    renderResult = render(<M91101 message="テスト" />, {
+    renderResult = render(<M91201 message="テスト" />, {
       wrapper: MathJaxContext,
     });
   });

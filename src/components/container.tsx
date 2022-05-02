@@ -7,19 +7,20 @@ import {
   SimpleGrid,
 } from "@chakra-ui/react";
 import { MathJax } from "better-react-mathjax";
-import { ChangeEventHandler, useEffect, useState } from "react";
+import { ChangeEventHandler, useEffect, useMemo, useState } from "react";
 import { RefreshFunction } from "~/interfaces/types";
 import { Layout } from "./layout";
 import { FaArrowUp, FaArrowDown } from "react-icons/fa";
 import { isDev } from "~/utils";
 type Props = {
+  maxLv?: number;
   message: string;
   onRefresh: RefreshFunction;
 };
 
 const NUM_OF_Q = isDev ? 10 : 4;
 
-export const MugenContainer = ({ message, onRefresh }: Props) => {
+export const MugenContainer = ({ maxLv = 5, message, onRefresh }: Props) => {
   const [score, setScore] = useState(-1);
   const [totalScore, setTotalScore] = useState(0);
   const [refresh, setRefresh] = useState(true);
@@ -27,6 +28,10 @@ export const MugenContainer = ({ message, onRefresh }: Props) => {
   const [questions, setQuestions] = useState<string[]>([]);
   const [answers, setAnswers] = useState<string[]>([]);
   const [stock, setStock] = useState<string[]>([]);
+
+  const level = useMemo(() => {
+    return Math.max(0, Math.min(Math.floor(totalScore / 5), maxLv - 1)) + 1;
+  }, [maxLv, totalScore]);
 
   const handleLevelDown = () => {
     if (totalScore > 0) {
@@ -62,18 +67,19 @@ export const MugenContainer = ({ message, onRefresh }: Props) => {
       const newQuestions: string[] = [];
       const newAnswers: string[] = [];
       let _stock = [...stock];
-      let retryCount = 0;
+      let s_time = new Date();
       while (newQuestions.length < NUM_OF_Q) {
-        const [question, answer] = onRefresh(totalScore);
+        const [question, answer] = onRefresh(level, totalScore);
         if (!!question && !!answer) {
           if (_stock.includes(question) || _stock.includes(answer)) {
-            retryCount++;
-            if (retryCount > NUM_OF_Q * 4) {
-              _stock = [];
-              retryCount = 0;
-              if (isDev) {
-                console.log("give up!");
-              }
+            const e_time = new Date();
+            const diff = e_time.getTime() - s_time.getTime();
+            if (diff > 50) {
+              _stock = _stock.slice(-1 * Math.floor(_stock.length / 2));
+              s_time = new Date();
+              // if (isDev) {
+              //   console.log(`Level ${level}: give up!`);
+              // }
             }
             continue;
           }
@@ -155,6 +161,7 @@ export const MugenContainer = ({ message, onRefresh }: Props) => {
             次の問題
           </Button>
           {isDev && <Box>スコア：{totalScore}</Box>}
+          {isDev && <Box>レベル：{level}</Box>}
         </Flex>
       </Container>
     </Layout>

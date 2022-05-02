@@ -1,6 +1,8 @@
-import { checkParam, drawLots, getRandomFraction } from "~/utils";
+import { drawLots } from "~/utils";
 import { RefreshFunction } from "~/interfaces/types";
 import { MugenContainer } from "~/components/container";
+import { Monomial } from "~/utils/monomial";
+import { Polynomial } from "~/utils/polynomial";
 
 // "id": "91203",
 // "module": "wa_to_sa_no_seki",
@@ -12,69 +14,34 @@ type Props = {
   message: string;
 };
 const Mugen = ({ message }: Props) => {
-  return <MugenContainer message={message} onRefresh={onRefresh} />;
+  return <MugenContainer message={message} onRefresh={handleRefresh} />;
 };
 
 export { Mugen as M91203 };
-export { onRefresh as wa_to_sa_no_seki };
+export { handleRefresh as wa_to_sa_no_seki };
 
-const onRefresh: RefreshFunction = (score) => {
-  let question = "";
-  let answer = "";
-  while (1) {
-    // 和と差の公式：(a + b)(a - b)
-    const a = getRandomFraction();
-    if (!checkParam(a)) {
-      continue;
-    }
+// 和と差の公式：(a + b)(a - b)
+const handleRefresh: RefreshFunction = (level, score) => {
+  const ax = Monomial.create({
+    factors: "x",
+    max: [1, 2, 3, 4, 5, 6, 9][level - 1],
+    maxD: [1, 1, 1, 1, 5, 5, 5][level - 1],
+    maxN: [1, 1, 1, 1, 5, 5, 5][level - 1],
+    allowNegative: level > 5,
+  });
+  const b = Monomial.create({
+    factors: drawLots(Math.max(50, 95 - level * 10), "", "y"),
+    max: 9,
+    maxD: [1, 1, 1, 2, 5, 5, 5][level - 1],
+    maxN: [1, 1, 1, 3, 5, 5, 5][level - 1],
+    allowNegative: true,
+  });
 
-    const b = getRandomFraction();
-    if (!checkParam(b)) {
-      continue;
-    }
+  const p1 = new Polynomial(ax, b);
+  const p2 = new Polynomial(ax, b.mul(-1));
 
-    // 1と1以外で同数は気持ち悪い
-    if (!a.equals(1) && a.resembles(b)) {
-      continue;
-    }
-
-    if (score < 5) {
-      // 1と整数
-      if (!a.equals(1) || b.isFrac) {
-        continue;
-      }
-    } else if (score < 10) {
-      // 自然数と整数
-      if (!a.isNatural || b.isFrac) {
-        continue;
-      }
-    } else if (score < 15) {
-      // 整数と整数
-      if (a.isFrac || b.isFrac) {
-        continue;
-      }
-    } else if (score < 20) {
-      // 自然数と分数
-      if (!a.isNatural) {
-        continue;
-      }
-    } else if (score < 25) {
-      if (a.isNegative) {
-        continue;
-      }
-    }
-
-    const y = drawLots(Math.min(50, score * 2), "y", "");
-
-    question =
-      `\\left(${a.toLatex("x")} ${b.toLatex(y, true)}\\right)` +
-      `\\left(${a.toLatex("x")} ${b.mul(-1).toLatex(y, true)}\\right)`;
-
-    const k1 = a.mul(a);
-    const k2 = b.mul(b);
-    answer = `${k1.toLatex("x^2")} - ${k2.toLatex(`${y ? "y^2" : ""}`)}`;
-    break;
-  }
+  const question = p1.toLatex("()") + p2.toLatex("()");
+  const answer = p1.mul(p2).compact().toLatex();
 
   return [question, answer];
 };

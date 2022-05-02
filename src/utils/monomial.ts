@@ -1,10 +1,12 @@
+import { TermSpec } from "~/interfaces/types";
+import { getRandomInt } from ".";
 import { Fraction } from "./fraction";
 
 type Factor = {
   [key: string]: Fraction;
 };
 
-type MonomialConstructor = number | string | Fraction | Monomial;
+export type MonomialConstructor = number | string | Fraction | Monomial;
 
 export class Monomial {
   private _coeff: Fraction = new Fraction(1);
@@ -173,11 +175,14 @@ export class Monomial {
       .join("");
 
     const coeff = this._coeff.toLatex();
-    const sign = showPlus && this.coeff.s > 0 ? "+" : "";
+    const sign = showPlus && this.coeff.s >= 0 ? "+" : "";
     if (!moji) {
       return left + sign + coeff + right;
     }
 
+    if (coeff === "0") {
+      return "";
+    }
     if (coeff == "1") {
       return left + sign + moji + right;
     }
@@ -195,6 +200,20 @@ export class Monomial {
       other = new Monomial(other);
     }
     const coeff = this._coeff.mul(other._coeff);
+    const factors = Monomial.mergeFactors(this._factors, other._factors);
+
+    return new Monomial(coeff, factors);
+  }
+
+  div(other: MonomialConstructor): Monomial {
+    if (!(other instanceof Monomial)) {
+      other = new Monomial(other);
+    }
+    const coeff = this._coeff.div(other._coeff);
+    const newFactors: Factor = {};
+    Object.keys(other._factors).forEach((key) => {
+      newFactors[key] = (other as Monomial)._factors[key].mul(-1);
+    });
     const factors = Monomial.mergeFactors(this._factors, other._factors);
 
     return new Monomial(coeff, factors);
@@ -238,5 +257,63 @@ export class Monomial {
       });
     });
     return ret;
+  }
+
+  static create({
+    factors = "",
+    max = 1,
+    maxD = 1,
+    maxN = 1,
+    allowNegative = false,
+    allowZero = false,
+  }: TermSpec): Monomial {
+    do {
+      // 分母
+      const m = getRandomInt(maxD, 1);
+      // 分子
+      maxN = m === 1 ? max : maxN;
+      const minN = allowNegative ? maxN * -1 : 0;
+      const n = getRandomInt(maxN, minN);
+
+      if (n === 0 && !allowZero) {
+        continue;
+      }
+
+      return new Monomial(new Fraction(n, m), factors);
+    } while (1);
+
+    throw new Error("What's wrong?");
+  }
+
+  // 係数に関するショートカット
+  get n(): number {
+    return this.coeff.n;
+  }
+  get d(): number {
+    return this.coeff.d;
+  }
+  get s(): number {
+    return this.coeff.s;
+  }
+  get valueOf(): number {
+    return this.coeff.valueOf;
+  }
+  get abs(): Fraction {
+    return this.coeff.abs;
+  }
+  get isInteger(): boolean {
+    return this.coeff.isInteger;
+  }
+  get isNatural(): boolean {
+    return this.coeff.isNatural;
+  }
+  get isFrac(): boolean {
+    return this.coeff.isFrac;
+  }
+  get isPositive(): boolean {
+    return this.coeff.isPositive;
+  }
+  get isNegative(): boolean {
+    return this.coeff.isNegative;
   }
 }

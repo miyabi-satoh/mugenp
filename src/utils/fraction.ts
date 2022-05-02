@@ -1,3 +1,5 @@
+import { gcd } from ".";
+
 type FractionConstructor = string | number | Fraction;
 
 export class Fraction {
@@ -40,13 +42,10 @@ export class Fraction {
     n = Math.abs(n);
     d = Math.abs(d!);
 
-    // ユークリッドの互除法で最大公約数を取得する
-    // https://blog.beatdjam.com/entry/2017/11/07/190000
-    const f = (a: number, b: number): number => (a % b ? f(b, a % b) : b);
-    const gcd = f(n, d);
+    const g = gcd(n, d);
 
-    this._numerator = n / gcd;
-    this._denominator = d / gcd;
+    this._numerator = n / g;
+    this._denominator = d / g;
     this._sign = s;
   }
 
@@ -218,5 +217,18 @@ export class Fraction {
         break;
     }
     return new Fraction(this.s * other.s * this.n * other.n, this.d * other.d);
+  }
+
+  /**
+   * Divides two rational numbers
+   */
+  div(other: FractionConstructor): Fraction {
+    switch (typeof other) {
+      case "number":
+      case "string":
+        other = new Fraction(other);
+        break;
+    }
+    return new Fraction(this.s * other.s * this.n * other.d, this.d * other.n);
   }
 }

@@ -1,4 +1,5 @@
-import { Monomial } from "./monomial";
+import { Fraction } from "./fraction";
+import { Monomial, MonomialConstructor } from "./monomial";
 
 export class Polynomial {
   private _monomials: Monomial[] = [];
@@ -12,25 +13,53 @@ export class Polynomial {
     return this._monomials.length;
   }
 
-  append(x: Monomial | Polynomial): Polynomial {
+  get terms(): Monomial[] {
+    return this._monomials;
+  }
+
+  append(x: MonomialConstructor | Polynomial): Polynomial {
+    if (typeof x !== "object" || x instanceof Fraction) {
+      x = new Monomial(x);
+    }
     if (x instanceof Polynomial) {
       return new Polynomial(...this._monomials, ...x._monomials);
     }
     return new Polynomial(...this._monomials, x);
   }
 
-  mul(x: Monomial | Polynomial): Polynomial {
+  mul(x: MonomialConstructor | Polynomial): Polynomial {
+    if (typeof x !== "object" || x instanceof Fraction) {
+      x = new Monomial(x);
+    }
     if (x instanceof Monomial) {
-      return new Polynomial(...this._monomials.map((m) => m.mul(x)));
+      return new Polynomial(
+        ...this._monomials.map((m) => m.mul(x as Monomial))
+      );
     }
     let ret = new Polynomial();
     this._monomials.forEach((m) => {
-      ret = ret.append(x.mul(m));
+      ret = ret.append((x as Polynomial).mul(m));
     });
     return ret;
   }
 
-  add(x: Monomial | Polynomial): Polynomial {
+  div(x: MonomialConstructor | Polynomial): Polynomial {
+    if (typeof x !== "object" || x instanceof Fraction) {
+      x = new Monomial(x);
+    }
+    if (x instanceof Monomial) {
+      return new Polynomial(
+        ...this._monomials.map((m) => m.div(x as Monomial))
+      );
+    }
+    let ret = new Polynomial();
+    this._monomials.forEach((m) => {
+      ret = ret.append((x as Polynomial).div(m));
+    });
+    return ret;
+  }
+
+  add(x: MonomialConstructor | Polynomial): Polynomial {
     return this.append(x).compact();
   }
 
@@ -38,8 +67,17 @@ export class Polynomial {
     return new Polynomial(...Monomial.merge(...this._monomials));
   }
 
-  toLatex(): string {
-    return this._monomials.map((x, i) => x.toLatex(!!i)).join("");
+  toLatex(brackets?: string): string {
+    let left = "";
+    let right = "";
+    if (brackets) {
+      [left, right] = brackets.split("");
+      left = "\\left" + left;
+      right = "\\right" + right;
+    }
+    return (
+      left + this._monomials.map((x, i) => x.toLatex(!!i)).join("") + right
+    );
   }
 
   orderTo(ascend?: boolean): Polynomial;

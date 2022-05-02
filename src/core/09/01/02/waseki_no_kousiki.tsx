@@ -1,6 +1,8 @@
 import { MugenContainer } from "~/components/container";
-import { RefreshFunction } from "~/interfaces/types";
-import { checkParam, drawLots, getRandomFraction } from "~/utils";
+import { RefreshFunction, TermSpec } from "~/interfaces/types";
+import { drawLots } from "~/utils";
+import { Monomial } from "~/utils/monomial";
+import { Polynomial } from "~/utils/polynomial";
 
 // "id": "91201",
 // "module": "waseki_no_kousiki",
@@ -12,80 +14,64 @@ type Props = {
   message: string;
 };
 const Mugen = ({ message }: Props) => {
-  return <MugenContainer message={message} onRefresh={onRefresh} />;
+  return (
+    <MugenContainer maxLv={7} message={message} onRefresh={handleRefresh} />
+  );
 };
 
 export { Mugen as M91201 };
-export { onRefresh as waseki_no_kousiki };
+export { handleRefresh as waseki_no_kousiki };
 
-const onRefresh: RefreshFunction = (score) => {
-  let question = "";
-  let answer = "";
-  while (1) {
-    // 和積の公式：(ax + b)(ax + c)
-    const b = getRandomFraction();
-    if (!checkParam(b)) {
-      continue;
-    }
+// 和積の公式：(ax + b)(ax + c)
+const handleRefresh: RefreshFunction = (level, score) => {
+  const bcSpec: TermSpec = {
+    factors: drawLots(Math.max(50, 110 - level * 10), "", "y"),
+    max: [3, 3, 5, 7, 9, 9, 9][level - 1],
+    maxD: [1, 1, 1, 5, 5, 5, 5][level - 1],
+    maxN: [1, 1, 1, 5, 5, 5, 5][level - 1],
+    allowNegative: true,
+  };
+  const b = Monomial.create(bcSpec);
+  const c = Monomial.create(bcSpec);
 
-    const c = getRandomFraction();
-    if (!checkParam(c)) {
-      continue;
-    }
-    if (b.resembles(c)) {
-      // 平方公式、和と差の公式の問題になってしまうのでスキップ
-      continue;
-    }
-
-    const a = getRandomFraction();
-    if (!checkParam(a) || a.isFrac) {
-      continue;
-    }
-
-    if (score < 5) {
-      if (!a.equals(1) || b.isFrac || c.isFrac) {
-        continue;
-      }
-    } else if (score < 10) {
-      if (a.isNegative || a.isFrac || b.isFrac || c.isFrac) {
-        continue;
-      }
-    } else if (score < 15) {
-      if (a.isNegative) {
-        continue;
-      }
-      if (b.isFrac || c.isFrac) {
-        if (!a.equals(1) || b.d != c.d) {
-          continue;
-        }
-      }
-    } else if (score < 20) {
-      if (b.isInteger && c.isInteger) {
-        // 制限なし
-      } else if (b.isFrac && c.isFrac) {
-        if (a.isNegative || b.d != c.d) {
-          continue;
-        }
-      } else {
-        if (!a.equals(1)) {
-          continue;
-        }
-      }
-    }
-
-    const y = drawLots(Math.min(50, score * 2), "y", "");
-    question =
-      `\\left(${a.toLatex("x")} ${b.toLatex(y, true)}\\right)` +
-      `\\left(${a.toLatex("x")} ${c.toLatex(y, true)}\\right)`;
-
-    const k1 = a.mul(a);
-    const k2 = b.add(c).mul(a);
-    const k3 = b.mul(c);
-    answer = `${k1.toLatex("x^2")} ${k2.toLatex(`x${y}`, true)} ${k3.toLatex(
-      `${y ? "y^2" : ""}`,
-      true
-    )}`;
-    break;
+  if (b.coeff.resembles(c.coeff)) {
+    // 平方公式、和と差の公式の問題になってしまうのでスキップ
+    return ["", ""];
   }
+  if (level < 7) {
+    if (b.isFrac || c.isFrac) {
+      // 同分母以外はNG
+      if (b.d !== c.d) {
+        return ["", ""];
+      }
+    }
+  }
+  const ax = Monomial.create({
+    factors: "x",
+    max: [1, 1, 2, 3, 3, 9, 9][level - 1],
+    maxD: [1, 1, 1, 1, 5, 5, 5][level - 1],
+    maxN: [1, 1, 1, 1, 5, 5, 5][level - 1],
+    allowNegative: level > 5,
+  });
+  if (level < 6) {
+    // b,cが分数だったら、a=1
+    if (b.isFrac && !ax.coeff.equals(1)) {
+      return ["", ""];
+    }
+    // aが分数だったら、b,cは整数
+    if (ax.isFrac && (b.isFrac || c.isFrac)) {
+      return ["", ""];
+    }
+  } else if (level < 7) {
+    // aが負の数だったら、a,b,cは整数
+    if (ax.isNegative && (ax.isFrac || b.isFrac || c.isFrac)) {
+      return ["", ""];
+    }
+  }
+
+  const p1 = new Polynomial(ax, b);
+  const p2 = new Polynomial(ax, c);
+  const question = p1.toLatex("()") + p2.toLatex("()");
+  const answer = p1.mul(p2).compact().toLatex();
   return [question, answer];
 };

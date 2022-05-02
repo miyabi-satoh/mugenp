@@ -15,16 +15,16 @@ type Props = {
   message: string;
 };
 const Mugen = ({ message }: Props) => {
-  return <MugenContainer message={message} onRefresh={onRefresh} />;
+  return <MugenContainer message={message} onRefresh={handleRefresh} />;
 };
 
 export { Mugen as M91204 };
 
-const onRefresh: RefreshFunction = (score) => {
+const handleRefresh: RefreshFunction = (level, score) => {
   return drawLots(
     33,
     heihou_kousiki,
     wa_to_sa_no_seki,
     waseki_no_kousiki
-  )(score);
+  )(level, score);
 };
