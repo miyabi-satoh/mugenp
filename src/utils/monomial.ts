@@ -212,7 +212,7 @@ export class Monomial {
     const coeff = this._coeff.div(other._coeff);
     const newFactors: Factor = {};
     Object.keys(other._factors).forEach((key) => {
-      newFactors[key] = (other as Monomial)._factors[key].mul(-1);
+      newFactors[key] = (other as Monomial)._factors[key].neg;
     });
     const factors = Monomial.mergeFactors(this._factors, other._factors);
 
@@ -300,6 +300,9 @@ export class Monomial {
   }
   get abs(): Fraction {
     return this.coeff.abs;
+  }
+  get neg(): Monomial {
+    return new Monomial(this.coeff.neg, this._factors);
   }
   get isInteger(): boolean {
     return this.coeff.isInteger;

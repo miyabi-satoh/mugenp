@@ -169,4 +169,14 @@ describe("Fractionクラス", () => {
       expect(f.compare(x) < 0).toBe(e3);
     });
   });
+
+  describe("neg()をテスト", () => {
+    test.each([
+      [1, -1],
+      [-1, 1],
+    ])("compare(%d)", (a, expected) => {
+      const f = new Fraction(a);
+      expect(f.neg.valueOf).toBe(expected);
+    });
+  });
 });

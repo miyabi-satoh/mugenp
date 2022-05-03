@@ -17,6 +17,10 @@ export class Polynomial {
     return this._monomials;
   }
 
+  get neg(): Polynomial {
+    return new Polynomial(...this._monomials.map((x) => x.neg));
+  }
+
   append(x: MonomialConstructor | Polynomial): Polynomial {
     if (typeof x !== "object" || x instanceof Fraction) {
       x = new Monomial(x);
@@ -64,7 +68,9 @@ export class Polynomial {
   }
 
   compact(): Polynomial {
-    return new Polynomial(...Monomial.merge(...this._monomials));
+    return new Polynomial(
+      ...Monomial.merge(...this._monomials).filter((x) => !x.coeff.equals(0))
+    );
   }
 
   toLatex(brackets?: string): string {

@@ -26,4 +26,9 @@ describe("Polynomialクラス", () => {
     const x = new Polynomial(new Monomial(a), new Monomial(b), new Monomial(c));
     expect(x.orderTo("x").toLatex()).toBe("x^{2}-2x+1");
   });
+
+  test.each([["1", "-2x", "+x^{2}"]])("neg()", (a, b, c) => {
+    const x = new Polynomial(new Monomial(a), new Monomial(b), new Monomial(c));
+    expect(x.neg.orderTo("x").toLatex()).toBe("-x^{2}+2x-1");
+  });
 });

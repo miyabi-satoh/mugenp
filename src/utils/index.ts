@@ -65,3 +65,10 @@ export function randArray<T>(...array: T[]): T {
   var rValue = array[rand];
   return rValue;
 }
+
+/**
+ * 最小値と最大値の範囲内に収めた数値を返す
+ */
+export function minMax(min: number, n: number, max: number): number {
+  return Math.max(min, Math.min(n, max));
+}

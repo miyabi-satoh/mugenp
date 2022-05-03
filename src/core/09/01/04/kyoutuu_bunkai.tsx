@@ -29,10 +29,10 @@ const handleRefresh: RefreshFunction = (level, score) => {
     return ["", ""];
   }
   if (poly.terms[0].isNegative) {
-    poly = poly.mul(-1);
+    poly = poly.neg;
   }
   if (mono.isNegative) {
-    mono = mono.mul(-1);
+    mono = mono.neg;
   }
 
   const g = gcd(...poly.terms.map((x) => x.coeff.valueOf));
