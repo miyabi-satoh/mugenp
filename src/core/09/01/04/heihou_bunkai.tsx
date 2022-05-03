@@ -1,6 +1,6 @@
 import { MugenContainer } from "~/components/container";
 import { RefreshFunction } from "~/interfaces/types";
-import { drawLots, gcd } from "~/utils";
+import { byScore, gcd, guard } from "~/utils";
 import { Monomial } from "~/utils/monomial";
 import { Polynomial } from "~/utils/polynomial";
 
@@ -18,20 +18,22 @@ const Mugen = ({ message }: Props) => {
 };
 
 export { Mugen as M91403 };
+export { handleRefresh as heihou_bunkai };
 
 // 平方公式：(a + b)^2
 const handleRefresh: RefreshFunction = (level, score) => {
+  const idx = level - 1;
   let ax = Monomial.create({
     factors: "x",
-    max: [1, 1, 2, 3, 3, 9, 9][level - 1],
-    maxD: [1, 1, 1, 1, 5, 5, 5][level - 1],
-    maxN: [1, 1, 1, 1, 5, 5, 5][level - 1],
+    max: guard(idx, 1, 1, 2, 3, 3, 9),
+    maxD: guard(idx, 1, 1, 1, 1, 5),
+    maxN: guard(idx, 1, 1, 1, 1, 5),
   });
   let b = Monomial.create({
-    factors: drawLots(Math.max(50, 100 - level * 10), "", "y"),
-    max: [5, 6, 7, 8, 9, 9, 9][level - 1],
-    maxD: [1, 1, 1, 2, 5, 5, 5][level - 1],
-    maxN: [1, 1, 1, 3, 5, 5, 5][level - 1],
+    factors: byScore(score, "", "y"),
+    max: guard(idx, 5, 6, 7, 8, 9),
+    maxD: guard(idx, 1, 1, 1, 2, 5),
+    maxN: guard(idx, 1, 1, 1, 3, 5),
     allowNegative: true,
   });
 

@@ -52,7 +52,7 @@
     "module": "jyouhou_kousiki",
     "grade": "中3",
     "chapter": "式の展開と因数分解",
-    "title": "乗法公式まとめ",
+    "title": "乗法公式ミックス",
     "message": "次の式を展開しなさい。"
   },
   {
@@ -77,6 +77,22 @@
     "grade": "中3",
     "chapter": "式の展開と因数分解",
     "title": "\\( a^2 \\pm 2ab +b^2 \\) の因数分解",
+    "message": "次の式を因数分解しなさい。"
+  },
+  {
+    "id": "91404",
+    "module": "waseki_no_bunkai",
+    "grade": "中3",
+    "chapter": "式の展開と因数分解",
+    "title": "\\( x^2 + (a+b)x +ab \\) の因数分解",
+    "message": "次の式を因数分解しなさい。"
+  },
+  {
+    "id": "91405",
+    "module": "insuu_bunkai",
+    "grade": "中3",
+    "chapter": "式の展開と因数分解",
+    "title": "因数分解ミックス",
     "message": "次の式を因数分解しなさい。"
   }
 ]

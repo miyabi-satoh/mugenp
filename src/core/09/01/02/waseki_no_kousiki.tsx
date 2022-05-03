@@ -1,6 +1,6 @@
 import { MugenContainer } from "~/components/container";
 import { RefreshFunction, TermSpec } from "~/interfaces/types";
-import { drawLots } from "~/utils";
+import { byScore, guard } from "~/utils";
 import { Monomial } from "~/utils/monomial";
 import { Polynomial } from "~/utils/polynomial";
 
@@ -24,11 +24,12 @@ export { handleRefresh as waseki_no_kousiki };
 
 // 和積の公式：(ax + b)(ax + c)
 const handleRefresh: RefreshFunction = (level, score) => {
+  const idx = level - 1;
   const bcSpec: TermSpec = {
-    factors: drawLots(Math.max(50, 110 - level * 10), "", "y"),
-    max: [3, 3, 5, 7, 9, 9, 9][level - 1],
-    maxD: [1, 1, 1, 5, 5, 5, 5][level - 1],
-    maxN: [1, 1, 1, 5, 5, 5, 5][level - 1],
+    factors: byScore(score, "", "y"),
+    max: guard(idx, 3, 3, 5, 7, 9),
+    maxD: guard(idx, 1, 1, 1, 5),
+    maxN: guard(idx, 1, 1, 1, 5),
     allowNegative: true,
   };
   const b = Monomial.create(bcSpec);
@@ -48,9 +49,9 @@ const handleRefresh: RefreshFunction = (level, score) => {
   }
   const ax = Monomial.create({
     factors: "x",
-    max: [1, 1, 2, 3, 3, 9, 9][level - 1],
-    maxD: [1, 1, 1, 1, 5, 5, 5][level - 1],
-    maxN: [1, 1, 1, 1, 5, 5, 5][level - 1],
+    max: guard(idx, 1, 1, 2, 3, 3, 9),
+    maxD: guard(idx, 1, 1, 1, 1, 5),
+    maxN: guard(idx, 1, 1, 1, 1, 5),
     allowNegative: level > 5,
   });
   if (level < 6) {

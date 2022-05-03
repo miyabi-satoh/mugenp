@@ -16,11 +16,15 @@ export function getRandomInt(max: number, min: number = 0): number {
 }
 
 /**
- * thresholdを確率(%)としたクジ引き
+ * scoreを元にした抽選
+ *
+ * F(x) = 100 - (x^2/2)
+ * F(0) = 100, F(10) = 50
  */
-export function drawLots<T>(threshold: number, ...lots: T[]): T {
-  const found = lots.find((x) => getRandomInt(100) < threshold);
-  return found || lots.slice(-1)[0];
+export function byScore<T>(score: number, ...ary: T[]): T {
+  const threshold = Math.max(100 / ary.length, 100 - (score * score) / 2);
+  const found = ary.find((x) => getRandomInt(100) <= threshold);
+  return found !== undefined ? found : ary[0];
 }
 
 /**
@@ -37,4 +41,27 @@ export function gcd(...args: number[]): number {
   }
 
   return ans;
+}
+
+/**
+ * 安全な配列からのチョイス
+ */
+export function guard<T>(idx: number, ...ary: T[]): T {
+  if (ary[idx] === undefined) {
+    if (idx > ary.length / 2) {
+      return ary.slice(-1)[0];
+    } else {
+      return ary[0];
+    }
+  }
+  return ary[idx];
+}
+
+/**
+ * 配列からランダムに要素を返す
+ */
+export function randArray<T>(...array: T[]): T {
+  var rand = (Math.random() * array.length) | 0;
+  var rValue = array[rand];
+  return rValue;
 }

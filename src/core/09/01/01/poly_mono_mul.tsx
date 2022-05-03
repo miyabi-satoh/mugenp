@@ -1,7 +1,6 @@
 import { MugenContainer } from "~/components/container";
 import { RefreshFunction, TermSpec } from "~/interfaces/types";
-import { drawLots, getRandomInt } from "~/utils";
-import { Fraction } from "~/utils/fraction";
+import { getRandomInt, guard, randArray } from "~/utils";
 import { Monomial } from "~/utils/monomial";
 import { Polynomial } from "~/utils/polynomial";
 
@@ -30,7 +29,7 @@ const handleRefresh: RefreshFunction = (level, score) => {
   const polyAns = poly.mul(mono).compact().orderTo();
 
   let question;
-  if (drawLots(50, true, false)) {
+  if (randArray(true, false)) {
     question =
       poly.toLatex("()") +
       " \\times " +
@@ -60,7 +59,7 @@ export const poly_mono = (
   if (level == 1) {
     polyVars.push("x", "");
   } else if (level == 2) {
-    polyVars.push(drawLots(50, "x", "y"), "");
+    polyVars.push(randArray("x", "y"), "");
   } else if (level == 3) {
     polyVars.push("x", "y", "");
   } else {
@@ -68,30 +67,26 @@ export const poly_mono = (
   }
 
   // 多項式の項数
-  const kousuuSeed = Math.max(50, 100 - score * 5);
-  const kousuu = drawLots(kousuuSeed, 2, Math.min(3, polyVars.length));
+  const kousuu = randArray(2, Math.min(3, polyVars.length));
 
+  const idx = level - 1;
   const monoSpec: TermSpec = {
-    max: [2, 3, 4, 5, 5][level - 1],
-    maxD: kousuu == 3 ? 1 : [1, 1, 2, 3, 5][level - 1],
-    maxN: [1, 1, 2, 3, 5][level - 1],
+    max: guard(idx, 2, 3, 4, 5),
+    maxD: kousuu == 3 ? 1 : guard(idx, 1, 1, 2, 3, 5),
+    maxN: guard(idx, 1, 1, 2, 3, 5),
     allowNegative: level >= 2,
   };
   const polySpec: TermSpec = {
-    max: [3, 5, 9, 9, 9][level - 1],
-    maxD: kousuu == 3 ? 1 : [1, 1, 1, 3, 5][level - 1],
-    maxN: [1, 1, 1, 2, 5][level - 1],
+    max: guard(idx, 3, 5, 9),
+    maxD: kousuu == 3 ? 1 : guard(idx, 1, 1, 1, 3, 5),
+    maxN: guard(idx, 1, 1, 1, 2, 5),
     allowNegative: true,
   };
 
   // 単項式
-  // const mono = new Monomial(
-  //   getParam(monoParam),
-  //   drawLots(100 / monoVars.length, ...monoVars)
-  // );
   const mono = Monomial.create({
     ...monoSpec,
-    factors: drawLots(100 / monoVars.length, ...monoVars),
+    factors: randArray(...monoVars),
   });
 
   // 多項式を作成
