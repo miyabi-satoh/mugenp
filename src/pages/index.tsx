@@ -23,7 +23,7 @@ const Card = ({ page }: CardProps) => {
       <Box bg="blue.100" px={2} py={1} fontSize="sm">
         {page.grade} {page.chapter}
       </Box>
-      <Center as="h2" p={4} bg="blue.600" color="gray.50">
+      <Center as="h2" p={4} bg="blue.600" color="gray.50" fontSize="sm">
         <NextLink href={`/${page.id}`} passHref>
           <LinkOverlay>
             <MathJax>{page.title}</MathJax>

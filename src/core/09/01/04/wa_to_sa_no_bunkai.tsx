@@ -1,7 +1,6 @@
 import { RefreshFunction } from "~/interfaces/types";
 import { MugenContainer } from "~/components/container";
-import { wa_to_sa_no_seki } from "~/core";
-import { drawLots, gcd } from "~/utils";
+import { byScore, gcd, guard } from "~/utils";
 import { Monomial } from "~/utils/monomial";
 import { Polynomial } from "~/utils/polynomial";
 
@@ -19,21 +18,23 @@ const Mugen = ({ message }: Props) => {
 };
 
 export { Mugen as M91402 };
+export { handleRefresh as wa_to_sa_no_bunkai };
 
 // 和と差の公式：(a + b)(a - b)
 const handleRefresh: RefreshFunction = (level, score) => {
+  const idx = level - 1;
   let ax = Monomial.create({
     factors: "x",
-    max: [1, 2, 3, 4, 5, 6, 9][level - 1],
-    maxD: [1, 1, 1, 1, 5, 5, 5][level - 1],
-    maxN: [1, 1, 1, 1, 5, 5, 5][level - 1],
+    max: guard(idx, 1, 2, 3, 4, 5, 6, 9),
+    maxD: guard(idx, 1, 1, 1, 1, 5),
+    maxN: guard(idx, 1, 1, 1, 1, 5),
     allowNegative: level > 5,
   });
   let b = Monomial.create({
-    factors: drawLots(Math.max(50, 95 - level * 10), "", "y"),
-    max: 9,
-    maxD: [1, 1, 1, 2, 5, 5, 5][level - 1],
-    maxN: [1, 1, 1, 3, 5, 5, 5][level - 1],
+    factors: byScore(score, "", "y"),
+    max: guard(idx, 3, 5, 7, 9, 11, 13),
+    maxD: guard(idx, 1, 1, 1, 2, 5),
+    maxN: guard(idx, 1, 1, 1, 3, 5),
     allowNegative: true,
   });
 

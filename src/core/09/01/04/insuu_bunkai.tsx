@@ -1,16 +1,17 @@
 import { MugenContainer } from "~/components/container";
 import { RefreshFunction } from "~/interfaces/types";
 import { randArray } from "~/utils";
-import { heihou_kousiki } from "./heihou_kousiki";
-import { waseki_no_kousiki } from "./waseki_no_kousiki";
-import { wa_to_sa_no_seki } from "./wa_to_sa_no_seki";
+import { heihou_bunkai } from "./heihou_bunkai";
+import { kyoutuu_bunkai } from "./kyoutuu_bunkai";
+import { waseki_no_bunkai } from "./waseki_no_bunkai";
+import { wa_to_sa_no_bunkai } from "./wa_to_sa_no_bunkai";
 
-// "id": "91204",
-// "module": "jyouhou_kousiki",
+// "id": "91405",
+// "module": "insuu_bunkai",
 // "grade": "中3",
 // "chapter": "式の展開と因数分解",
-// "title": "乗法公式まとめ",
-// "message": "次の式を展開しなさい。"
+// "title": "因数分解まとめ",
+// "message": "次の式を因数分解しなさい。"
 type Props = {
   message: string;
 };
@@ -20,12 +21,13 @@ const Mugen = ({ message }: Props) => {
   );
 };
 
-export { Mugen as M91204 };
+export { Mugen as M91405 };
 
 const handleRefresh: RefreshFunction = (level, score) => {
   return randArray(
-    heihou_kousiki,
-    wa_to_sa_no_seki,
-    waseki_no_kousiki
+    kyoutuu_bunkai,
+    wa_to_sa_no_bunkai,
+    heihou_bunkai,
+    waseki_no_bunkai
   )(level, score);
 };

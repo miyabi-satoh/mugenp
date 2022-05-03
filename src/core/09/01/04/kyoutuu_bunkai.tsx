@@ -17,6 +17,7 @@ const Mugen = ({ message }: Props) => {
 };
 
 export { Mugen as M91401 };
+export { handleRefresh as kyoutuu_bunkai };
 
 // 共通因数でくくる
 const handleRefresh: RefreshFunction = (level, score) => {

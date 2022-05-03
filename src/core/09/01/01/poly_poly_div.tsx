@@ -1,6 +1,6 @@
 import { MugenContainer } from "~/components/container";
 import { RefreshFunction } from "~/interfaces/types";
-import { drawLots, getRandomInt } from "~/utils";
+import { getRandomInt, randArray } from "~/utils";
 import { Monomial } from "~/utils/monomial";
 import { Polynomial } from "~/utils/polynomial";
 
@@ -26,7 +26,7 @@ const handleRefresh: RefreshFunction = (level, score) => {
   if (level == 1) {
     polyVars.push("x", "");
   } else if (level == 2) {
-    polyVars.push(drawLots(50, "x", "y"), "");
+    polyVars.push(randArray("x", "y"), "");
   } else {
     polyVars.push("x", "y", "");
   }
@@ -37,7 +37,7 @@ const handleRefresh: RefreshFunction = (level, score) => {
     const moji = [...polyVars];
     let kousuu: number = 2;
     if (level >= 3) {
-      kousuu = drawLots(50, 2, 3);
+      kousuu = randArray(2, 3);
       if (i > 0 && expressions[0].terms.length === 3) {
         kousuu = 2;
       }
