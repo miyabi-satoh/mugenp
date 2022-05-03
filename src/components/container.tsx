@@ -11,8 +11,9 @@ import { ChangeEventHandler, useEffect, useMemo, useState } from "react";
 import { RefreshFunction } from "~/interfaces/types";
 import { Layout } from "./layout";
 import { FaArrowUp, FaArrowDown } from "react-icons/fa";
-import { isDev } from "~/utils";
+import { isDev, minMax } from "~/utils";
 type Props = {
+  columns?: number | number[];
   maxLv?: number;
   message: string;
   onRefresh: RefreshFunction;
@@ -20,7 +21,12 @@ type Props = {
 
 const NUM_OF_Q = isDev ? 10 : 4;
 
-export const MugenContainer = ({ maxLv = 5, message, onRefresh }: Props) => {
+export const MugenContainer = ({
+  columns = [1, 1, 2],
+  maxLv = 5,
+  message,
+  onRefresh,
+}: Props) => {
   const [score, setScore] = useState(-1);
   const [totalScore, setTotalScore] = useState(0);
   const [refresh, setRefresh] = useState(true);
@@ -30,7 +36,7 @@ export const MugenContainer = ({ maxLv = 5, message, onRefresh }: Props) => {
   const [stock, setStock] = useState<string[]>([]);
 
   const level = useMemo(() => {
-    return Math.max(0, Math.min(Math.floor(totalScore / 5), maxLv - 1)) + 1;
+    return minMax(0, Math.floor(totalScore / 5), maxLv - 1) + 1;
   }, [maxLv, totalScore]);
 
   const handleLevelDown = () => {
@@ -121,7 +127,7 @@ export const MugenContainer = ({ maxLv = 5, message, onRefresh }: Props) => {
             難易度を上げる
           </Button>
         </Box> */}
-        <SimpleGrid columns={2} mb={4}>
+        <SimpleGrid columns={columns} mb={4}>
           {questions.map((q, index) => (
             <Box key={`${q}${index}`}>
               <Flex h="3em" align="center">

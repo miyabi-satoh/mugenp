@@ -39,6 +39,16 @@ describe("Monomialクラス", () => {
     const x = new Monomial(a);
     expect(x.mul(b).toString()).toBe(expected);
   });
+
+  test.each([
+    ["1", "-1"],
+    ["-1", "1"],
+    ["x", "-x"],
+    ["-x", "x"],
+  ])("neg() %s -> %s", (a, expected) => {
+    const x = new Monomial(a);
+    expect(x.neg.toString()).toBe(expected);
+  });
 });
 
 describe("create()のテスト", () => {

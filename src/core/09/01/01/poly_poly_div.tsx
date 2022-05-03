@@ -1,6 +1,6 @@
 import { MugenContainer } from "~/components/container";
 import { RefreshFunction } from "~/interfaces/types";
-import { getRandomInt, randArray } from "~/utils";
+import { getRandomInt, minMax, randArray } from "~/utils";
 import { Monomial } from "~/utils/monomial";
 import { Polynomial } from "~/utils/polynomial";
 
@@ -22,6 +22,13 @@ export { Mugen as M91103 };
 // 多項式 × 多項式
 const handleRefresh: RefreshFunction = (level, score) => {
   // 多項式の文字
+  //  Lv1 : (x) + (N)
+  //  Lv2 : (x) + (N)
+  //        (y) + (N)
+  //  Lv3 : (x) + (N)
+  //        (y) + (N)
+  //        (x) + (y)
+  //        (x) + (y) + (N)
   const polyVars: string[] = [];
   if (level == 1) {
     polyVars.push("x", "");
@@ -45,7 +52,7 @@ const handleRefresh: RefreshFunction = (level, score) => {
 
     do {
       let p = Monomial.create({
-        max: Math.min(Math.max(3, score), 9),
+        max: minMax(3, score, 9),
         maxD: kousuu == 3 || level < 5 ? 1 : 5,
         maxN: 5,
         allowNegative: true,
@@ -64,7 +71,7 @@ const handleRefresh: RefreshFunction = (level, score) => {
     expressions[i] = expressions[i].orderTo();
     // 初項がマイナスにならないようにする
     if (expressions[i].terms[0].isNegative) {
-      expressions[i] = expressions[i].mul(-1);
+      expressions[i] = expressions[i].neg;
     }
   }
 

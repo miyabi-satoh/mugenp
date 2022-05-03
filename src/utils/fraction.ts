@@ -86,6 +86,13 @@ export class Fraction {
   }
 
   /**
+   * Inverts the sign of the current fraction
+   **/
+  get neg(): Fraction {
+    return new Fraction(-this.s * this.n, this.d);
+  }
+
+  /**
    * Returns true if the fraction is integer
    */
   get isInteger(): boolean {

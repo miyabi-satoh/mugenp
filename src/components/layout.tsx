@@ -29,7 +29,7 @@ const Footer = () => {
 
 const Main = ({ children }: PropsWithChildren<{}>) => {
   return (
-    <Box flex="1" shadow="sm">
+    <Box flex="1" shadow="sm" overflowY="scroll">
       {children}
     </Box>
   );

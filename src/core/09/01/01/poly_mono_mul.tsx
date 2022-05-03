@@ -23,7 +23,7 @@ export { Mugen as M91101 };
 const handleRefresh: RefreshFunction = (level, score) => {
   let [poly, mono] = poly_mono(level, score);
   if (level < 5 && poly.terms[0].isNegative) {
-    poly = poly.mul(-1);
+    poly = poly.neg;
   }
 
   const polyAns = poly.mul(mono).compact().orderTo();

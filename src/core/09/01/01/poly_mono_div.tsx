@@ -23,8 +23,8 @@ const handleRefresh: RefreshFunction = (level, score) => {
 
   let poly = polyAns.mul(mono).compact().orderTo();
   if (level < 5 && poly.terms[0].isNegative) {
-    poly = poly.mul(-1);
-    polyAns = polyAns.mul(-1);
+    poly = poly.neg;
+    polyAns = polyAns.neg;
   }
 
   const question =

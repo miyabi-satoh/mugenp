@@ -4,6 +4,8 @@ export type Page = {
   title: string;
   grade: string;
   chapter: string;
+  section: string;
+  subsection: string;
   message: string;
 };
 

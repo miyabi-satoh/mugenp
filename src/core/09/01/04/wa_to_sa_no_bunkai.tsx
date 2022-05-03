@@ -45,7 +45,7 @@ const handleRefresh: RefreshFunction = (level, score) => {
   }
 
   const p1 = new Polynomial(ax, b);
-  const p2 = new Polynomial(ax, b.mul(-1));
+  const p2 = new Polynomial(ax, b.neg);
 
   const question = p1.mul(p2).compact().toLatex();
   const answer = p1.toLatex("()") + p2.toLatex("()");
