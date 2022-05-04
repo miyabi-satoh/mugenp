@@ -2,7 +2,6 @@ import { readFileSync } from "fs";
 import { GetStaticPaths, GetStaticProps } from "next";
 import dynamic from "next/dynamic";
 import { join } from "path";
-import { ComponentType } from "react";
 import { Page } from "~/interfaces/types";
 
 type PathParams = {
