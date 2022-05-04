@@ -15,6 +15,7 @@ import { isDev, minMax } from "~/utils";
 type Props = {
   columns?: number | number[];
   maxLv?: number;
+  answerPrefix?: string;
   message: string;
   onRefresh: RefreshFunction;
 };
@@ -24,6 +25,7 @@ const NUM_OF_Q = isDev ? 10 : 4;
 export const MugenContainer = ({
   columns = [1, 1, 2],
   maxLv = 5,
+  answerPrefix = "=",
   message,
   onRefresh,
 }: Props) => {
@@ -138,7 +140,7 @@ export const MugenContainer = ({
               </Flex>
               <Box h="3em" my={2} ml={6} color="red">
                 {showAnswer && (
-                  <MathJax>{`\\(\\displaystyle = ${answers[index]}\\)`}</MathJax>
+                  <MathJax>{`\\(\\displaystyle ${answerPrefix} ${answers[index]}\\)`}</MathJax>
                 )}
               </Box>
             </Box>

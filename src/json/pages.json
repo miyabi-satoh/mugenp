@@ -1,5 +1,25 @@
 [
   {
+    "id": "71101",
+    "module": "fugou",
+    "grade": "中1",
+    "chapter": "正の数・負の数",
+    "section": "正の数・負の数",
+    "subsection": "０より小さい数",
+    "title": "正の符号・負の符号",
+    "message": "次の数について、正の符号または負の符号をつけて表しなさい。"
+  },
+  {
+    "id": "71201",
+    "module": "hantai",
+    "grade": "中1",
+    "chapter": "正の数・負の数",
+    "section": "正の数・負の数",
+    "subsection": "正の数・負の数で量を表す",
+    "title": "反対の性質を持つ量",
+    "message": "[　]内の言葉を使って、次のことを表しなさい。"
+  },
+  {
     "id": "91101",
     "module": "poly_mono_mul",
     "grade": "中3",
