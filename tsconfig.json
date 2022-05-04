@@ -17,7 +17,8 @@
     "baseUrl": "./",
     "paths": {
       "~/*": ["src/*"]
-    }
+    },
+    "types": ["puppeteer", "jest-environment-puppeteer", "expect-puppeteer"]
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
   "exclude": ["node_modules"]

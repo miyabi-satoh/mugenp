@@ -15,7 +15,8 @@ const customJestConfig = {
     // aliasを定義 （tsconfig.jsonのcompilerOptions>pathsの定義に合わせる）
     "^~/(.*)$": "<rootDir>/src/$1",
   },
-  testEnvironment: 'jest-environment-jsdom',
+  // testEnvironment: 'jest-environment-jsdom',
+  preset: 'jest-puppeteer',
 }
 
 // createJestConfig is exported this way to ensure that next/jest can load the Next.js config which is async
