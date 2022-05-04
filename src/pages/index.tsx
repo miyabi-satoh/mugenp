@@ -7,6 +7,8 @@ import {
   LinkOverlay,
   Select,
   SimpleGrid,
+  Wrap,
+  WrapItem,
 } from "@chakra-ui/react";
 import { MathJax } from "better-react-mathjax";
 import { readFileSync } from "fs";
@@ -106,29 +108,46 @@ const Home: NextPage<PageProps> = ({ pages }) => {
   return (
     <Layout>
       <Container p={4} maxW="container.md">
-        <Flex alignItems="center" mb={4}>
-          <Box mr={3}>学年</Box>
-          <Select w="5em" onChange={handleChangeGrade} value={grade}>
-            {grades.map((key) => (
-              <option key={key} value={key}>
-                {key}
-              </option>
-            ))}
-          </Select>
-          <Box mx={3}>項目</Box>
-          <Select
-            maxW="16em"
-            onChange={handleChangeSubsection}
-            value={subSection}
-          >
-            <option value="">すべて表示</option>
-            {subsections.map((key) => (
-              <option key={key} value={key}>
-                {key}
-              </option>
-            ))}
-          </Select>
-        </Flex>
+        <Wrap mb={4}>
+          <WrapItem>
+            <Flex alignItems="center">
+              <Box flexGrow={0} flexShrink={0} mr={2}>
+                学年
+              </Box>
+              <Select
+                mr={3}
+                minW="5em"
+                onChange={handleChangeGrade}
+                value={grade}
+              >
+                {grades.map((key) => (
+                  <option key={key} value={key}>
+                    {key}
+                  </option>
+                ))}
+              </Select>
+            </Flex>
+          </WrapItem>
+          <WrapItem>
+            <Flex alignItems="center">
+              <Box flexGrow={0} flexShrink={0} mr={2}>
+                項目
+              </Box>
+              <Select
+                minW="16em"
+                onChange={handleChangeSubsection}
+                value={subSection}
+              >
+                <option value="">すべて表示</option>
+                {subsections.map((key) => (
+                  <option key={key} value={key}>
+                    {key}
+                  </option>
+                ))}
+              </Select>
+            </Flex>
+          </WrapItem>
+        </Wrap>
         <SimpleGrid columns={[1, 1, 2]} spacing={6}>
           {pages
             .filter((p) => p.grade == grade)

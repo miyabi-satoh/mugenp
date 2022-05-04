@@ -12,11 +12,12 @@ function MyApp({ Component, pageProps }: AppProps) {
         <DefaultSeo
           titleTemplate="MuGenP | %s"
           defaultTitle="MuGenP"
-          description="中学数学の主要な計算問題を無限に演習できるサイトです。"
+          description="中学数学の主要な計算問題を無限に演習できるサイトです。(開発中)"
           openGraph={{
             type: "website",
             locale: "ja_JP",
             url: "https://mugenp.amiiby.com/",
+            site_name: "MuGenP",
             images: [
               {
                 url: "https://mugenp.amiiby.com/mugenp.png",
