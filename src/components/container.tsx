@@ -15,6 +15,7 @@ import { isDev, minMax } from "~/utils";
 type Props = {
   columns?: number | number[];
   maxLv?: number;
+  answerPrefix?: string;
   message: string;
   onRefresh: RefreshFunction;
 };
@@ -24,6 +25,7 @@ const NUM_OF_Q = isDev ? 10 : 4;
 export const MugenContainer = ({
   columns = [1, 1, 2],
   maxLv = 5,
+  answerPrefix = "=",
   message,
   onRefresh,
 }: Props) => {
@@ -138,19 +140,19 @@ export const MugenContainer = ({
               </Flex>
               <Box h="3em" my={2} ml={6} color="red">
                 {showAnswer && (
-                  <MathJax>{`\\(\\displaystyle = ${answers[index]}\\)`}</MathJax>
+                  <MathJax>{`\\(\\displaystyle ${answerPrefix} ${answers[index]}\\)`}</MathJax>
                 )}
               </Box>
             </Box>
           ))}
         </SimpleGrid>
         <Flex align="center" ml={2}>
-          <Button onClick={() => setShowAnswer(!showAnswer)}>
+          <Button id="toggle-answer" onClick={() => setShowAnswer(!showAnswer)}>
             解答を{`${showAnswer ? "隠す" : "表示"}`}
           </Button>
           <Box mx={3}>正解数</Box>
           <Select
-            data-testid="correct-answers"
+            id="select-score"
             w="4em"
             mr={4}
             onChange={handleChangeScore}
@@ -163,7 +165,7 @@ export const MugenContainer = ({
               </option>
             ))}
           </Select>
-          <Button disabled={score < 0} onClick={handleNext}>
+          <Button id="button-next" disabled={score < 0} onClick={handleNext}>
             次の問題
           </Button>
           {isDev && <Box>スコア：{totalScore}</Box>}

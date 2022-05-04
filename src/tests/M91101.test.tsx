@@ -9,7 +9,7 @@ import { MathJaxContext } from "better-react-mathjax";
 import { M91101 } from "~/core";
 import userEvent from "@testing-library/user-event";
 
-describe("M91101コンポーネント", () => {
+describe.skip("M91101コンポーネント", () => {
   let renderResult: RenderResult;
   beforeEach(() => {
     // 準備処理 テスト対象Componentの描画

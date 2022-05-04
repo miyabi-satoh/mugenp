@@ -13,8 +13,9 @@ import { readFileSync } from "fs";
 import type { GetStaticProps, NextPage } from "next";
 import NextLink from "next/link";
 import { join } from "path";
-import { ChangeEventHandler, useEffect, useMemo, useState } from "react";
+import { ChangeEvent, useCallback, useMemo } from "react";
 import { Layout } from "~/components/layout";
+import { useLocalStorage } from "~/hooks/useLocalStorage";
 import { Page } from "~/interfaces/types";
 
 type CardProps = {
@@ -53,14 +54,23 @@ export const getStaticProps: GetStaticProps<PageProps> = async (context) => {
   };
 };
 
-const Home: NextPage<PageProps> = ({ pages }) => {
-  const [grade, setGrade] = useState("");
-  const [subSection, setSubSection] = useState("");
+const STORAGE_KEY_GRADE = "mugenp.amiiby.com/grade";
+const STORAGE_KEY_SUBSECTION = "mugenp.amiiby.com/subsection";
 
+const Home: NextPage<PageProps> = ({ pages }) => {
   const grades = useMemo(() => {
     const _grades = pages.map((x) => x.grade);
     return _grades.filter((e, pos) => _grades.indexOf(e) == pos);
   }, [pages]);
+
+  const [grade, setGrade] = useLocalStorage(
+    STORAGE_KEY_GRADE,
+    grades.slice(-1)[0]
+  );
+  const [subSection, setSubSection] = useLocalStorage(
+    STORAGE_KEY_SUBSECTION,
+    ""
+  );
 
   const subsections = useMemo(() => {
     const _subsections = pages
@@ -69,21 +79,36 @@ const Home: NextPage<PageProps> = ({ pages }) => {
     return _subsections.filter((e, pos) => _subsections.indexOf(e) == pos);
   }, [grade, pages]);
 
-  useEffect(() => {
-    setGrade(grades[0]);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  const handleChangeGrade = useCallback(
+    (ev: ChangeEvent<HTMLSelectElement>) => {
+      setSubSection("");
+      setGrade(ev.target.value);
+    },
+    [setGrade, setSubSection]
+  );
+
+  const handleChangeSubsection = useCallback(
+    (ev: ChangeEvent<HTMLSelectElement>) => {
+      setSubSection(ev.target.value);
+    },
+    [setSubSection]
+  );
+
+  // useEffect(() => {
+  //   setGrade(grades[0]);
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, []);
+
+  if (grade === undefined || subSection === undefined) {
+    return null;
+  }
 
   return (
     <Layout>
       <Container p={4} maxW="container.md">
         <Flex alignItems="center" mb={4}>
           <Box mr={3}>学年</Box>
-          <Select
-            w="5em"
-            onChange={(ev) => setGrade(ev.target.value)}
-            value={grade}
-          >
+          <Select w="5em" onChange={handleChangeGrade} value={grade}>
             {grades.map((key) => (
               <option key={key} value={key}>
                 {key}
@@ -92,8 +117,8 @@ const Home: NextPage<PageProps> = ({ pages }) => {
           </Select>
           <Box mx={3}>項目</Box>
           <Select
-            maxW="10em"
-            onChange={(ev) => setSubSection(ev.target.value)}
+            maxW="16em"
+            onChange={handleChangeSubsection}
             value={subSection}
           >
             <option value="">すべて表示</option>

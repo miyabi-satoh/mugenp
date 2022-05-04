@@ -1,5 +1,4 @@
 import { Flex, Heading, Center, Link, Box } from "@chakra-ui/react";
-import Head from "next/head";
 import NextLink from "next/link";
 import { PropsWithChildren } from "react";
 
@@ -35,18 +34,9 @@ const Main = ({ children }: PropsWithChildren<{}>) => {
   );
 };
 
-type Props = {
-  title?: string;
-};
-export const Layout = ({
-  children,
-  title = "MuGenP",
-}: PropsWithChildren<Props>) => {
+export const Layout = ({ children }: PropsWithChildren<{}>) => {
   return (
     <Container>
-      <Head>
-        <title>{title}</title>
-      </Head>
       <Header />
       <Main>{children}</Main>
       <Footer />

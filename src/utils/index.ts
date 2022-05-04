@@ -5,6 +5,10 @@ export const isDev = process.env.NODE_ENV !== "production";
 
 /**
  * min以上 max以下のランダムな整数を返す
+ *
+ * @param {number} max - 最大値
+ * @param {number} [min=0] - 最小値(省略時:0)
+ * @returns {number} 結果
  */
 export function getRandomInt(max: number, min: number = 0): number {
   if (min > max) {
