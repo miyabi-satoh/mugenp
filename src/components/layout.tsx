@@ -1,6 +1,15 @@
-import { Flex, Heading, Center, Link, Box } from "@chakra-ui/react";
+import {
+  Flex,
+  Heading,
+  Center,
+  Link,
+  Box,
+  Spacer,
+  Icon,
+} from "@chakra-ui/react";
 import NextLink from "next/link";
 import { PropsWithChildren } from "react";
+import { FaInfoCircle } from "react-icons/fa";
 
 const Container = ({ children }: PropsWithChildren<{}>) => {
   return (
@@ -12,12 +21,18 @@ const Container = ({ children }: PropsWithChildren<{}>) => {
 
 const Header = () => {
   return (
-    <Flex shadow="sm" py={2} px={4}>
+    <Flex shadow="sm" py={2} px={4} alignItems="center">
       <Heading as="h1" size="lg">
         <NextLink href="/" passHref>
           <Link _hover={{ textDecorationLine: "none" }}>MuGenP</Link>
         </NextLink>
       </Heading>
+      <Spacer />
+      <NextLink href="/about" passHref>
+        <Link d="inline-flex" alignItems="center">
+          <Icon as={FaInfoCircle} mr={1} /> About
+        </Link>
+      </NextLink>
     </Flex>
   );
 };
