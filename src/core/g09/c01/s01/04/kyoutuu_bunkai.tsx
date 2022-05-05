@@ -1,6 +1,6 @@
 import { MugenContainer } from "~/components/container";
 import { RefreshFunction } from "~/interfaces/types";
-import { gcd } from "~/utils";
+import { dsp, gcd } from "~/utils";
 import { poly_mono } from "../01";
 
 // "id": "91401",
@@ -41,5 +41,5 @@ const handleRefresh: RefreshFunction = (level, score) => {
 
   const question = poly.mul(mono).toLatex();
   const answer = mono.toLatex() + poly.toLatex("()");
-  return [question, answer];
+  return [dsp(question), dsp(answer)];
 };

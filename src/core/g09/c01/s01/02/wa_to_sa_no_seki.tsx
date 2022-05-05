@@ -1,4 +1,4 @@
-import { byScore, guard } from "~/utils";
+import { byScore, dsp, guard } from "~/utils";
 import { RefreshFunction } from "~/interfaces/types";
 import { MugenContainer } from "~/components/container";
 import { Monomial } from "~/utils/monomial";
@@ -46,5 +46,5 @@ const handleRefresh: RefreshFunction = (level, score) => {
   const question = p1.toLatex("()") + p2.toLatex("()");
   const answer = p1.mul(p2).compact().toLatex();
 
-  return [question, answer];
+  return [dsp(question), dsp(answer)];
 };

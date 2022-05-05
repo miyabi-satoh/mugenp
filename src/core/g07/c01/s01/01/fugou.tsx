@@ -1,6 +1,7 @@
 import { MugenContainer } from "~/components/container";
 import { RefreshFunction } from "~/interfaces/types";
-import { getRandomInt, randArray } from "~/utils";
+import { dsp, getRandomInt, randArray } from "~/utils";
+import { Fraction } from "~/utils/fraction";
 import { Monomial } from "~/utils/monomial";
 
 // "id": "71101",
@@ -28,43 +29,42 @@ export { Mugen as M71101 };
 
 // 0よりX[大きい,小さい]数を答える
 const handleRefresh: RefreshFunction = (level, score) => {
-  let question = "";
+  let qValue: Fraction;
 
   if (level === 1) {
-    question += seisuu();
+    qValue = seisuu();
   } else if (level === 2) {
-    question += randArray(seisuu, syousuu)();
+    qValue = randArray(seisuu, syousuu)();
   } else {
-    question += randArray(seisuu, syousuu, bunsuu)();
+    qValue = randArray(seisuu, syousuu, bunsuu)();
   }
 
-  let answer = "";
+  let aValue: Fraction;
+  let qType: string;
   if (randArray(true, false)) {
-    answer = "+" + question;
-    question += "\\,\\mbox{大きな数}";
+    aValue = new Fraction(qValue);
+    qType = " 大きな";
   } else {
-    answer = "-" + question;
-    question += "\\,\\mbox{小さな数}";
+    aValue = qValue.neg;
+    qType = " 小さな";
   }
 
-  return [`0\\mbox{よりも}\\, ${question}`, answer];
+  const question = dsp("0") + " よりも " + dsp(qValue.toLatex()) + qType + "数";
+  return [question, dsp(aValue.toLatex(true))];
 };
 
-const seisuu = (): string => {
-  const x = getRandomInt(9, 1);
-  return String(x);
+const seisuu = (): Fraction => {
+  return new Fraction(getRandomInt(9, 1));
 };
 
-const syousuu = (): string => {
-  const x = getRandomInt(50, 1);
-  return String(x / 10);
+const syousuu = (): Fraction => {
+  return new Fraction(getRandomInt(50, 1) / 10);
 };
 
-const bunsuu = (): string => {
-  const x = Monomial.create({
+const bunsuu = (): Fraction => {
+  return Monomial.create({
     max: 9,
     maxD: 9,
     maxN: 9,
-  });
-  return x.toLatex();
+  }).coeff;
 };

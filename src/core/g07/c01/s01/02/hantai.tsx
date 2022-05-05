@@ -1,6 +1,6 @@
 import { MugenContainer } from "~/components/container";
 import { RefreshFunction } from "~/interfaces/types";
-import { getRandomInt, randArray } from "~/utils";
+import { dsp, getRandomInt, randArray } from "~/utils";
 import { Fraction } from "~/utils/fraction";
 
 // "id": "71201",
@@ -48,18 +48,19 @@ const handleRefresh: RefreshFunction = (level, score) => {
   const units: string[] = words[idx][2];
   const unit = randArray(...units);
 
-  let value = "";
-
-  if (level === 1 || unit === "円") {
-    value = seisuu();
+  let qValue: Fraction;
+  if (level === 1 || ["円", "個"].includes(unit)) {
+    qValue = seisuu();
   } else if (level === 2) {
-    value = randArray(seisuu, syousuu)();
+    qValue = randArray(seisuu, syousuu)();
   } else {
-    value = randArray(seisuu, syousuu, bunsuu)();
+    qValue = randArray(seisuu, syousuu, bunsuu)();
   }
 
-  const sign_q = randArray("+", "-");
-  const sign_a = sign_q === "+" ? "-" : "+";
+  if (randArray(true, false)) {
+    qValue = qValue.neg;
+  }
+  const aValue = qValue.neg;
 
   let word_q, word_a;
   if (randArray(true, false)) {
@@ -70,27 +71,26 @@ const handleRefresh: RefreshFunction = (level, score) => {
     word_a = words[idx][0];
   }
 
-  const question = `${sign_q}${value}\\mbox{${unit} ${word_q}}\\quad\\mbox{[${word_a}]}`;
-  const answer = `${sign_a}${value}\\mbox{${unit} ${word_a}}`;
+  const question = dsp(qValue.toLatex(true)) + `${unit} ${word_q}　[${word_a}]`;
+  const answer = dsp(aValue.toLatex(true)) + `${unit} ${word_a}`;
 
   return [question, answer];
 };
 
-const seisuu = (): string => {
-  const x = getRandomInt(499, 100);
-  return String(x);
+const seisuu = (): Fraction => {
+  return new Fraction(getRandomInt(499, 100));
 };
 
-const syousuu = (): string => {
+const syousuu = (): Fraction => {
   const x = getRandomInt(499, 1);
   const y = getRandomInt(String(x).length, 1);
-  return String(x * Math.pow(10, -y));
+  console.log(x, y, x / Math.pow(10, y));
+  return new Fraction(x / Math.pow(10, y));
 };
 
-const bunsuu = (): string => {
+const bunsuu = (): Fraction => {
   const n = getRandomInt(499, 100);
   const m = getRandomInt(9, 1);
 
-  const x = new Fraction(n, m);
-  return x.toLatex();
+  return new Fraction(n, m);
 };

@@ -136,11 +136,13 @@ export const MugenContainer = ({
                 <Box w="2em" textAlign="center" mr={2}>
                   ({index + 1})
                 </Box>
-                <MathJax>{`\\(\\displaystyle ${q}\\)`}</MathJax>
+                <MathJax>{q}</MathJax>
               </Flex>
               <Box h="3em" my={2} ml={6} color="red">
                 {showAnswer && (
-                  <MathJax>{`\\(\\displaystyle ${answerPrefix} ${answers[index]}\\)`}</MathJax>
+                  <MathJax>
+                    {answerPrefix} {answers[index]}
+                  </MathJax>
                 )}
               </Box>
             </Box>

@@ -1,6 +1,6 @@
 import { MugenContainer } from "~/components/container";
 import { RefreshFunction } from "~/interfaces/types";
-import { getRandomInt, minMax, randArray } from "~/utils";
+import { dsp, getRandomInt, minMax, randArray } from "~/utils";
 import { Monomial } from "~/utils/monomial";
 import { Polynomial } from "~/utils/polynomial";
 
@@ -80,5 +80,5 @@ const handleRefresh: RefreshFunction = (level, score) => {
 
   const question = expressions[0].toLatex("()") + expressions[1].toLatex("()");
   const answer = polyAns.toLatex();
-  return [question, answer];
+  return [dsp(question), dsp(answer)];
 };

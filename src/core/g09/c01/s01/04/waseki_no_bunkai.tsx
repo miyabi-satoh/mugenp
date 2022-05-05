@@ -1,6 +1,6 @@
 import { MugenContainer } from "~/components/container";
 import { RefreshFunction, TermSpec } from "~/interfaces/types";
-import { byScore, guard } from "~/utils";
+import { byScore, dsp, guard } from "~/utils";
 import { Monomial } from "~/utils/monomial";
 import { Polynomial } from "~/utils/polynomial";
 
@@ -45,5 +45,5 @@ const handleRefresh: RefreshFunction = (level, score) => {
   const p2 = new Polynomial(ax, c);
   const question = p1.mul(p2).compact().toLatex();
   const answer = p1.toLatex("()") + p2.toLatex("()");
-  return [question, answer];
+  return [dsp(question), dsp(answer)];
 };
