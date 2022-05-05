@@ -4,8 +4,8 @@ FROM node:16-alpine AS deps
 RUN apk add --no-cache libc6-compat
 WORKDIR /app
 COPY package.json yarn.lock ./
-# # devDependenciesはインストールしない
-# ENV NODE_ENV production
+# devDependenciesはインストールしない
+ENV NODE_ENV production
 RUN yarn install --frozen-lockfile
 
 # If using npm with a `package-lock.json` comment out above and use below instead
@@ -59,5 +59,5 @@ EXPOSE 3001
 
 ENV PORT 3001
 
-# CMD ["node", "server.js"]
-CMD ["yarn", "start"]
+CMD ["node", "server.js"]
+# CMD ["yarn", "start"]
