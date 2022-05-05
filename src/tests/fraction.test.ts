@@ -40,6 +40,7 @@ describe("Fractionクラス", () => {
       [-5, 1, "-5"], // -5/1
       [-1, 5, "-\\frac{1}{5}"], // -1/5
       [-3, 5, "-\\frac{3}{5}"], // -3/5
+      [0.3, 1, "0.3"],
     ])("%d / %d = %s", (a, b, expected) => {
       const f = new Fraction(a, b);
       expect(f.toLatex()).toBe(expected);

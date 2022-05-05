@@ -42,10 +42,14 @@ export class Fraction {
     n = Math.abs(n);
     d = Math.abs(d!);
 
-    const g = gcd(n, d);
+    if (d != 1) {
+      const g = gcd(n, d);
+      n /= g;
+      d /= g;
+    }
 
-    this._numerator = n / g;
-    this._denominator = d / g;
+    this._numerator = n;
+    this._denominator = d;
     this._sign = s;
   }
 
