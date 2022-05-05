@@ -22,7 +22,7 @@ const testParams = [...json.map((x) => [x.id])];
 // スクリーンショットの保存先
 const ssDir = join(process.cwd(), "src", "tests", "screenshots");
 
-describe("Google", () => {
+describe("スクリーンショット", () => {
   // ユニットテスト起動
   beforeAll(async () => {
     browser = await puppeteer.launch({ headless: true });
@@ -44,6 +44,8 @@ describe("Google", () => {
     async (id) => {
       await page.goto(`http://localhost:3001/${id}`);
       expect(page.url()).toBe(`http://localhost:3001/${id}`);
+      const text = await page.evaluate(() => document.body.textContent);
+      expect(text).not.toContain("スコア");
       for (let i = 0; i < 10; i++) {
         await page.click("#toggle-answer");
         await page.screenshot({

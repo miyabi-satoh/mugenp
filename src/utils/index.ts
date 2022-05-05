@@ -4,6 +4,15 @@
 export const isDev = process.env.NODE_ENV !== "production";
 
 /**
+ * 数式をインラインスタイルにして返す
+ * @param {string} x - 数式
+ * @returns インラインスタイルの数式
+ */
+export function dsp(x: string): string {
+  return `\\(\\displaystyle ${x}\\)`;
+}
+
+/**
  * min以上 max以下のランダムな整数を返す
  *
  * @param {number} max - 最大値

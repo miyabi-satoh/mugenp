@@ -1,6 +1,6 @@
 import { MugenContainer } from "~/components/container";
 import { RefreshFunction } from "~/interfaces/types";
-import { byScore, guard } from "~/utils";
+import { byScore, dsp, guard } from "~/utils";
 import { Monomial } from "~/utils/monomial";
 import { Polynomial } from "~/utils/polynomial";
 
@@ -108,5 +108,5 @@ const handleRefresh: RefreshFunction = (level, score) => {
     answer = "0";
   }
 
-  return [question, answer];
+  return [dsp(question), dsp(answer)];
 };

@@ -42,10 +42,14 @@ export class Fraction {
     n = Math.abs(n);
     d = Math.abs(d!);
 
-    const g = gcd(n, d);
+    if (d != 1) {
+      const g = gcd(n, d);
+      n /= g;
+      d /= g;
+    }
 
-    this._numerator = n / g;
-    this._denominator = d / g;
+    this._numerator = n;
+    this._denominator = d;
     this._sign = s;
   }
 
@@ -183,7 +187,22 @@ export class Fraction {
   /**
    * Returns a latex representation of a Fraction object
    */
-  toLatex(moji: string = "", showPlus: boolean = false): string {
+  toLatex(showPlus?: boolean, moji?: string): string;
+  toLatex(moji?: string, showPlus?: boolean): string;
+  toLatex(showPlus?: boolean | string, moji?: string | boolean): string {
+    if (typeof showPlus === "string") {
+      [showPlus, moji] = [moji, showPlus];
+    }
+    if (showPlus === undefined) {
+      showPlus = false;
+    }
+    if (moji === undefined) {
+      moji = "";
+    }
+    if (typeof showPlus != "boolean" || typeof moji != "string") {
+      throw new Error("Invalid argument");
+    }
+
     const sign = this._sign < 0 ? "-" : showPlus ? "+" : "";
     if (this.isInteger) {
       if (this.n == 0) {
