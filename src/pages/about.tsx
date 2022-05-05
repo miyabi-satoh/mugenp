@@ -15,8 +15,8 @@ const Heading3 = ({ children }: PropsWithChildren<{}>) => (
   <Heading
     as="h3"
     size="md"
-    mt={8}
-    mb={4}
+    mt={10}
+    mb={3}
     pl={2}
     py={2}
     borderLeftColor="tomato"
@@ -27,13 +27,19 @@ const Heading3 = ({ children }: PropsWithChildren<{}>) => (
 );
 
 const Heading4 = ({ children }: PropsWithChildren<{}>) => (
-  <Heading as="h4" size="sm" mb={1}>
+  <Heading as="h4" size="sm" mt={8} mb={1}>
     {children}
   </Heading>
 );
 
 const Paragraph = ({ children }: PropsWithChildren<{}>) => (
   <Text as="p" mb={3}>
+    {children}
+  </Text>
+);
+
+const Bold = ({ children }: PropsWithChildren<{}>) => (
+  <Text as="span" fontWeight="bold">
     {children}
   </Text>
 );
@@ -54,7 +60,21 @@ const About: NextPage = () => {
       <Container p={4} maxW="container.md">
         <Heading2>このサイトについて</Heading2>
         <Paragraph>
-          現役の塾講師が作成した、公立の中学校における数学の主要な計算問題を無限に演習できる無料サイトです。
+          公立の中学校で学習する数学の主要な計算問題を無限に演習できる無料サイトです。
+        </Paragraph>
+
+        <Heading3>経緯(いきさつ)</Heading3>
+        <Paragraph>
+          当初は紙ベースの演習プリントを作成する仕組みを構築しようとして
+          「無限プリント」から「MuGenP」というプロジェクト名を付けました。
+        </Paragraph>
+        <Paragraph>
+          その後「いやこれ印刷じゃなくて画面表示で良くない？」となり、
+          現在の形になりました。
+        </Paragraph>
+        <Paragraph>
+          MuGenP は <Bold>Mu</Bold>ddled(ごちゃまぜに)<Bold>Gen</Bold>
+          erated(生成された)<Bold>P</Bold>ractice(練習問題)の意味です。(後付け)
         </Paragraph>
 
         <Heading3>計算能力の向上に役立ちます</Heading3>
@@ -68,13 +88,16 @@ const About: NextPage = () => {
           これにより適度なレベルの演習を積むことができます。
         </Paragraph>
 
-        <Heading3>速い・安い・便利</Heading3>
+        <Heading3>お手軽に利用できます</Heading3>
         <Paragraph>
           このサイトのコンテンツはすべて無料で利用できます。
           <br />
           面倒なユーザー登録などもありません。
         </Paragraph>
         <Paragraph>
+          Google
+          ChromeやSafariなどの、いわゆるモダンブラウザをターゲットに制作しています。
+          <br />
           問題生成は端末側で行われるので、ページが表示された後はサーバーとの通信を必要としません。
         </Paragraph>
 
@@ -149,7 +172,7 @@ const About: NextPage = () => {
           </ExternalLink>
         </Heading4>
         <Paragraph>
-          このサイトをホスティングしているNTTPCコミュニケーションズ様のサービスです。
+          このサイトをホスティングしているNTTPCコミュニケーションズのサービスです。
           いっちゃん安い月額396円（税込）のプランを使っています。
           <ExternalLink href="https://ja.wikipedia.org/wiki/VPS">
             VPS
@@ -161,7 +184,7 @@ const About: NextPage = () => {
         <Heading3>製作者について</Heading3>
         <Paragraph>
           某個別指導塾で講師をしています。
-          某大学の工学部情報処理学科卒、某この木なんの木気になる木系列でSEをしていたという経歴はありますがプログラミングはすべて独学です。
+          某大学の工学部情報処理学科卒、某この木なんの木気になる木系列の会社でSEをしていたという経歴はありますがプログラミングはすべて独学です。
         </Paragraph>
         <Paragraph>
           プログラミングに限らず、何事もすべて独力で学べます。
