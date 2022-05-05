@@ -1,9 +1,7 @@
 import { MugenContainer } from "~/components/container";
-import { RefreshFunction, TermSpec } from "~/interfaces/types";
-import { getRandomInt, guard, randArray } from "~/utils";
+import { RefreshFunction } from "~/interfaces/types";
+import { getRandomInt, randArray } from "~/utils";
 import { Fraction } from "~/utils/fraction";
-import { Monomial } from "~/utils/monomial";
-import { Polynomial } from "~/utils/polynomial";
 
 // "id": "71201",
 // "module": "hantai",
