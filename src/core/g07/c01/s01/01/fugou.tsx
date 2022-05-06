@@ -13,12 +13,14 @@ import { Monomial } from "~/utils/monomial";
 // "title": "正の符号・負の符号",
 // "message": "次の数について、正の符号または負の符号をつけて表しなさい。"
 type Props = {
+  title: string;
   message: string;
 };
-const Mugen = ({ message }: Props) => {
+const Mugen = ({ title, message }: Props) => {
   return (
     <MugenContainer
       answerPrefix=""
+      title={title}
       message={message}
       onRefresh={handleRefresh}
     />

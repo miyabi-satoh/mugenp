@@ -12,11 +12,17 @@ import { wa_to_sa_no_seki } from "./wa_to_sa_no_seki";
 // "title": "乗法公式まとめ",
 // "message": "次の式を展開しなさい。"
 type Props = {
+  title: string;
   message: string;
 };
-const Mugen = ({ message }: Props) => {
+const Mugen = ({ title, message }: Props) => {
   return (
-    <MugenContainer maxLv={7} message={message} onRefresh={handleRefresh} />
+    <MugenContainer
+      maxLv={7}
+      title={title}
+      message={message}
+      onRefresh={handleRefresh}
+    />
   );
 };
 

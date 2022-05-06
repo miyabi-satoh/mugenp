@@ -13,12 +13,14 @@ import { Monomial } from "~/utils/monomial";
 // "title": "正の数・負の数の大小",
 // "message": "次の各組の数の大小を、不等号(＜)を使って表しなさい。"
 type Props = {
+  title: string;
   message: string;
 };
-const Mugen = ({ message }: Props) => {
+const Mugen = ({ title, message }: Props) => {
   return (
     <MugenContainer
       answerPrefix=""
+      title={title}
       message={message}
       onRefresh={handleRefresh}
     />

@@ -40,9 +40,11 @@ export const getStaticProps: GetStaticProps<Page> = async (context) => {
 };
 
 const Mugen = (page: Page) => {
-  const MugenContainer = dynamic<{ message: string }>(() =>
-    import("~/core").then((mod: any) => mod[`M${page.id}`])
-  );
+  const MugenContainer = dynamic<{
+    title: string;
+    message: string;
+  }>(() => import("~/core").then((mod: any) => mod[`M${page.id}`]));
+
   const description = useMemo(() => {
     let ret = page.grade + " " + page.chapter + " ";
     if (page.section != page.chapter) {
@@ -53,10 +55,14 @@ const Mugen = (page: Page) => {
     return ret;
   }, [page]);
 
+  const title = useMemo(() => {
+    return `${page.grade} ${page.section} / ${page.subsection}`;
+  }, [page]);
+
   return (
     <>
       <NextSeo
-        title={`${page.grade} ${page.subsection}`}
+        title={title}
         description={description}
         openGraph={{
           type: "article",
@@ -64,7 +70,7 @@ const Mugen = (page: Page) => {
           title: page.subsection,
         }}
       />
-      <MugenContainer message={page.message} />
+      <MugenContainer title={title} message={page.message} />
     </>
   );
 };

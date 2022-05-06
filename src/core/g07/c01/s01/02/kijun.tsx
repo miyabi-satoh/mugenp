@@ -12,13 +12,15 @@ import { Monomial } from "~/utils/monomial";
 // "title": "基準からの増減や過不足",
 // "message": "次の問いに答えなさい。"
 type Props = {
+  title: string;
   message: string;
 };
-const Mugen = ({ message }: Props) => {
+const Mugen = ({ title, message }: Props) => {
   return (
     <MugenContainer
       answerPrefix=""
       columns={1}
+      title={title}
       message={message}
       onRefresh={handleRefresh}
     />

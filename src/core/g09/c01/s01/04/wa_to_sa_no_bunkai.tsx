@@ -11,10 +11,13 @@ import { Polynomial } from "~/utils/polynomial";
 // "title": "\\( (a^2 - b^2) \\) の因数分解",
 // "message": "次の式を因数分解しなさい。"
 type Props = {
+  title: string;
   message: string;
 };
-const Mugen = ({ message }: Props) => {
-  return <MugenContainer message={message} onRefresh={handleRefresh} />;
+const Mugen = ({ title, message }: Props) => {
+  return (
+    <MugenContainer title={title} message={message} onRefresh={handleRefresh} />
+  );
 };
 
 export { Mugen as M91142 };

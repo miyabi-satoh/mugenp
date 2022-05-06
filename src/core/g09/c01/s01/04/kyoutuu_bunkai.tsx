@@ -10,10 +10,13 @@ import { poly_mono } from "../01";
 // "title": "共通因数でくくる",
 // "message": "次の式を因数分解しなさい。"
 type Props = {
+  title: string;
   message: string;
 };
-const Mugen = ({ message }: Props) => {
-  return <MugenContainer message={message} onRefresh={handleRefresh} />;
+const Mugen = ({ title, message }: Props) => {
+  return (
+    <MugenContainer title={title} message={message} onRefresh={handleRefresh} />
+  );
 };
 
 export { Mugen as M91141 };

@@ -12,12 +12,14 @@ import { Fraction } from "~/utils/fraction";
 // "title": "反対の性質を持つ量",
 // "message": "[ ]内の言葉を使って、次のことを表しなさい。"
 type Props = {
+  title: string;
   message: string;
 };
-const Mugen = ({ message }: Props) => {
+const Mugen = ({ title, message }: Props) => {
   return (
     <MugenContainer
       answerPrefix=""
+      title={title}
       message={message}
       onRefresh={handleRefresh}
     />

@@ -3,6 +3,7 @@ import {
   Button,
   Container,
   Flex,
+  Heading,
   Select,
   SimpleGrid,
 } from "@chakra-ui/react";
@@ -16,6 +17,7 @@ type Props = {
   columns?: number | number[];
   maxLv?: number;
   answerPrefix?: string;
+  title: string;
   message: string;
   onRefresh: RefreshFunction;
 };
@@ -26,6 +28,7 @@ export const MugenContainer = ({
   columns = [1, 1, 2],
   maxLv = 5,
   answerPrefix = "=",
+  title,
   message,
   onRefresh,
 }: Props) => {
@@ -110,6 +113,11 @@ export const MugenContainer = ({
   return (
     <Layout>
       <Container my={4} p={4} maxW="container.md" shadow="base">
+        <Box>
+          <Heading as="h2" size="sm">
+            {title}
+          </Heading>
+        </Box>
         <Box mb={4}>{message}</Box>
         {/* <Box mb={6}>
           <Button

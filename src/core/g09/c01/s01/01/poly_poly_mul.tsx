@@ -11,10 +11,13 @@ import { Polynomial } from "~/utils/polynomial";
 // "title": "\\( (a+b)(c+d) \\) の展開",
 // "message": "次の式を展開をしなさい。"
 type Props = {
+  title: string;
   message: string;
 };
-const Mugen = ({ message }: Props) => {
-  return <MugenContainer message={message} onRefresh={handleRefresh} />;
+const Mugen = ({ title, message }: Props) => {
+  return (
+    <MugenContainer title={title} message={message} onRefresh={handleRefresh} />
+  );
 };
 
 export { Mugen as M91113 };
