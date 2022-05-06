@@ -40,6 +40,7 @@ const handleRefresh: RefreshFunction = (level, score) => {
       maxD: guard(idx, 1, 5, 10),
       maxN: guard(idx, 1, 4, 9),
       allowNegative: true,
+      allowZero: true,
     }).coeff;
     // 分母が5or10なら小数表記にする
     if (x.d == 5 || x.d == 10) {
