@@ -4,7 +4,7 @@ import { byScore, dsp, guard } from "~/utils";
 import { Monomial } from "~/utils/monomial";
 import { Polynomial } from "~/utils/polynomial";
 
-// "id": "91202",
+// "id": "91122",
 // "module": "heihou_kousiki",
 // "grade": "中3",
 // "chapter": "式の展開と因数分解",
@@ -19,7 +19,7 @@ const Mugen = ({ message }: Props) => {
   );
 };
 
-export { Mugen as M91202 };
+export { Mugen as M91122 };
 export { handleRefresh as heihou_kousiki };
 
 // 平方公式：(a + b)^2

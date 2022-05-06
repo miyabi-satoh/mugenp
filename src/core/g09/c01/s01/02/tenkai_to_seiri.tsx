@@ -4,7 +4,7 @@ import { byScore, dsp, guard } from "~/utils";
 import { Monomial } from "~/utils/monomial";
 import { Polynomial } from "~/utils/polynomial";
 
-// "id": "91205",
+// "id": "91125",
 // "module": "tenkai_to_seiri",
 // "grade": "中3",
 // "chapter": "式の展開と因数分解",
@@ -19,7 +19,7 @@ const Mugen = ({ message }: Props) => {
   );
 };
 
-export { Mugen as M91205 };
+export { Mugen as M91125 };
 
 // 展開と整理 m(x + a)(x + b) + n(x + c)(x + d)
 const handleRefresh: RefreshFunction = (level, score) => {

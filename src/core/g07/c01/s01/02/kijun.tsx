@@ -1,10 +1,9 @@
 import { MugenContainer } from "~/components/container";
 import { RefreshFunction } from "~/interfaces/types";
 import { dsp, getRandomInt, guard, randArray } from "~/utils";
-import { Fraction } from "~/utils/fraction";
 import { Monomial } from "~/utils/monomial";
 
-// "id": "71202",
+// "id": "71122",
 // "module": "kijun",
 // "grade": "中1",
 // "chapter": "正の数・負の数",
@@ -26,7 +25,7 @@ const Mugen = ({ message }: Props) => {
   );
 };
 
-export { Mugen as M71202 };
+export { Mugen as M71122 };
 
 // 基準とした量からの増減や過不足
 const handleRefresh: RefreshFunction = (level, score) => {

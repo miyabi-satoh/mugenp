@@ -4,8 +4,8 @@ import { dsp, getRandomInt, minMax, randArray } from "~/utils";
 import { Monomial } from "~/utils/monomial";
 import { Polynomial } from "~/utils/polynomial";
 
-// "id": "91103",
-// "module": "poly_poly_div",
+// "id": "91113",
+// "module": "poly_poly_mul",
 // "grade": "中3",
 // "chapter": "式の展開と因数分解",
 // "title": "\\( (a+b)(c+d) \\) の展開",
@@ -17,7 +17,7 @@ const Mugen = ({ message }: Props) => {
   return <MugenContainer message={message} onRefresh={handleRefresh} />;
 };
 
-export { Mugen as M91103 };
+export { Mugen as M91113 };
 
 // 多項式 × 多項式
 const handleRefresh: RefreshFunction = (level, score) => {

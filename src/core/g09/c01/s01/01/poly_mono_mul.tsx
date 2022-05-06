@@ -4,7 +4,7 @@ import { dsp, getRandomInt, guard, randArray } from "~/utils";
 import { Monomial } from "~/utils/monomial";
 import { Polynomial } from "~/utils/polynomial";
 
-// "id": "91101",
+// "id": "91111",
 // "module": "poly_mono_mul",
 // "grade": "中3",
 // "chapter": "式の展開と因数分解",
@@ -17,7 +17,7 @@ const Mugen = ({ message }: Props) => {
   return <MugenContainer message={message} onRefresh={handleRefresh} />;
 };
 
-export { Mugen as M91101 };
+export { Mugen as M91111 };
 
 // 多項式 × 単項式
 const handleRefresh: RefreshFunction = (level, score) => {

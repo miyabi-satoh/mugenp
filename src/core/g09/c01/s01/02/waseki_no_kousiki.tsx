@@ -4,7 +4,7 @@ import { byScore, dsp, guard } from "~/utils";
 import { Monomial } from "~/utils/monomial";
 import { Polynomial } from "~/utils/polynomial";
 
-// "id": "91201",
+// "id": "91121",
 // "module": "waseki_no_kousiki",
 // "grade": "中3",
 // "chapter": "式の展開と因数分解",
@@ -19,7 +19,7 @@ const Mugen = ({ message }: Props) => {
   );
 };
 
-export { Mugen as M91201 };
+export { Mugen as M91121 };
 export { handleRefresh as waseki_no_kousiki };
 
 // 和積の公式：(ax + b)(ax + c)

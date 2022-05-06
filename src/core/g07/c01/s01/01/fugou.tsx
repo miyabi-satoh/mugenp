@@ -4,7 +4,7 @@ import { dsp, getRandomInt, randArray } from "~/utils";
 import { Fraction } from "~/utils/fraction";
 import { Monomial } from "~/utils/monomial";
 
-// "id": "71101",
+// "id": "71111",
 // "module": "fugou",
 // "grade": "中1",
 // "chapter": "正の数・負の数",
@@ -25,7 +25,7 @@ const Mugen = ({ message }: Props) => {
   );
 };
 
-export { Mugen as M71101 };
+export { Mugen as M71111 };
 
 // 0よりX[大きい,小さい]数を答える
 const handleRefresh: RefreshFunction = (level, score) => {

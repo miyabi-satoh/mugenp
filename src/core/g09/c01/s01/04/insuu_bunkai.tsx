@@ -6,7 +6,7 @@ import { kyoutuu_bunkai } from "./kyoutuu_bunkai";
 import { waseki_no_bunkai } from "./waseki_no_bunkai";
 import { wa_to_sa_no_bunkai } from "./wa_to_sa_no_bunkai";
 
-// "id": "91405",
+// "id": "91145",
 // "module": "insuu_bunkai",
 // "grade": "中3",
 // "chapter": "式の展開と因数分解",
@@ -21,7 +21,7 @@ const Mugen = ({ message }: Props) => {
   );
 };
 
-export { Mugen as M91405 };
+export { Mugen as M91145 };
 
 const handleRefresh: RefreshFunction = (level, score) => {
   return randArray(

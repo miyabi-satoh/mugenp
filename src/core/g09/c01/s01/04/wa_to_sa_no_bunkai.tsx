@@ -4,7 +4,7 @@ import { byScore, dsp, gcd, guard } from "~/utils";
 import { Monomial } from "~/utils/monomial";
 import { Polynomial } from "~/utils/polynomial";
 
-// "id": "91402",
+// "id": "91142",
 // "module": "wa_to_sa_no_bunkai",
 // "grade": "中3",
 // "chapter": "式の展開と因数分解",
@@ -17,7 +17,7 @@ const Mugen = ({ message }: Props) => {
   return <MugenContainer message={message} onRefresh={handleRefresh} />;
 };
 
-export { Mugen as M91402 };
+export { Mugen as M91142 };
 export { handleRefresh as wa_to_sa_no_bunkai };
 
 // 和と差の公式：(a + b)(a - b)

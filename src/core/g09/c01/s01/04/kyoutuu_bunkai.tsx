@@ -3,7 +3,7 @@ import { RefreshFunction } from "~/interfaces/types";
 import { dsp, gcd } from "~/utils";
 import { poly_mono } from "../01";
 
-// "id": "91401",
+// "id": "91141",
 // "module": "kyoutuu_bunkai",
 // "grade": "中3",
 // "chapter": "式の展開と因数分解",
@@ -16,7 +16,7 @@ const Mugen = ({ message }: Props) => {
   return <MugenContainer message={message} onRefresh={handleRefresh} />;
 };
 
-export { Mugen as M91401 };
+export { Mugen as M91141 };
 export { handleRefresh as kyoutuu_bunkai };
 
 // 共通因数でくくる

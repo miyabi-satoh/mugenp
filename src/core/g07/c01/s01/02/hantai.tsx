@@ -3,7 +3,7 @@ import { RefreshFunction } from "~/interfaces/types";
 import { dsp, getRandomInt, randArray } from "~/utils";
 import { Fraction } from "~/utils/fraction";
 
-// "id": "71201",
+// "id": "71121",
 // "module": "hantai",
 // "grade": "中1",
 // "chapter": "正の数・負の数",
@@ -24,7 +24,7 @@ const Mugen = ({ message }: Props) => {
   );
 };
 
-export { Mugen as M71201 };
+export { Mugen as M71121 };
 
 // 反対の意味の言葉を使う
 const handleRefresh: RefreshFunction = (level, score) => {

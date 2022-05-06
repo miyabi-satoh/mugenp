@@ -4,7 +4,7 @@ import { byScore, dsp, guard } from "~/utils";
 import { Monomial } from "~/utils/monomial";
 import { Polynomial } from "~/utils/polynomial";
 
-// "id": "91404",
+// "id": "91144",
 // "module": "waseki_no_bunkai",
 // "grade": "中3",
 // "chapter": "式の展開と因数分解",
@@ -19,7 +19,7 @@ const Mugen = ({ message }: Props) => {
   );
 };
 
-export { Mugen as M91404 };
+export { Mugen as M91144 };
 export { handleRefresh as waseki_no_bunkai };
 
 // 和積の公式：(x + b)(x + c)

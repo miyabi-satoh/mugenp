@@ -5,7 +5,7 @@ import { heihou_kousiki } from "./heihou_kousiki";
 import { waseki_no_kousiki } from "./waseki_no_kousiki";
 import { wa_to_sa_no_seki } from "./wa_to_sa_no_seki";
 
-// "id": "91204",
+// "id": "91124",
 // "module": "jyouhou_kousiki",
 // "grade": "中3",
 // "chapter": "式の展開と因数分解",
@@ -20,7 +20,7 @@ const Mugen = ({ message }: Props) => {
   );
 };
 
-export { Mugen as M91204 };
+export { Mugen as M91124 };
 
 const handleRefresh: RefreshFunction = (level, score) => {
   return randArray(

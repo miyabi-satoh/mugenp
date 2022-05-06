@@ -4,7 +4,7 @@ import { byScore, dsp, getRandomInt, guard, randArray } from "~/utils";
 import { Fraction } from "~/utils/fraction";
 import { Monomial } from "~/utils/monomial";
 
-// "id": "71301",
+// "id": "71131",
 // "module": "daisyou",
 // "grade": "中1",
 // "chapter": "正の数・負の数",
@@ -25,7 +25,7 @@ const Mugen = ({ message }: Props) => {
   );
 };
 
-export { Mugen as M71301 };
+export { Mugen as M71131 };
 
 // 正の数・負の数の大小
 const handleRefresh: RefreshFunction = (level, score) => {

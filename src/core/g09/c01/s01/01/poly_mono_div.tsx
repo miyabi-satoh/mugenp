@@ -3,7 +3,7 @@ import { RefreshFunction } from "~/interfaces/types";
 import { dsp } from "~/utils";
 import { poly_mono } from "./poly_mono_mul";
 
-// "id": "91102",
+// "id": "91112",
 // "module": "poly_mono_div",
 // "grade": "中3",
 // "chapter": "式の展開と因数分解",
@@ -16,7 +16,7 @@ const Mugen = ({ message }: Props) => {
   return <MugenContainer message={message} onRefresh={handleRefresh} />;
 };
 
-export { Mugen as M91102 };
+export { Mugen as M91112 };
 
 // 多項式 ÷ 単項式
 const handleRefresh: RefreshFunction = (level, score) => {
