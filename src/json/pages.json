@@ -30,6 +30,16 @@
     "message": "次の問いに答えなさい。"
   },
   {
+    "id": "71301",
+    "module": "daisyou",
+    "grade": "中1",
+    "chapter": "正の数・負の数",
+    "section": "正の数・負の数",
+    "subsection": "絶対値と数の大小",
+    "title": "正の数・負の数の大小",
+    "message": "次の各組の数の大小を、不等号(＜)を使って表しなさい。"
+  },
+  {
     "id": "91101",
     "module": "poly_mono_mul",
     "grade": "中3",
