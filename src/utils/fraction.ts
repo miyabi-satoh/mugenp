@@ -204,11 +204,11 @@ export class Fraction {
     }
 
     const sign = this._sign < 0 ? "-" : showPlus ? "+" : "";
-    if (this.isInteger) {
+    if (!this.isFrac) {
       if (this.n == 0) {
         return sign + "0";
       }
-      if (Math.abs(this.n) == 1) {
+      if (this.n == 1) {
         return sign + (moji ? moji : "1");
       }
       return sign + this.n + moji;
