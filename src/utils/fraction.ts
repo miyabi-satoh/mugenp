@@ -100,14 +100,14 @@ export class Fraction {
    * Returns true if the fraction is integer
    */
   get isInteger(): boolean {
-    return this.d == 1;
+    return this.d == 1 && Number.isInteger(this.n);
   }
 
   /**
    * Returns true if the fraction is natural number
    */
   get isNatural(): boolean {
-    return this.d == 1 && this.s > 0;
+    return this.isInteger && this.s > 0;
   }
 
   /**
