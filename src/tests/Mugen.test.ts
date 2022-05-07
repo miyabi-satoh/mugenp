@@ -10,7 +10,7 @@ import { Page as PageJson } from "~/interfaces/types";
 // let pages: PageJson[];
 let browser: puppeteer.Browser;
 let page: puppeteer.Page;
-const timeout = 1000 * 60;
+const timeout = 1000 * 60 * 2;
 const score = "4";
 
 // JSON ファイルを読み込む

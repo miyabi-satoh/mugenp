@@ -4,22 +4,17 @@ import { byScore, dsp, guard } from "~/utils";
 import { Monomial } from "~/utils/monomial";
 import { Polynomial } from "~/utils/polynomial";
 
-// "id": "91202",
+// "id": "91122",
 // "module": "heihou_kousiki",
 // "grade": "中3",
 // "chapter": "式の展開と因数分解",
 // "title": "\\((a\\pm b)^2\\) の展開",
 // "message": "次の式を展開しなさい。"
-type Props = {
-  message: string;
-};
-const Mugen = ({ message }: Props) => {
-  return (
-    <MugenContainer maxLv={7} message={message} onRefresh={handleRefresh} />
-  );
+const Mugen = () => {
+  return <MugenContainer maxLv={7} onRefresh={handleRefresh} />;
 };
 
-export { Mugen as M91202 };
+export { Mugen as M91122 };
 export { handleRefresh as heihou_kousiki };
 
 // 平方公式：(a + b)^2
@@ -41,7 +36,10 @@ const handleRefresh: RefreshFunction = (level, score) => {
   });
 
   // 絶対値が同じだと、変な感じがする
-  if (!ax.coeff.resembles(1) && ax.coeff.resembles(b.coeff)) {
+  if (
+    ax.coeff.abs().compare(1) != 0 &&
+    ax.coeff.abs().compare(b.coeff.abs()) == 0
+  ) {
     return ["", ""];
   }
 

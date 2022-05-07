@@ -4,20 +4,17 @@ import { dsp, getRandomInt, minMax, randArray } from "~/utils";
 import { Monomial } from "~/utils/monomial";
 import { Polynomial } from "~/utils/polynomial";
 
-// "id": "91103",
-// "module": "poly_poly_div",
+// "id": "91113",
+// "module": "poly_poly_mul",
 // "grade": "中3",
 // "chapter": "式の展開と因数分解",
 // "title": "\\( (a+b)(c+d) \\) の展開",
 // "message": "次の式を展開をしなさい。"
-type Props = {
-  message: string;
-};
-const Mugen = ({ message }: Props) => {
-  return <MugenContainer message={message} onRefresh={handleRefresh} />;
+const Mugen = () => {
+  return <MugenContainer onRefresh={handleRefresh} />;
 };
 
-export { Mugen as M91103 };
+export { Mugen as M91113 };
 
 // 多項式 × 多項式
 const handleRefresh: RefreshFunction = (level, score) => {
@@ -60,8 +57,10 @@ const handleRefresh: RefreshFunction = (level, score) => {
 
       // ±1以外は同じような数が並ばないようにする
       if (
-        p.coeff.resembles(1) ||
-        !expressions[i].terms.find((x) => x.coeff.resembles(p.coeff))
+        p.coeff.abs().compare(1) == 0 ||
+        !expressions[i].terms.find(
+          (x) => x.coeff.abs().compare(p.coeff.abs()) == 0
+        )
       ) {
         p = p.mul(moji.splice(getRandomInt(moji.length - 1), 1)[0]);
         expressions[i] = expressions[i].append(p);
@@ -71,7 +70,7 @@ const handleRefresh: RefreshFunction = (level, score) => {
     expressions[i] = expressions[i].orderTo();
     // 初項がマイナスにならないようにする
     if (expressions[i].terms[0].isNegative) {
-      expressions[i] = expressions[i].neg;
+      expressions[i] = expressions[i].neg();
     }
   }
 

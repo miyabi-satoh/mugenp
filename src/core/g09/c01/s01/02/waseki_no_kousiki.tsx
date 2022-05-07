@@ -1,25 +1,20 @@
 import { MugenContainer } from "~/components/container";
-import { RefreshFunction, TermSpec } from "~/interfaces/types";
+import { RefreshFunction } from "~/interfaces/types";
 import { byScore, dsp, guard } from "~/utils";
-import { Monomial } from "~/utils/monomial";
+import { Monomial, TermSpec } from "~/utils/monomial";
 import { Polynomial } from "~/utils/polynomial";
 
-// "id": "91201",
+// "id": "91121",
 // "module": "waseki_no_kousiki",
 // "grade": "中3",
 // "chapter": "式の展開と因数分解",
 // "title": "\\((x+a)(x+b)\\) の展開",
 // "message": "次の式を展開しなさい。"
-type Props = {
-  message: string;
-};
-const Mugen = ({ message }: Props) => {
-  return (
-    <MugenContainer maxLv={7} message={message} onRefresh={handleRefresh} />
-  );
+const Mugen = () => {
+  return <MugenContainer maxLv={7} onRefresh={handleRefresh} />;
 };
 
-export { Mugen as M91201 };
+export { Mugen as M91121 };
 export { handleRefresh as waseki_no_kousiki };
 
 // 和積の公式：(ax + b)(ax + c)
@@ -35,7 +30,7 @@ const handleRefresh: RefreshFunction = (level, score) => {
   const b = Monomial.create(bcSpec);
   const c = Monomial.create(bcSpec);
 
-  if (b.coeff.resembles(c.coeff)) {
+  if (b.coeff.abs().compare(c.coeff.abs()) == 0) {
     // 平方公式、和と差の公式の問題になってしまうのでスキップ
     return ["", ""];
   }

@@ -1,6 +1,47 @@
-import { TermSpec } from "~/interfaces/types";
+import Fraction from "fraction.js";
 import { getRandomInt } from ".";
-import { Fraction } from "./fraction";
+
+/**
+ * 項の生成条件
+ */
+export type TermSpec = {
+  /**
+   * 文字
+   */
+  factors?: string;
+
+  /**
+   * 整数の最大値
+   * 省略時は 1
+   */
+  max?: number;
+  /**
+   * 分母の最大値
+   * 省略時は 1
+   */
+  maxD?: number;
+  /**
+   * 分子の最大値
+   * 省略時は 1
+   */
+  maxN?: number;
+  /**
+   * true = 負の数を許可する
+   * 省略時は false
+   */
+  allowNegative?: boolean;
+  /**
+   * true = 0を許可する
+   * 省略時は false
+   */
+  allowZero?: boolean;
+};
+
+export type LatexOptions = {
+  sign?: boolean;
+  brackets?: string;
+  decimal?: boolean;
+};
 
 type Factor = {
   [key: string]: Fraction;
@@ -138,26 +179,14 @@ export class Monomial {
     return coeff + moji;
   }
 
-  toLatex(showPlus?: boolean, brackets?: string): string;
-  toLatex(brackets?: string, showPlus?: boolean): string;
-  toLatex(showPlus?: boolean | string, brackets?: string | boolean): string {
-    if (typeof showPlus === "string") {
-      [showPlus, brackets] = [brackets, showPlus];
-    }
-    if (showPlus === undefined) {
-      showPlus = false;
-    }
-    if (brackets === undefined) {
-      brackets = "";
-    }
-    if (typeof showPlus != "boolean" || typeof brackets != "string") {
-      throw new Error("Invalid argument");
-    }
-
+  toLatex(options: LatexOptions = {}): string {
     let left = "";
     let right = "";
-    if (brackets.length == 2) {
-      [left, right] = [`\\left${brackets[0]}`, `\\right${brackets[1]}`];
+    if (options.brackets && options.brackets.length == 2) {
+      [left, right] = [
+        `\\left${options.brackets[0]}`,
+        `\\right${options.brackets[1]}`,
+      ];
     }
 
     const moji = Object.keys(this._factors)
@@ -174,8 +203,14 @@ export class Monomial {
       })
       .join("");
 
-    const coeff = this._coeff.toLatex();
-    const sign = showPlus && this.coeff.s >= 0 ? "+" : "";
+    let coeff = "";
+    if (options.decimal) {
+      coeff = this._coeff.toString();
+    } else {
+      coeff = this._coeff.toLatex();
+    }
+
+    const sign = options.sign && this.coeff.s >= 0 ? "+" : "";
     if (!moji) {
       return left + sign + coeff + right;
     }
@@ -212,7 +247,7 @@ export class Monomial {
     const coeff = this._coeff.div(other._coeff);
     const newFactors: Factor = {};
     Object.keys(other._factors).forEach((key) => {
-      newFactors[key] = (other as Monomial)._factors[key].neg;
+      newFactors[key] = (other as Monomial)._factors[key].neg();
     });
     const factors = Monomial.mergeFactors(this._factors, other._factors);
 
@@ -295,28 +330,28 @@ export class Monomial {
   get s(): number {
     return this.coeff.s;
   }
-  get valueOf(): number {
-    return this.coeff.valueOf;
+  valueOf(): number {
+    return this.coeff.valueOf();
   }
-  get abs(): Fraction {
-    return this.coeff.abs;
+  abs(): Fraction {
+    return this.coeff.abs();
   }
-  get neg(): Monomial {
-    return new Monomial(this.coeff.neg, this._factors);
+  neg(): Monomial {
+    return new Monomial(this.coeff.neg(), this._factors);
   }
   get isInteger(): boolean {
-    return this.coeff.isInteger;
+    return this.d === 1;
   }
   get isNatural(): boolean {
-    return this.coeff.isNatural;
+    return this.isInteger && this.n > 0;
   }
   get isFrac(): boolean {
-    return this.coeff.isFrac;
+    return this.d > 1;
   }
   get isPositive(): boolean {
-    return this.coeff.isPositive;
+    return this.s > 0;
   }
   get isNegative(): boolean {
-    return this.coeff.isNegative;
+    return this.s < 0;
   }
 }

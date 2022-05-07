@@ -1,9 +1,11 @@
+import Fraction from "fraction.js";
 import { MugenContainer } from "~/components/container";
 import { RefreshFunction } from "~/interfaces/types";
 import { dsp, getRandomInt, randArray } from "~/utils";
-import { Fraction } from "~/utils/fraction";
+import { LatexOptions, Monomial } from "~/utils/monomial";
+// import { Fraction } from "~/utils/fraction";
 
-// "id": "71201",
+// "id": "71121",
 // "module": "hantai",
 // "grade": "中1",
 // "chapter": "正の数・負の数",
@@ -11,25 +13,16 @@ import { Fraction } from "~/utils/fraction";
 // "subsection": "正の数・負の数で量を表す",
 // "title": "反対の性質を持つ量",
 // "message": "[ ]内の言葉を使って、次のことを表しなさい。"
-type Props = {
-  message: string;
-};
-const Mugen = ({ message }: Props) => {
-  return (
-    <MugenContainer
-      answerPrefix=""
-      message={message}
-      onRefresh={handleRefresh}
-    />
-  );
+const Mugen = () => {
+  return <MugenContainer answerPrefix="" maxLv={3} onRefresh={handleRefresh} />;
 };
 
-export { Mugen as M71201 };
+export { Mugen as M71121 };
 
 // 反対の意味の言葉を使う
 const handleRefresh: RefreshFunction = (level, score) => {
-  //   const allUnits = ["個", "円", "歩", "m", "km", "kg", "分", "時間", "日", "年"];
-  const words: [string, string, string[]][] = [
+  // 問題パターン
+  const patterns: [string, string, string[]][] = [
     ["多い", "少ない", ["個", "円", "kg"]],
     ["長い", "短い", ["cm", "m", "分"]],
     ["増える", "減る", ["個", "円", "kg"]],
@@ -44,53 +37,71 @@ const handleRefresh: RefreshFunction = (level, score) => {
     ["重い", "軽い", ["g", "kg"]],
   ];
 
-  const idx = getRandomInt(words.length - 1);
-  const units: string[] = words[idx][2];
-  const unit = randArray(...units);
+  // 使用する問題パターンをランダムに決定
+  const pattern = patterns[getRandomInt(patterns.length - 1)];
+  const unit = randArray(...pattern[2]);
+  // 表現もランダムに入れ替え
+  const words = pattern.slice(0, 2);
+  if (randArray(true, false)) {
+    words.reverse();
+  }
 
-  let qValue: Fraction;
+  // レベルに応じて数値モードを決定
+  let mode: number;
   if (level === 1 || ["円", "個"].includes(unit)) {
-    qValue = seisuu();
-  } else if (level === 2) {
-    qValue = randArray(seisuu, syousuu)();
+    mode = 1;
   } else {
-    qValue = randArray(seisuu, syousuu, bunsuu)();
+    mode = getRandomInt(level, 1);
   }
 
-  if (randArray(true, false)) {
-    qValue = qValue.neg;
+  // 数値モードに応じて問題の数値を決定
+  const opt: LatexOptions = {
+    sign: true,
+  };
+  let qValue: Monomial;
+  switch (mode) {
+    case 1:
+      qValue = seisuu();
+      break;
+    case 2:
+      qValue = syousuu();
+      opt.decimal = true;
+      break;
+    default:
+      qValue = bunsuu();
   }
-  const aValue = qValue.neg;
 
-  let word_q, word_a;
-  if (randArray(true, false)) {
-    word_q = words[idx][0];
-    word_a = words[idx][1];
-  } else {
-    word_q = words[idx][1];
-    word_a = words[idx][0];
-  }
+  // 問題と正解の数値を文字列化
+  const qStr = dsp(qValue.toLatex(opt));
+  const aStr = dsp(qValue.neg().toLatex(opt));
 
-  const question = dsp(qValue.toLatex(true)) + `${unit} ${word_q}　[${word_a}]`;
-  const answer = dsp(aValue.toLatex(true)) + `${unit} ${word_a}`;
+  const question = `${qStr}${unit} ${words[0]}　[${words[1]}]`;
+  const answer = `${aStr}${unit} ${words[1]}`;
 
   return [question, answer];
 };
 
-const seisuu = (): Fraction => {
-  return new Fraction(getRandomInt(499, 100));
+const seisuu = (): Monomial => {
+  return Monomial.create({
+    max: 100,
+    allowNegative: true,
+  });
 };
 
-const syousuu = (): Fraction => {
-  const x = getRandomInt(499, 1);
-  const y = getRandomInt(String(x).length, 1);
-  console.log(x, y, x / Math.pow(10, y));
-  return new Fraction(x / Math.pow(10, y));
+const syousuu = (): Monomial => {
+  const m = Monomial.create({
+    max: 100,
+    allowNegative: true,
+  });
+  const y = getRandomInt(m.toString().length, 1);
+  return m.div(Math.pow(10, y));
 };
 
-const bunsuu = (): Fraction => {
-  const n = getRandomInt(499, 100);
-  const m = getRandomInt(9, 1);
-
-  return new Fraction(n, m);
+const bunsuu = (): Monomial => {
+  return Monomial.create({
+    max: 12,
+    maxD: 12,
+    maxN: 12,
+    allowNegative: true,
+  });
 };

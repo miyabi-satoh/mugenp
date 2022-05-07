@@ -1,6 +1,6 @@
 [
   {
-    "id": "71101",
+    "id": "71111",
     "module": "fugou",
     "grade": "中1",
     "chapter": "正の数・負の数",
@@ -10,7 +10,7 @@
     "message": "次の数について、正の符号または負の符号をつけて表しなさい。"
   },
   {
-    "id": "71201",
+    "id": "71121",
     "module": "hantai",
     "grade": "中1",
     "chapter": "正の数・負の数",
@@ -20,7 +20,7 @@
     "message": "[　]内の言葉を使って、次のことを表しなさい。"
   },
   {
-    "id": "71202",
+    "id": "71122",
     "module": "kijun",
     "grade": "中1",
     "chapter": "正の数・負の数",
@@ -30,7 +30,47 @@
     "message": "次の問いに答えなさい。"
   },
   {
-    "id": "91101",
+    "id": "71131",
+    "module": "daisyou",
+    "grade": "中1",
+    "chapter": "正の数・負の数",
+    "section": "正の数・負の数",
+    "subsection": "絶対値と数の大小",
+    "title": "正の数・負の数の大小",
+    "message": "次の各組の数の大小を、不等号(＜)を使って表しなさい。"
+  },
+  {
+    "id": "71211",
+    "module": "kahou_kihon",
+    "grade": "中1",
+    "chapter": "正の数・負の数",
+    "section": "正の数・負の数の計算",
+    "subsection": "正の数・負の数の加法，減法",
+    "title": "加法の基本",
+    "message": "次の計算をしなさい。"
+  },
+  {
+    "id": "71212",
+    "module": "genpou_kihon",
+    "grade": "中1",
+    "chapter": "正の数・負の数",
+    "section": "正の数・負の数の計算",
+    "subsection": "正の数・負の数の加法，減法",
+    "title": "減法の基本",
+    "message": "次の計算をしなさい。"
+  },
+  {
+    "id": "71213",
+    "module": "kagen_mix",
+    "grade": "中1",
+    "chapter": "正の数・負の数",
+    "section": "正の数・負の数の計算",
+    "subsection": "正の数・負の数の加法，減法",
+    "title": "加法・減法ミックス",
+    "message": "次の計算をしなさい。"
+  },
+  {
+    "id": "91111",
     "module": "poly_mono_mul",
     "grade": "中3",
     "chapter": "式の展開と因数分解",
@@ -40,7 +80,7 @@
     "message": "次の計算をしなさい。"
   },
   {
-    "id": "91102",
+    "id": "91112",
     "module": "poly_mono_div",
     "grade": "中3",
     "chapter": "式の展開と因数分解",
@@ -50,8 +90,8 @@
     "message": "次の計算をしなさい。"
   },
   {
-    "id": "91103",
-    "module": "poly_poly_div",
+    "id": "91113",
+    "module": "poly_poly_mul",
     "grade": "中3",
     "chapter": "式の展開と因数分解",
     "section": "式の展開と因数分解",
@@ -60,7 +100,7 @@
     "message": "次の式を展開しなさい。"
   },
   {
-    "id": "91201",
+    "id": "91121",
     "module": "waseki_no_kousiki",
     "grade": "中3",
     "chapter": "式の展開と因数分解",
@@ -70,7 +110,7 @@
     "message": "次の式を展開しなさい。"
   },
   {
-    "id": "91202",
+    "id": "91122",
     "module": "heihou_kousiki",
     "grade": "中3",
     "chapter": "式の展開と因数分解",
@@ -80,7 +120,7 @@
     "message": "次の式を展開しなさい。"
   },
   {
-    "id": "91203",
+    "id": "91123",
     "module": "wa_to_sa_no_seki",
     "grade": "中3",
     "chapter": "式の展開と因数分解",
@@ -90,7 +130,7 @@
     "message": "次の式を展開しなさい。"
   },
   {
-    "id": "91204",
+    "id": "91124",
     "module": "jyouhou_kousiki",
     "grade": "中3",
     "chapter": "式の展開と因数分解",
@@ -100,7 +140,7 @@
     "message": "次の式を展開しなさい。"
   },
   {
-    "id": "91205",
+    "id": "91125",
     "module": "tenkai_to_seiri",
     "grade": "中3",
     "chapter": "式の展開と因数分解",
@@ -110,7 +150,7 @@
     "message": "次の計算をしなさい。"
   },
   {
-    "id": "91401",
+    "id": "91141",
     "module": "kyoutuu_bunkai",
     "grade": "中3",
     "chapter": "式の展開と因数分解",
@@ -120,7 +160,7 @@
     "message": "次の式を因数分解しなさい。"
   },
   {
-    "id": "91402",
+    "id": "91142",
     "module": "wa_to_sa_no_bunkai",
     "grade": "中3",
     "chapter": "式の展開と因数分解",
@@ -130,7 +170,7 @@
     "message": "次の式を因数分解しなさい。"
   },
   {
-    "id": "91403",
+    "id": "91143",
     "module": "heihou_bunkai",
     "grade": "中3",
     "chapter": "式の展開と因数分解",
@@ -140,17 +180,17 @@
     "message": "次の式を因数分解しなさい。"
   },
   {
-    "id": "91404",
+    "id": "91144",
     "module": "waseki_no_bunkai",
     "grade": "中3",
     "chapter": "式の展開と因数分解",
     "section": "式の展開と因数分解",
     "subsection": "因数分解",
-    "title": "\\( x^2 + (a+b)x +ab \\) の因数分解",
+    "title": "\\(x^2 + (a+b)x +ab \\) の因数分解",
     "message": "次の式を因数分解しなさい。"
   },
   {
-    "id": "91405",
+    "id": "91145",
     "module": "insuu_bunkai",
     "grade": "中3",
     "chapter": "式の展開と因数分解",

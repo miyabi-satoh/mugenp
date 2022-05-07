@@ -1,29 +1,26 @@
 import { MugenContainer } from "~/components/container";
-import { RefreshFunction, TermSpec } from "~/interfaces/types";
+import { RefreshFunction } from "~/interfaces/types";
 import { dsp, getRandomInt, guard, randArray } from "~/utils";
-import { Monomial } from "~/utils/monomial";
+import { Monomial, TermSpec } from "~/utils/monomial";
 import { Polynomial } from "~/utils/polynomial";
 
-// "id": "91101",
+// "id": "91111",
 // "module": "poly_mono_mul",
 // "grade": "中3",
 // "chapter": "式の展開と因数分解",
 // "title": "\\( (a+b)\\times c \\) の計算",
 // "message": "次の計算をしなさい。"
-type Props = {
-  message: string;
-};
-const Mugen = ({ message }: Props) => {
-  return <MugenContainer message={message} onRefresh={handleRefresh} />;
+const Mugen = () => {
+  return <MugenContainer onRefresh={handleRefresh} />;
 };
 
-export { Mugen as M91101 };
+export { Mugen as M91111 };
 
 // 多項式 × 単項式
 const handleRefresh: RefreshFunction = (level, score) => {
   let [poly, mono] = poly_mono(level, score);
   if (level < 5 && poly.terms[0].isNegative) {
-    poly = poly.neg;
+    poly = poly.neg();
   }
 
   const polyAns = poly.mul(mono).compact().orderTo();
@@ -33,7 +30,9 @@ const handleRefresh: RefreshFunction = (level, score) => {
     question =
       poly.toLatex("()") +
       " \\times " +
-      mono.toLatex(mono.isNegative ? "()" : "");
+      mono.toLatex({
+        brackets: mono.isNegative ? "()" : "",
+      });
   } else {
     question = mono.toLatex() + poly.toLatex("()");
   }
@@ -114,8 +113,8 @@ export const poly_mono = (
 
     // ±1以外は同じような数が並ばないようにする
     if (
-      p.coeff.resembles(1) ||
-      !poly.terms.find((x) => x.coeff.resembles(p.coeff))
+      p.coeff.abs().compare(1) === 0 ||
+      !poly.terms.find((x) => x.coeff.abs().compare(p.coeff.abs()) == 0)
     ) {
       const moji = polyVars.splice(getRandomInt(polyVars.length - 1), 1)[0];
       poly = poly.append(p.mul(moji));

@@ -3,20 +3,17 @@ import { RefreshFunction } from "~/interfaces/types";
 import { dsp, gcd } from "~/utils";
 import { poly_mono } from "../01";
 
-// "id": "91401",
+// "id": "91141",
 // "module": "kyoutuu_bunkai",
 // "grade": "中3",
 // "chapter": "式の展開と因数分解",
 // "title": "共通因数でくくる",
 // "message": "次の式を因数分解しなさい。"
-type Props = {
-  message: string;
-};
-const Mugen = ({ message }: Props) => {
-  return <MugenContainer message={message} onRefresh={handleRefresh} />;
+const Mugen = () => {
+  return <MugenContainer onRefresh={handleRefresh} />;
 };
 
-export { Mugen as M91401 };
+export { Mugen as M91141 };
 export { handleRefresh as kyoutuu_bunkai };
 
 // 共通因数でくくる
@@ -29,13 +26,13 @@ const handleRefresh: RefreshFunction = (level, score) => {
     return ["", ""];
   }
   if (poly.terms[0].isNegative) {
-    poly = poly.neg;
+    poly = poly.neg();
   }
   if (mono.isNegative) {
-    mono = mono.neg;
+    mono = mono.neg();
   }
 
-  const g = gcd(...poly.terms.map((x) => x.coeff.valueOf));
+  const g = gcd(...poly.terms.map((x) => x.coeff.valueOf()));
   poly = poly.div(g);
   mono = mono.mul(g);
 

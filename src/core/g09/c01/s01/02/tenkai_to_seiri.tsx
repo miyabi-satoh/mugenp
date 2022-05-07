@@ -4,22 +4,17 @@ import { byScore, dsp, guard } from "~/utils";
 import { Monomial } from "~/utils/monomial";
 import { Polynomial } from "~/utils/polynomial";
 
-// "id": "91205",
+// "id": "91125",
 // "module": "tenkai_to_seiri",
 // "grade": "中3",
 // "chapter": "式の展開と因数分解",
 // "title": "展開と整理",
 // "message": "次の計算をしなさい。"
-type Props = {
-  message: string;
-};
-const Mugen = ({ message }: Props) => {
-  return (
-    <MugenContainer columns={1} message={message} onRefresh={handleRefresh} />
-  );
+const Mugen = () => {
+  return <MugenContainer columns={1} onRefresh={handleRefresh} />;
 };
 
-export { Mugen as M91205 };
+export { Mugen as M91125 };
 
 // 展開と整理 m(x + a)(x + b) + n(x + c)(x + d)
 const handleRefresh: RefreshFunction = (level, score) => {
@@ -62,7 +57,7 @@ const handleRefresh: RefreshFunction = (level, score) => {
     } else if (mn[i].coeff.equals(-1)) {
       question += "-";
     } else {
-      question += mn[i].toLatex(i != 0);
+      question += mn[i].toLatex({ sign: i != 0 });
     }
 
     if (s[i * 2] == s[i * 2 + 1]) {
@@ -80,7 +75,7 @@ const handleRefresh: RefreshFunction = (level, score) => {
       question += s[i * 2] + "^2";
     } else {
       if (level > 1) {
-        if (p[i * 2].terms[1].coeff.equals(p[i * 2 + 1].terms[1].coeff.neg)) {
+        if (p[i * 2].terms[1].coeff.equals(p[i * 2 + 1].terms[1].coeff.neg())) {
           // 和と差の積になる場合
           const x = Monomial.create({
             factors: "x",

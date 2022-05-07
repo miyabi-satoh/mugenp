@@ -1,4 +1,5 @@
-import { Fraction } from "~/utils/fraction";
+// import { Fraction } from "~/utils/fraction";
+import Fraction from "fraction.js";
 import { Monomial } from "~/utils/monomial";
 
 describe("Monomialクラス", () => {
@@ -47,7 +48,7 @@ describe("Monomialクラス", () => {
     ["-x", "x"],
   ])("neg() %s -> %s", (a, expected) => {
     const x = new Monomial(a);
-    expect(x.neg.toString()).toBe(expected);
+    expect(x.neg().toString()).toBe(expected);
   });
 });
 
@@ -74,7 +75,7 @@ describe("create()のテスト", () => {
         allowZero: false,
         allowNegative: true,
       });
-      expect(x.coeff.resembles(1)).toBeTruthy();
+      expect(x.coeff.abs().compare(1)).toBe(0);
     }
   });
 
@@ -117,10 +118,10 @@ describe("create()のテスト", () => {
         allowZero: false,
         allowNegative: true,
       });
-      if (x.coeff.isFrac) {
+      if (x.isFrac) {
         cntF++;
       }
-      if (x.coeff.isInteger) {
+      if (x.isInteger) {
         cntI++;
       }
       expect(x.coeff.compare(-10) >= 0).toBeTruthy();

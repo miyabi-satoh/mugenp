@@ -74,7 +74,7 @@ export function guard<T>(idx: number, ...ary: T[]): T {
  * 配列からランダムに要素を返す
  */
 export function randArray<T>(...array: T[]): T {
-  var rand = (Math.random() * array.length) | 0;
+  var rand = getRandomInt(array.length - 1);
   var rValue = array[rand];
   return rValue;
 }
@@ -84,4 +84,23 @@ export function randArray<T>(...array: T[]): T {
  */
 export function minMax(min: number, n: number, max: number): number {
   return Math.max(min, Math.min(n, max));
+}
+
+/**
+ * 有限小数の分母ならtrueを返す
+ */
+export function isFiniteDenom(n: number): boolean {
+  switch (n) {
+    case 2:
+    case 4:
+    case 5:
+    case 10:
+    case 20:
+    case 25:
+    case 40:
+    case 50:
+    case 100:
+      return true;
+  }
+  return false;
 }

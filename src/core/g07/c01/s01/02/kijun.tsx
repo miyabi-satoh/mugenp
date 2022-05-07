@@ -1,10 +1,9 @@
 import { MugenContainer } from "~/components/container";
 import { RefreshFunction } from "~/interfaces/types";
 import { dsp, getRandomInt, guard, randArray } from "~/utils";
-import { Fraction } from "~/utils/fraction";
 import { Monomial } from "~/utils/monomial";
 
-// "id": "71202",
+// "id": "71122",
 // "module": "kijun",
 // "grade": "中1",
 // "chapter": "正の数・負の数",
@@ -12,21 +11,13 @@ import { Monomial } from "~/utils/monomial";
 // "subsection": "正の数・負の数で量を表す",
 // "title": "基準からの増減や過不足",
 // "message": "次の問いに答えなさい。"
-type Props = {
-  message: string;
-};
-const Mugen = ({ message }: Props) => {
+const Mugen = () => {
   return (
-    <MugenContainer
-      answerPrefix=""
-      columns={1}
-      message={message}
-      onRefresh={handleRefresh}
-    />
+    <MugenContainer answerPrefix="" columns={1} onRefresh={handleRefresh} />
   );
 };
 
-export { Mugen as M71202 };
+export { Mugen as M71122 };
 
 // 基準とした量からの増減や過不足
 const handleRefresh: RefreshFunction = (level, score) => {
@@ -51,12 +42,12 @@ const handleRefresh: RefreshFunction = (level, score) => {
       .replaceAll("{x}", dsp(String(base)))
       .replaceAll("{unit}", unit)
       .replaceAll("{y}", dsp(diff.coeff.add(base).toLatex()));
-    answer = dsp(diff.coeff.toLatex(true)) + unit;
+    answer = dsp(diff.toLatex({ sign: true })) + unit;
   } else {
     question = patterns[1]
       .replaceAll("{x}", dsp(String(base)))
       .replaceAll("{unit}", unit)
-      .replaceAll("{y}", dsp(diff.coeff.toLatex(true)));
+      .replaceAll("{y}", dsp(diff.toLatex({ sign: true })));
     answer = dsp(diff.coeff.add(base).toLatex()) + unit;
   }
 

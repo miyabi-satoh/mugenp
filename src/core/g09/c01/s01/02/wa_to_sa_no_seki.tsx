@@ -4,22 +4,17 @@ import { MugenContainer } from "~/components/container";
 import { Monomial } from "~/utils/monomial";
 import { Polynomial } from "~/utils/polynomial";
 
-// "id": "91203",
+// "id": "91123",
 // "module": "wa_to_sa_no_seki",
 // "grade": "中3",
 // "chapter": "式の展開と因数分解",
 // "title": "\\((a + b)(a - b)\\) の展開",
 // "message": "次の式を展開しなさい。"
-type Props = {
-  message: string;
-};
-const Mugen = ({ message }: Props) => {
-  return (
-    <MugenContainer maxLv={7} message={message} onRefresh={handleRefresh} />
-  );
+const Mugen = () => {
+  return <MugenContainer maxLv={7} onRefresh={handleRefresh} />;
 };
 
-export { Mugen as M91203 };
+export { Mugen as M91123 };
 export { handleRefresh as wa_to_sa_no_seki };
 
 // 和と差の公式：(a + b)(a - b)
@@ -41,7 +36,7 @@ const handleRefresh: RefreshFunction = (level, score) => {
   });
 
   const p1 = new Polynomial(ax, b);
-  const p2 = new Polynomial(ax, b.neg);
+  const p2 = new Polynomial(ax, b.neg());
 
   const question = p1.toLatex("()") + p2.toLatex("()");
   const answer = p1.mul(p2).compact().toLatex();

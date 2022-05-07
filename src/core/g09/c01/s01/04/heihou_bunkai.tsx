@@ -4,20 +4,17 @@ import { byScore, dsp, gcd, guard } from "~/utils";
 import { Monomial } from "~/utils/monomial";
 import { Polynomial } from "~/utils/polynomial";
 
-// "id": "91403",
+// "id": "91143",
 // "module": "heihou_bunkai",
 // "grade": "中3",
 // "chapter": "式の展開と因数分解",
 // "title": "\\( a^2 \\pm 2ab +b^2 \\) の因数分解",
 // "message": "次の式を因数分解しなさい。"
-type Props = {
-  message: string;
-};
-const Mugen = ({ message }: Props) => {
-  return <MugenContainer message={message} onRefresh={handleRefresh} />;
+const Mugen = () => {
+  return <MugenContainer onRefresh={handleRefresh} />;
 };
 
-export { Mugen as M91403 };
+export { Mugen as M91143 };
 export { handleRefresh as heihou_bunkai };
 
 // 平方公式：(a + b)^2
@@ -38,7 +35,10 @@ const handleRefresh: RefreshFunction = (level, score) => {
   });
 
   // 絶対値が同じだと、変な感じがする
-  if (!ax.coeff.resembles(1) && ax.coeff.resembles(b.coeff)) {
+  if (
+    ax.coeff.abs().compare(1) != 0 &&
+    ax.coeff.abs().compare(b.coeff.abs()) == 0
+  ) {
     return ["", ""];
   }
 
