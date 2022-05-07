@@ -68,7 +68,7 @@ const handleRefresh: RefreshFunction = (level, score) => {
     } else if (mn[i].coeff.equals(-1)) {
       question += "-";
     } else {
-      question += mn[i].toLatex(i != 0);
+      question += mn[i].toLatex({ sign: i != 0 });
     }
 
     if (s[i * 2] == s[i * 2 + 1]) {
@@ -86,7 +86,7 @@ const handleRefresh: RefreshFunction = (level, score) => {
       question += s[i * 2] + "^2";
     } else {
       if (level > 1) {
-        if (p[i * 2].terms[1].coeff.equals(p[i * 2 + 1].terms[1].coeff.neg)) {
+        if (p[i * 2].terms[1].coeff.equals(p[i * 2 + 1].terms[1].coeff.neg())) {
           // 和と差の積になる場合
           const x = Monomial.create({
             factors: "x",

@@ -42,13 +42,13 @@ const handleRefresh: RefreshFunction = (level, score) => {
   });
 
   if (ax.isInteger && b.isInteger) {
-    const g = gcd(ax.coeff.valueOf, b.coeff.valueOf);
+    const g = gcd(ax.coeff.valueOf(), b.coeff.valueOf());
     ax = ax.div(g);
     b = b.div(g);
   }
 
   const p1 = new Polynomial(ax, b);
-  const p2 = new Polynomial(ax, b.neg);
+  const p2 = new Polynomial(ax, b.neg());
 
   const question = p1.mul(p2).compact().toLatex();
   const answer = p1.toLatex("()") + p2.toLatex("()");

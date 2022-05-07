@@ -1,7 +1,7 @@
 import { MugenContainer } from "~/components/container";
-import { RefreshFunction, TermSpec } from "~/interfaces/types";
+import { RefreshFunction } from "~/interfaces/types";
 import { byScore, dsp, guard } from "~/utils";
-import { Monomial } from "~/utils/monomial";
+import { Monomial, TermSpec } from "~/utils/monomial";
 import { Polynomial } from "~/utils/polynomial";
 
 // "id": "91144",
@@ -39,7 +39,7 @@ const handleRefresh: RefreshFunction = (level, score) => {
   const b = Monomial.create(bcSpec);
   const c = Monomial.create(bcSpec);
 
-  if (b.coeff.resembles(c.coeff)) {
+  if (b.coeff.abs().compare(c.coeff.abs()) == 0) {
     // 平方公式、和と差の公式の問題になってしまうのでスキップ
     return ["", ""];
   }

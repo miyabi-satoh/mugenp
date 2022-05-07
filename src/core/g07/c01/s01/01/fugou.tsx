@@ -1,8 +1,7 @@
 import { MugenContainer } from "~/components/container";
 import { RefreshFunction } from "~/interfaces/types";
 import { dsp, getRandomInt, randArray } from "~/utils";
-import { Fraction } from "~/utils/fraction";
-import { Monomial } from "~/utils/monomial";
+import { LatexOptions, Monomial } from "~/utils/monomial";
 
 // "id": "71111",
 // "module": "fugou",
@@ -20,6 +19,7 @@ const Mugen = ({ title, message }: Props) => {
   return (
     <MugenContainer
       answerPrefix=""
+      maxLv={3}
       title={title}
       message={message}
       onRefresh={handleRefresh}
@@ -31,42 +31,55 @@ export { Mugen as M71111 };
 
 // 0よりX[大きい,小さい]数を答える
 const handleRefresh: RefreshFunction = (level, score) => {
-  let qValue: Fraction;
+  let qValue: Monomial;
+  const opt: LatexOptions = {};
 
-  if (level === 1) {
-    qValue = seisuu();
-  } else if (level === 2) {
-    qValue = randArray(seisuu, syousuu)();
-  } else {
-    qValue = randArray(seisuu, syousuu, bunsuu)();
+  const mode = getRandomInt(level, 1);
+  switch (mode) {
+    case 1:
+      qValue = seisuu();
+      break;
+    case 2:
+      qValue = syousuu();
+      opt.decimal = true;
+      break;
+    default:
+      qValue = bunsuu();
   }
 
-  let aValue: Fraction;
+  let aValue: Monomial;
   let qType: string;
   if (randArray(true, false)) {
-    aValue = new Fraction(qValue);
+    aValue = qValue;
     qType = " 大きな";
   } else {
-    aValue = qValue.neg;
+    aValue = qValue.neg();
     qType = " 小さな";
   }
 
-  const question = dsp("0") + " よりも " + dsp(qValue.toLatex()) + qType + "数";
-  return [question, dsp(aValue.toLatex(true))];
+  const question = `${dsp("0")} よりも ${dsp(qValue.toLatex(opt))}${qType}数`;
+  const answer = dsp(aValue.toLatex({ ...opt, sign: true }));
+  return [question, answer];
 };
 
-const seisuu = (): Fraction => {
-  return new Fraction(getRandomInt(9, 1));
+const seisuu = (): Monomial => {
+  return Monomial.create({
+    max: 9,
+  });
 };
 
-const syousuu = (): Fraction => {
-  return new Fraction(getRandomInt(50, 1) / 10);
+const syousuu = (): Monomial => {
+  const m = Monomial.create({
+    max: 50,
+  });
+  const y = getRandomInt(m.toString().length, 1);
+  return m.div(Math.pow(10, y));
 };
 
-const bunsuu = (): Fraction => {
+const bunsuu = (): Monomial => {
   return Monomial.create({
     max: 9,
     maxD: 9,
     maxN: 9,
-  }).coeff;
+  });
 };

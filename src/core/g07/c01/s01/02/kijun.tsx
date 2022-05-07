@@ -52,12 +52,12 @@ const handleRefresh: RefreshFunction = (level, score) => {
       .replaceAll("{x}", dsp(String(base)))
       .replaceAll("{unit}", unit)
       .replaceAll("{y}", dsp(diff.coeff.add(base).toLatex()));
-    answer = dsp(diff.coeff.toLatex(true)) + unit;
+    answer = dsp(diff.toLatex({ sign: true })) + unit;
   } else {
     question = patterns[1]
       .replaceAll("{x}", dsp(String(base)))
       .replaceAll("{unit}", unit)
-      .replaceAll("{y}", dsp(diff.coeff.toLatex(true)));
+      .replaceAll("{y}", dsp(diff.toLatex({ sign: true })));
     answer = dsp(diff.coeff.add(base).toLatex()) + unit;
   }
 

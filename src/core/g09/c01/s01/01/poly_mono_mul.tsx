@@ -1,7 +1,7 @@
 import { MugenContainer } from "~/components/container";
-import { RefreshFunction, TermSpec } from "~/interfaces/types";
+import { RefreshFunction } from "~/interfaces/types";
 import { dsp, getRandomInt, guard, randArray } from "~/utils";
-import { Monomial } from "~/utils/monomial";
+import { Monomial, TermSpec } from "~/utils/monomial";
 import { Polynomial } from "~/utils/polynomial";
 
 // "id": "91111",
@@ -26,7 +26,7 @@ export { Mugen as M91111 };
 const handleRefresh: RefreshFunction = (level, score) => {
   let [poly, mono] = poly_mono(level, score);
   if (level < 5 && poly.terms[0].isNegative) {
-    poly = poly.neg;
+    poly = poly.neg();
   }
 
   const polyAns = poly.mul(mono).compact().orderTo();
@@ -36,7 +36,9 @@ const handleRefresh: RefreshFunction = (level, score) => {
     question =
       poly.toLatex("()") +
       " \\times " +
-      mono.toLatex(mono.isNegative ? "()" : "");
+      mono.toLatex({
+        brackets: mono.isNegative ? "()" : "",
+      });
   } else {
     question = mono.toLatex() + poly.toLatex("()");
   }
@@ -117,8 +119,8 @@ export const poly_mono = (
 
     // ±1以外は同じような数が並ばないようにする
     if (
-      p.coeff.resembles(1) ||
-      !poly.terms.find((x) => x.coeff.resembles(p.coeff))
+      p.coeff.abs().compare(1) === 0 ||
+      !poly.terms.find((x) => x.coeff.abs().compare(p.coeff.abs()) == 0)
     ) {
       const moji = polyVars.splice(getRandomInt(polyVars.length - 1), 1)[0];
       poly = poly.append(p.mul(moji));

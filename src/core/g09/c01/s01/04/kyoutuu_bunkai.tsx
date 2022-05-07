@@ -32,13 +32,13 @@ const handleRefresh: RefreshFunction = (level, score) => {
     return ["", ""];
   }
   if (poly.terms[0].isNegative) {
-    poly = poly.neg;
+    poly = poly.neg();
   }
   if (mono.isNegative) {
-    mono = mono.neg;
+    mono = mono.neg();
   }
 
-  const g = gcd(...poly.terms.map((x) => x.coeff.valueOf));
+  const g = gcd(...poly.terms.map((x) => x.coeff.valueOf()));
   poly = poly.div(g);
   mono = mono.mul(g);
 

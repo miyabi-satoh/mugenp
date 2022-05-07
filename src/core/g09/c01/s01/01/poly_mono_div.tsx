@@ -27,12 +27,14 @@ const handleRefresh: RefreshFunction = (level, score) => {
 
   let poly = polyAns.mul(mono).compact().orderTo();
   if (level < 5 && poly.terms[0].isNegative) {
-    poly = poly.neg;
-    polyAns = polyAns.neg;
+    poly = poly.neg();
+    polyAns = polyAns.neg();
   }
 
   const question =
-    poly.toLatex("()") + " \\div " + mono.toLatex(mono.isNegative ? "()" : "");
+    poly.toLatex("()") +
+    " \\div " +
+    mono.toLatex({ brackets: mono.isNegative ? "()" : "" });
   const answer = polyAns.toLatex();
   return [dsp(question), dsp(answer)];
 };

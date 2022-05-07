@@ -1,8 +1,8 @@
+import Fraction from "fraction.js";
 import { MugenContainer } from "~/components/container";
 import { RefreshFunction } from "~/interfaces/types";
-import { byScore, dsp, getRandomInt, guard, randArray } from "~/utils";
-import { Fraction } from "~/utils/fraction";
-import { Monomial } from "~/utils/monomial";
+import { byScore, dsp, getRandomInt, minMax, randArray } from "~/utils";
+import { Monomial, LatexOptions } from "~/utils/monomial";
 
 // "id": "71131",
 // "module": "daisyou",
@@ -31,34 +31,101 @@ export { Mugen as M71131 };
 
 // 正の数・負の数の大小
 const handleRefresh: RefreshFunction = (level, score) => {
-  const idx = level - 1;
-  const len = byScore(score, 2, 3);
-  const values: Fraction[] = [];
-  const stack: { [key: string]: number } = {};
+  const values: Array<[Monomial, boolean]> = [];
 
-  do {
-    let x = Monomial.create({
-      max: 9,
-      maxD: guard(idx, 1, 5, 10),
-      maxN: guard(idx, 1, 4, 9),
-      allowNegative: true,
-      allowZero: true,
-    }).coeff;
-    // 分母が5or10なら小数表記にする
-    if (x.d == 5 || x.d == 10) {
-      x = new Fraction(x.valueOf);
-    }
-    const key = x.toLatex();
-    if (stack[key] === undefined) {
-      stack[key] = 1;
-      values.push(x);
-    }
-  } while (values.length < len);
+  switch (level) {
+    case 1: // Lv1: 整数、整数
+      {
+        const len = randArray(2, 2, 2, 3);
+        const base = Monomial.create({
+          max: 5,
+          allowNegative: true,
+          allowZero: true,
+        });
+        values.push([base, false]);
+        do {
+          const diff = Monomial.create({
+            max: 4,
+            allowNegative: true,
+          });
+          const other = new Monomial(base.coeff.add(diff.coeff));
+          if (!values.find((v) => v[0].toString() === other.toString())) {
+            values.push([other, false]);
+          }
+        } while (values.length < len);
+      }
+      break;
+    case 2: // Lv2: 整数、小数
+      {
+        const len = randArray(2, 2, 2, 3);
+        const base = Monomial.create({
+          max: 5,
+          allowNegative: true,
+          allowZero: true,
+        });
+        values.push([base, false]);
+        do {
+          const diff = Monomial.create({
+            max: 9,
+            allowNegative: true,
+          }).coeff.div(10);
+          // base +/- 0.1〜0.9の範囲
+          const other = new Monomial(base.coeff.add(diff));
+          if (!values.find((v) => v[0].toString() === other.toString())) {
+            values.push([other, true]);
+          }
+        } while (values.length < len);
+      }
+      break;
+    case 3: // Lv3: 整数、分数/小数
+      {
+        const len = randArray(2, 2, 2, 3);
+        const base = Monomial.create({
+          max: 5,
+          allowNegative: true,
+          allowZero: true,
+        });
+        values.push([base, false]);
+        do {
+          const diff = new Fraction(randArray(1, -1), getRandomInt(5, 2));
+          const other = new Monomial(base.coeff.add(diff));
+          if (!values.find((v) => v[0].toString() === other.toString())) {
+            values.push([other, [2, 5, 10].includes(other.d)]);
+          }
+        } while (values.length < len);
+      }
+      break;
+    default:
+      {
+        // Lv4〜: 混在
+        const len = randArray(2, 3, 3);
+        const base = Monomial.create({
+          max: 5,
+          allowNegative: true,
+          allowZero: true,
+        });
+        do {
+          const diff = new Fraction(getRandomInt(5, -5), getRandomInt(5, 1));
+          const other = new Monomial(base.coeff.add(diff));
+          if (!values.find((v) => v[0].toString() === other.toString())) {
+            values.push([other, [2, 5, 10].includes(other.d)]);
+          }
+        } while (values.length < len);
+      }
+      break;
+  }
 
-  const question = values.map((x) => x.toLatex()).join(",\\quad ");
+  // 確率50%でリバース
+  if (randArray(true, false)) {
+    values.reverse();
+  }
+
+  const question = values
+    .map((x) => x[0].toLatex({ decimal: x[1] }))
+    .join(",\\quad ");
   const answer = values
-    .sort((a, b) => a.compare(b))
-    .map((x) => x.toLatex())
+    .sort((a, b) => a[0].coeff.compare(b[0].coeff))
+    .map((x) => x[0].toLatex({ decimal: x[1] }))
     .join(" < ");
 
   return [dsp(question), dsp(answer)];

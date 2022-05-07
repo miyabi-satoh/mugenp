@@ -41,12 +41,32 @@
   },
   {
     "id": "71211",
-    "module": "kahou",
+    "module": "kahou_kihon",
     "grade": "中1",
     "chapter": "正の数・負の数",
     "section": "正の数・負の数の計算",
     "subsection": "正の数・負の数の加法，減法",
     "title": "加法の基本",
+    "message": "次の計算をしなさい。"
+  },
+  {
+    "id": "71212",
+    "module": "genpou_kihon",
+    "grade": "中1",
+    "chapter": "正の数・負の数",
+    "section": "正の数・負の数の計算",
+    "subsection": "正の数・負の数の加法，減法",
+    "title": "減法の基本",
+    "message": "次の計算をしなさい。"
+  },
+  {
+    "id": "71213",
+    "module": "kagen_mix",
+    "grade": "中1",
+    "chapter": "正の数・負の数",
+    "section": "正の数・負の数の計算",
+    "subsection": "正の数・負の数の加法，減法",
+    "title": "加法・減法ミックス",
     "message": "次の計算をしなさい。"
   },
   {
@@ -166,7 +186,7 @@
     "chapter": "式の展開と因数分解",
     "section": "式の展開と因数分解",
     "subsection": "因数分解",
-    "title": "\\( x^2 + (a+b)x +ab \\) の因数分解",
+    "title": "\\(x^2 + (a+b)x +ab \\) の因数分解",
     "message": "次の式を因数分解しなさい。"
   },
   {

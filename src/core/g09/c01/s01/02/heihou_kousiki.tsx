@@ -47,7 +47,10 @@ const handleRefresh: RefreshFunction = (level, score) => {
   });
 
   // 絶対値が同じだと、変な感じがする
-  if (!ax.coeff.resembles(1) && ax.coeff.resembles(b.coeff)) {
+  if (
+    ax.coeff.abs().compare(1) != 0 &&
+    ax.coeff.abs().compare(b.coeff.abs()) == 0
+  ) {
     return ["", ""];
   }
 

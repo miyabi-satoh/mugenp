@@ -1,4 +1,5 @@
-import { Fraction } from "./fraction";
+// import { Fraction } from "./fraction";
+import Fraction from "fraction.js";
 import { Monomial, MonomialConstructor } from "./monomial";
 
 export class Polynomial {
@@ -17,8 +18,8 @@ export class Polynomial {
     return this._monomials;
   }
 
-  get neg(): Polynomial {
-    return new Polynomial(...this._monomials.map((x) => x.neg));
+  neg(): Polynomial {
+    return new Polynomial(...this._monomials.map((x) => x.neg()));
   }
 
   append(x: MonomialConstructor | Polynomial): Polynomial {
@@ -82,7 +83,17 @@ export class Polynomial {
       right = "\\right" + right;
     }
     return (
-      left + this._monomials.map((x, i) => x.toLatex(!!i)).join("") + right
+      left +
+      this._monomials
+        .map((x, i) => {
+          let sign = "";
+          if (i > 0 && x.isPositive) {
+            sign = "+";
+          }
+          return sign + x.toLatex();
+        })
+        .join("") +
+      right
     );
   }
 

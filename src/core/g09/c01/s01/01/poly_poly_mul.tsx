@@ -63,8 +63,10 @@ const handleRefresh: RefreshFunction = (level, score) => {
 
       // ±1以外は同じような数が並ばないようにする
       if (
-        p.coeff.resembles(1) ||
-        !expressions[i].terms.find((x) => x.coeff.resembles(p.coeff))
+        p.coeff.abs().compare(1) == 0 ||
+        !expressions[i].terms.find(
+          (x) => x.coeff.abs().compare(p.coeff.abs()) == 0
+        )
       ) {
         p = p.mul(moji.splice(getRandomInt(moji.length - 1), 1)[0]);
         expressions[i] = expressions[i].append(p);
@@ -74,7 +76,7 @@ const handleRefresh: RefreshFunction = (level, score) => {
     expressions[i] = expressions[i].orderTo();
     // 初項がマイナスにならないようにする
     if (expressions[i].terms[0].isNegative) {
-      expressions[i] = expressions[i].neg;
+      expressions[i] = expressions[i].neg();
     }
   }
 
