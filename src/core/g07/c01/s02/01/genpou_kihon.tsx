@@ -11,14 +11,8 @@ import { Monomial } from "~/utils/monomial";
 // "subsection": "正の数・負の数の加法，減法",
 // "title": "減法の基本",
 // "message": "次の計算をしなさい。"
-type Props = {
-  title: string;
-  message: string;
-};
-const Mugen = ({ title, message }: Props) => {
-  return (
-    <MugenContainer title={title} message={message} onRefresh={handleRefresh} />
-  );
+const Mugen = () => {
+  return <MugenContainer onRefresh={handleRefresh} />;
 };
 
 export { Mugen as M71212 };

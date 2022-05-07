@@ -12,19 +12,8 @@ import { wa_to_sa_no_bunkai } from "./wa_to_sa_no_bunkai";
 // "chapter": "式の展開と因数分解",
 // "title": "因数分解まとめ",
 // "message": "次の式を因数分解しなさい。"
-type Props = {
-  title: string;
-  message: string;
-};
-const Mugen = ({ title, message }: Props) => {
-  return (
-    <MugenContainer
-      maxLv={7}
-      title={title}
-      message={message}
-      onRefresh={handleRefresh}
-    />
-  );
+const Mugen = () => {
+  return <MugenContainer maxLv={7} onRefresh={handleRefresh} />;
 };
 
 export { Mugen as M91145 };

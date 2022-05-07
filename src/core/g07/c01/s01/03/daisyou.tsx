@@ -12,19 +12,8 @@ import { Monomial, LatexOptions } from "~/utils/monomial";
 // "subsection": "絶対値と数の大小",
 // "title": "正の数・負の数の大小",
 // "message": "次の各組の数の大小を、不等号(＜)を使って表しなさい。"
-type Props = {
-  title: string;
-  message: string;
-};
-const Mugen = ({ title, message }: Props) => {
-  return (
-    <MugenContainer
-      answerPrefix=""
-      title={title}
-      message={message}
-      onRefresh={handleRefresh}
-    />
-  );
+const Mugen = () => {
+  return <MugenContainer answerPrefix="" onRefresh={handleRefresh} />;
 };
 
 export { Mugen as M71131 };

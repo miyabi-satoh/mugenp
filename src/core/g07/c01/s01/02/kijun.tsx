@@ -11,19 +11,9 @@ import { Monomial } from "~/utils/monomial";
 // "subsection": "正の数・負の数で量を表す",
 // "title": "基準からの増減や過不足",
 // "message": "次の問いに答えなさい。"
-type Props = {
-  title: string;
-  message: string;
-};
-const Mugen = ({ title, message }: Props) => {
+const Mugen = () => {
   return (
-    <MugenContainer
-      answerPrefix=""
-      columns={1}
-      title={title}
-      message={message}
-      onRefresh={handleRefresh}
-    />
+    <MugenContainer answerPrefix="" columns={1} onRefresh={handleRefresh} />
   );
 };
 

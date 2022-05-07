@@ -17,8 +17,6 @@ type Props = {
   columns?: number | number[];
   maxLv?: number;
   answerPrefix?: string;
-  title: string;
-  message: string;
   onRefresh: RefreshFunction;
 };
 
@@ -28,8 +26,6 @@ export const MugenContainer = ({
   columns = [1, 1, 2],
   maxLv = 5,
   answerPrefix = "=",
-  title,
-  message,
   onRefresh,
 }: Props) => {
   const [score, setScore] = useState(-1);
@@ -111,15 +107,8 @@ export const MugenContainer = ({
   }, [refresh]);
 
   return (
-    <Layout>
-      <Container my={4} p={4} maxW="container.md" shadow="base">
-        <Box>
-          <Heading as="h2" size="sm">
-            {title}
-          </Heading>
-        </Box>
-        <Box mb={4}>{message}</Box>
-        {/* <Box mb={6}>
+    <>
+      {/* <Box mb={6}>
           <Button
             disabled={totalScore <= 0}
             onClick={handleLevelDown}
@@ -137,51 +126,50 @@ export const MugenContainer = ({
             難易度を上げる
           </Button>
         </Box> */}
-        <SimpleGrid columns={columns} mb={4}>
-          {questions.map((q, index) => (
-            <Box key={`${q}${index}`}>
-              <Flex h="3em" align="center">
-                <Box w="2em" textAlign="center" mr={2}>
-                  ({index + 1})
-                </Box>
-                <MathJax>{q}</MathJax>
-              </Flex>
-              <Box h="3em" my={2} ml={6} color="red">
-                {showAnswer && (
-                  <MathJax>
-                    {answerPrefix} {answers[index]}
-                  </MathJax>
-                )}
+      <SimpleGrid columns={columns} mb={4}>
+        {questions.map((q, index) => (
+          <Box key={`${q}${index}`}>
+            <Flex h="3em" align="center">
+              <Box w="2em" textAlign="center" mr={2}>
+                ({index + 1})
               </Box>
+              <MathJax>{q}</MathJax>
+            </Flex>
+            <Box h="3em" my={2} ml={6} color="red">
+              {showAnswer && (
+                <MathJax>
+                  {answerPrefix} {answers[index]}
+                </MathJax>
+              )}
             </Box>
+          </Box>
+        ))}
+      </SimpleGrid>
+      <Flex align="center" ml={2}>
+        <Button id="toggle-answer" onClick={() => setShowAnswer(!showAnswer)}>
+          解答を{`${showAnswer ? "隠す" : "表示"}`}
+        </Button>
+        <Box mx={3}>正解数</Box>
+        <Select
+          id="select-score"
+          w="4em"
+          mr={4}
+          onChange={handleChangeScore}
+          value={score}
+        >
+          <option value="-1"></option>
+          {Array.from(Array(NUM_OF_Q + 1).keys()).map((i) => (
+            <option key={i} value={i}>
+              {i}
+            </option>
           ))}
-        </SimpleGrid>
-        <Flex align="center" ml={2}>
-          <Button id="toggle-answer" onClick={() => setShowAnswer(!showAnswer)}>
-            解答を{`${showAnswer ? "隠す" : "表示"}`}
-          </Button>
-          <Box mx={3}>正解数</Box>
-          <Select
-            id="select-score"
-            w="4em"
-            mr={4}
-            onChange={handleChangeScore}
-            value={score}
-          >
-            <option value="-1"></option>
-            {Array.from(Array(NUM_OF_Q + 1).keys()).map((i) => (
-              <option key={i} value={i}>
-                {i}
-              </option>
-            ))}
-          </Select>
-          <Button id="button-next" disabled={score < 0} onClick={handleNext}>
-            次の問題
-          </Button>
-          {isDev && <Box>スコア：{totalScore}</Box>}
-          {isDev && <Box>レベル：{level}</Box>}
-        </Flex>
-      </Container>
-    </Layout>
+        </Select>
+        <Button id="button-next" disabled={score < 0} onClick={handleNext}>
+          次の問題
+        </Button>
+        {isDev && <Box>スコア：{totalScore}</Box>}
+        {isDev && <Box>レベル：{level}</Box>}
+      </Flex>
+    </>
   );
 };

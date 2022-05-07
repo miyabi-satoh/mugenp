@@ -10,14 +10,8 @@ import { Polynomial } from "~/utils/polynomial";
 // "chapter": "式の展開と因数分解",
 // "title": "\\( (a^2 - b^2) \\) の因数分解",
 // "message": "次の式を因数分解しなさい。"
-type Props = {
-  title: string;
-  message: string;
-};
-const Mugen = ({ title, message }: Props) => {
-  return (
-    <MugenContainer title={title} message={message} onRefresh={handleRefresh} />
-  );
+const Mugen = () => {
+  return <MugenContainer onRefresh={handleRefresh} />;
 };
 
 export { Mugen as M91142 };

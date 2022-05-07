@@ -13,7 +13,7 @@ describe.skip("M91101コンポーネント", () => {
   let renderResult: RenderResult;
   beforeEach(() => {
     // 準備処理 テスト対象Componentの描画
-    renderResult = render(<M91111 title="テスト" message="テスト" />, {
+    renderResult = render(<M91111 />, {
       wrapper: MathJaxContext,
     });
   });

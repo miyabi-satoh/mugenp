@@ -9,14 +9,8 @@ import { poly_mono } from "./poly_mono_mul";
 // "chapter": "式の展開と因数分解",
 // "title": "\\( (a+b)\\div c \\) の計算",
 // "message": "次の計算をしなさい。"
-type Props = {
-  title: string;
-  message: string;
-};
-const Mugen = ({ title, message }: Props) => {
-  return (
-    <MugenContainer title={title} message={message} onRefresh={handleRefresh} />
-  );
+const Mugen = () => {
+  return <MugenContainer onRefresh={handleRefresh} />;
 };
 
 export { Mugen as M91112 };

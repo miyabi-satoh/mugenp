@@ -3,14 +3,8 @@ import { RefreshFunction } from "~/interfaces/types";
 import { dsp, getRandomInt, isFiniteDenom, randArray } from "~/utils";
 import { Monomial } from "~/utils/monomial";
 
-type Props = {
-  title: string;
-  message: string;
-};
-const Mugen = ({ title, message }: Props) => {
-  return (
-    <MugenContainer title={title} message={message} onRefresh={handleRefresh} />
-  );
+const Mugen = () => {
+  return <MugenContainer onRefresh={handleRefresh} />;
 };
 
 export { Mugen as M71211 };

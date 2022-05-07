@@ -10,19 +10,8 @@ import { Polynomial } from "~/utils/polynomial";
 // "chapter": "式の展開と因数分解",
 // "title": "\\((a + b)(a - b)\\) の展開",
 // "message": "次の式を展開しなさい。"
-type Props = {
-  title: string;
-  message: string;
-};
-const Mugen = ({ title, message }: Props) => {
-  return (
-    <MugenContainer
-      maxLv={7}
-      title={title}
-      message={message}
-      onRefresh={handleRefresh}
-    />
-  );
+const Mugen = () => {
+  return <MugenContainer maxLv={7} onRefresh={handleRefresh} />;
 };
 
 export { Mugen as M91123 };

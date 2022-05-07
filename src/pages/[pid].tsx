@@ -5,6 +5,8 @@ import { join } from "path";
 import { Page } from "~/interfaces/types";
 import { NextSeo } from "next-seo";
 import { useMemo } from "react";
+import { Layout } from "~/components/layout";
+import { Box, Container, Heading } from "@chakra-ui/react";
 
 type PathParams = {
   pid: string;
@@ -40,10 +42,9 @@ export const getStaticProps: GetStaticProps<Page> = async (context) => {
 };
 
 const Mugen = (page: Page) => {
-  const MugenContainer = dynamic<{
-    title: string;
-    message: string;
-  }>(() => import("~/core").then((mod: any) => mod[`M${page.id}`]));
+  const MugenContainer = dynamic(() =>
+    import("~/core").then((mod: any) => mod[`M${page.id}`])
+  );
 
   const description = useMemo(() => {
     let ret = page.grade + " " + page.chapter + " ";
@@ -60,18 +61,26 @@ const Mugen = (page: Page) => {
   }, [page]);
 
   return (
-    <>
-      <NextSeo
-        title={title}
-        description={description}
-        openGraph={{
-          type: "article",
-          url: `https://mugenp.amiiby.com/${page.id}`,
-          title: page.subsection,
-        }}
-      />
-      <MugenContainer title={title} message={page.message} />
-    </>
+    <Layout>
+      <Container my={4} p={4} maxW="container.md" shadow="base">
+        <Box>
+          <Heading as="h2" size="sm">
+            {title}
+          </Heading>
+        </Box>
+        <Box mb={4}>{page.message}</Box>
+        <NextSeo
+          title={title}
+          description={description}
+          openGraph={{
+            type: "article",
+            url: `https://mugenp.amiiby.com/${page.id}`,
+            title: page.subsection,
+          }}
+        />
+        <MugenContainer />
+      </Container>
+    </Layout>
   );
 };
 

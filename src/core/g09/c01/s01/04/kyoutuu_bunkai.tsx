@@ -9,14 +9,8 @@ import { poly_mono } from "../01";
 // "chapter": "式の展開と因数分解",
 // "title": "共通因数でくくる",
 // "message": "次の式を因数分解しなさい。"
-type Props = {
-  title: string;
-  message: string;
-};
-const Mugen = ({ title, message }: Props) => {
-  return (
-    <MugenContainer title={title} message={message} onRefresh={handleRefresh} />
-  );
+const Mugen = () => {
+  return <MugenContainer onRefresh={handleRefresh} />;
 };
 
 export { Mugen as M91141 };

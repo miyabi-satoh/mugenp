@@ -11,20 +11,8 @@ import { LatexOptions, Monomial } from "~/utils/monomial";
 // "subsection": "０より小さい数",
 // "title": "正の符号・負の符号",
 // "message": "次の数について、正の符号または負の符号をつけて表しなさい。"
-type Props = {
-  title: string;
-  message: string;
-};
-const Mugen = ({ title, message }: Props) => {
-  return (
-    <MugenContainer
-      answerPrefix=""
-      maxLv={3}
-      title={title}
-      message={message}
-      onRefresh={handleRefresh}
-    />
-  );
+const Mugen = () => {
+  return <MugenContainer answerPrefix="" maxLv={3} onRefresh={handleRefresh} />;
 };
 
 export { Mugen as M71111 };
