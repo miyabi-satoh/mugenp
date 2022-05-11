@@ -29,9 +29,7 @@ const handleRefresh: RefreshFunction = (level, score) => {
     values.push(x);
   } while (values.length < 2);
 
-  const question = values
-    .map((x) => x.toLatex({ sign: true, brackets: "()" }))
-    .join(" + ");
+  const question = values.map((x) => x.toLatex({ brackets: "()" })).join(" + ");
 
   const aValue = values.reduce(
     (pv, cv) => new Monomial(pv.coeff.add(cv.coeff))
