@@ -21,14 +21,13 @@ export { handleRefresh as genpou_kihon };
 // 減法の基本
 const handleRefresh: RefreshFunction = (level, score) => {
   const values: Monomial[] = [];
-  for (let i = 0; i < 2; i++) {
+  do {
     const x = Monomial.create({
       max: 9,
       allowNegative: true,
-      allowZero: i == 0,
     });
     values.push(x);
-  }
+  } while (values.length < 2);
 
   const question = values
     .map((x) => x.toLatex({ sign: true, brackets: "()" }))
