@@ -9,3 +9,6 @@ export * from "./kagen_mix";
 
 // カッコのない加減法
 export * from "./kakko_nasi";
+
+// 加減混合計算
+export * from "./kagen_kongou";
