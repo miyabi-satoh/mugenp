@@ -100,6 +100,26 @@
     "message": "次の式が単項式ならば次数を、多項式ならば項と次数を答えなさい。"
   },
   {
+    "id": "81112",
+    "module": "douruikou_no_seiri",
+    "grade": "中2",
+    "chapter": "式の計算",
+    "section": "式の計算",
+    "subsection": "式の加法，減法",
+    "title": "同類項の整理",
+    "message": "次の式の同類項をまとめて簡単にしなさい。"
+  },
+  {
+    "id": "81113",
+    "module": "kahou_genpou",
+    "grade": "中2",
+    "chapter": "式の計算",
+    "section": "式の計算",
+    "subsection": "式の加法，減法",
+    "title": "多項式の加法，減法",
+    "message": "次の計算をしなさい。"
+  },
+  {
     "id": "91111",
     "module": "poly_mono_mul",
     "grade": "中3",
