@@ -42,6 +42,7 @@ export function byScore<T>(score: number, ...ary: T[]): T {
 
 /**
  * 最大公約数を求める
+ *
  * https://mebee.info/2021/04/26/post-26097/
  */
 export function gcd(...args: number[]): number {
@@ -53,6 +54,22 @@ export function gcd(...args: number[]): number {
     ans = f(ans, Math.abs(args[i]));
   }
 
+  return ans;
+}
+
+/**
+ * 最小公倍数を求める
+ *
+ * https://tech-blog.s-yoshiki.com/entry/63/
+ */
+export function lcm(...args: number[]): number {
+  const f = (n: number, m: number) => (n * m) / gcd(n, m);
+
+  let ans = Math.abs(args[0]);
+
+  for (let i = 1; i < args.length; i++) {
+    ans = f(ans, Math.abs(args[i]));
+  }
   return ans;
 }
 
