@@ -120,6 +120,16 @@
     "message": "次の計算をしなさい。"
   },
   {
+    "id": "81121",
+    "module": "poly_num_mul",
+    "grade": "中2",
+    "chapter": "式の計算",
+    "section": "式の計算",
+    "subsection": "いろいろな多項式の計算",
+    "title": "多項式と数の乗法",
+    "message": "次の計算をしなさい。"
+  },
+  {
     "id": "91111",
     "module": "poly_mono_mul",
     "grade": "中3",
