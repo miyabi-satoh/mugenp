@@ -140,6 +140,16 @@
     "message": "次の計算をしなさい。"
   },
   {
+    "id": "81123",
+    "module": "bunpai_kagen",
+    "grade": "中2",
+    "chapter": "式の計算",
+    "section": "式の計算",
+    "subsection": "いろいろな多項式の計算",
+    "title": "分配法則と加減法",
+    "message": "次の計算をしなさい。"
+  },
+  {
     "id": "91111",
     "module": "poly_mono_mul",
     "grade": "中3",
