@@ -187,6 +187,7 @@ export class Monomial {
         `\\left${options.brackets[0]}`,
         `\\right${options.brackets[1]}`,
       ];
+      options.sign = true;
     }
 
     const moji = Object.keys(this._factors)

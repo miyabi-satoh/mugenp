@@ -70,6 +70,106 @@
     "message": "次の計算をしなさい。"
   },
   {
+    "id": "71214",
+    "module": "kakko_nasi",
+    "grade": "中1",
+    "chapter": "正の数・負の数",
+    "section": "正の数・負の数の計算",
+    "subsection": "正の数・負の数の加法，減法",
+    "title": "カッコのない加減法",
+    "message": "次の計算をしなさい。"
+  },
+  {
+    "id": "71215",
+    "module": "kagen_kongou",
+    "grade": "中1",
+    "chapter": "正の数・負の数",
+    "section": "正の数・負の数の計算",
+    "subsection": "正の数・負の数の加法，減法",
+    "title": "加減混合計算",
+    "message": "次の計算をしなさい。"
+  },
+  {
+    "id": "81111",
+    "module": "kou_jisuu",
+    "grade": "中2",
+    "chapter": "式の計算",
+    "section": "式の計算",
+    "subsection": "式の加法，減法",
+    "title": "単項式・多項式・次数",
+    "message": "次の式が単項式ならば次数を、多項式ならば項と次数を答えなさい。"
+  },
+  {
+    "id": "81112",
+    "module": "douruikou_no_seiri",
+    "grade": "中2",
+    "chapter": "式の計算",
+    "section": "式の計算",
+    "subsection": "式の加法，減法",
+    "title": "同類項の整理",
+    "message": "次の式の同類項をまとめて簡単にしなさい。"
+  },
+  {
+    "id": "81113",
+    "module": "kahou_genpou",
+    "grade": "中2",
+    "chapter": "式の計算",
+    "section": "式の計算",
+    "subsection": "式の加法，減法",
+    "title": "多項式の加法，減法",
+    "message": "次の計算をしなさい。"
+  },
+  {
+    "id": "81121",
+    "module": "poly_num_mul",
+    "grade": "中2",
+    "chapter": "式の計算",
+    "section": "式の計算",
+    "subsection": "いろいろな多項式の計算",
+    "title": "多項式と数の乗法",
+    "message": "次の計算をしなさい。"
+  },
+  {
+    "id": "81122",
+    "module": "poly_num_div",
+    "grade": "中2",
+    "chapter": "式の計算",
+    "section": "式の計算",
+    "subsection": "いろいろな多項式の計算",
+    "title": "多項式と数の除法",
+    "message": "次の計算をしなさい。"
+  },
+  {
+    "id": "81123",
+    "module": "bunpai_kagen",
+    "grade": "中2",
+    "chapter": "式の計算",
+    "section": "式の計算",
+    "subsection": "いろいろな多項式の計算",
+    "title": "整数×多項式と加減法",
+    "message": "次の計算をしなさい。"
+  },
+  {
+    "id": "81124",
+    "module": "bunsuu_bunpai_kagen",
+    "grade": "中2",
+    "chapter": "式の計算",
+    "section": "式の計算",
+    "subsection": "いろいろな多項式の計算",
+    "title": "分数×多項式と加減法",
+    "message": "次の計算をしなさい。"
+  },
+  {
+    "id": "81125",
+    "module": "",
+    "grade": "中2",
+    "chapter": "式の計算",
+    "section": "式の計算",
+    "subsection": "いろいろな多項式の計算",
+    "title": "分数形の式と加減法",
+    "message": "次の計算をしなさい。"
+  },
+  {
     "id": "91111",
     "module": "poly_mono_mul",
     "grade": "中3",
