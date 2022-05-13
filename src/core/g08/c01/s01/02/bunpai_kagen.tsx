@@ -1,7 +1,7 @@
 import Fraction from "fraction.js";
 import { MugenContainer } from "~/components/container";
 import { RefreshFunction } from "~/interfaces/types";
-import { dsp, getRandomInt, guard, randArray } from "~/utils";
+import { dsp, getRandomInt, guard } from "~/utils";
 import { Monomial } from "~/utils/monomial";
 import { Polynomial } from "~/utils/polynomial";
 
@@ -57,10 +57,11 @@ const handleRefresh: RefreshFunction = (level, score) => {
 
   // 係数
   let mono: Monomial[] = [];
+  const idx = level - 1;
   do {
     const x = Monomial.create({
       max: 5,
-      allowNegative: level > 2 || mono.length > 0,
+      allowNegative: guard(idx, false, mono.length > 0, true),
     });
     // ±1はスキップ
     if (x.abs().equals(1)) {

@@ -146,7 +146,27 @@
     "chapter": "式の計算",
     "section": "式の計算",
     "subsection": "いろいろな多項式の計算",
-    "title": "分配法則と加減法",
+    "title": "整数×多項式と加減法",
+    "message": "次の計算をしなさい。"
+  },
+  {
+    "id": "81124",
+    "module": "bunsuu_bunpai_kagen",
+    "grade": "中2",
+    "chapter": "式の計算",
+    "section": "式の計算",
+    "subsection": "いろいろな多項式の計算",
+    "title": "分数×多項式と加減法",
+    "message": "次の計算をしなさい。"
+  },
+  {
+    "id": "81125",
+    "module": "",
+    "grade": "中2",
+    "chapter": "式の計算",
+    "section": "式の計算",
+    "subsection": "いろいろな多項式の計算",
+    "title": "分数形の式と加減法",
     "message": "次の計算をしなさい。"
   },
   {
