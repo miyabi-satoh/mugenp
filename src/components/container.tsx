@@ -1,16 +1,7 @@
-import {
-  Box,
-  Button,
-  Container,
-  Flex,
-  Heading,
-  Select,
-  SimpleGrid,
-} from "@chakra-ui/react";
+import { Box, Button, Flex, Select, SimpleGrid } from "@chakra-ui/react";
 import { MathJax } from "better-react-mathjax";
 import { ChangeEventHandler, useEffect, useMemo, useState } from "react";
 import { RefreshFunction } from "~/interfaces/types";
-import { Layout } from "./layout";
 import { FaArrowUp, FaArrowDown } from "react-icons/fa";
 import { isDev, minMax } from "~/utils";
 type Props = {
@@ -37,7 +28,7 @@ export const MugenContainer = ({
   const [stock, setStock] = useState<string[]>([]);
 
   const level = useMemo(() => {
-    return minMax(0, Math.floor(totalScore / 5), maxLv - 1) + 1;
+    return minMax(0, Math.floor(totalScore / (NUM_OF_Q / 2)), maxLv - 1) + 1;
   }, [maxLv, totalScore]);
 
   const handleLevelDown = () => {
