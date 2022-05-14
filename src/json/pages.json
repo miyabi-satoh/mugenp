@@ -180,6 +180,16 @@
     "message": "次の計算をしなさい。"
   },
   {
+    "id": "81132",
+    "module": "mono_mono_div",
+    "grade": "中2",
+    "chapter": "式の計算",
+    "section": "式の計算",
+    "subsection": "単項式の乗法，除法",
+    "title": "単項式の除法",
+    "message": "次の計算をしなさい。"
+  },
+  {
     "id": "91111",
     "module": "poly_mono_mul",
     "grade": "中3",

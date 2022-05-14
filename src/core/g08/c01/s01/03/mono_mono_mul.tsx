@@ -1,8 +1,7 @@
 import { MugenContainer } from "~/components/container";
 import { RefreshFunction } from "~/interfaces/types";
-import { dsp, getRandomInt, guard, randArray } from "~/utils";
+import { dsp, guard, randArray } from "~/utils";
 import { Monomial } from "~/utils/monomial";
-import { Polynomial } from "~/utils/polynomial";
 
 // "id": "81131",
 // "module": "mono_mono_mul",
