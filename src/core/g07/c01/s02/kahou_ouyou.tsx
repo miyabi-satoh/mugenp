@@ -9,7 +9,7 @@ const Mugen = () => {
 
 export { Mugen as M71211 };
 
-// 加法の基本
+// 加法の応用
 const handleRefresh: RefreshFunction = (level, score) => {
   // score|Lv|M1|M2|M3|M4
   // 0    | 1| 4| 0| 0| 0

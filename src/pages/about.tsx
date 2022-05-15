@@ -48,7 +48,13 @@ const ExternalLink = ({
   href,
   children,
 }: PropsWithChildren<{ href: string }>) => (
-  <Link href={href} isExternal d="inline-flex" alignItems="center" color="teal">
+  <Link
+    href={href}
+    isExternal
+    display="inline-flex"
+    alignItems="center"
+    color="teal"
+  >
     {children}
     <Icon as={FaExternalLinkAlt} mx={2} />
   </Link>

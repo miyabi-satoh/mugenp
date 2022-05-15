@@ -1,7 +1,6 @@
-import Fraction from "fraction.js";
 import { MugenContainer } from "~/components/container";
 import { RefreshFunction } from "~/interfaces/types";
-import { dsp, gcd, getRandomInt, guard, lcm, minMax, randArray } from "~/utils";
+import { dsp, gcd, getRandomInt, lcm, randArray } from "~/utils";
 import { Monomial } from "~/utils/monomial";
 import { Polynomial } from "~/utils/polynomial";
 

@@ -1,7 +1,7 @@
 import { MugenContainer } from "~/components/container";
+import { poly_mono } from "~/core";
 import { RefreshFunction } from "~/interfaces/types";
 import { dsp } from "~/utils";
-import { poly_mono } from "./poly_mono_mul";
 
 // "id": "91112",
 // "module": "poly_mono_div",

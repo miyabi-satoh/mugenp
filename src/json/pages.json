@@ -170,6 +170,26 @@
     "message": "次の計算をしなさい。"
   },
   {
+    "id": "81131",
+    "module": "mono_mono_mul",
+    "grade": "中2",
+    "chapter": "式の計算",
+    "section": "式の計算",
+    "subsection": "単項式の乗法，除法",
+    "title": "単項式の乗法",
+    "message": "次の計算をしなさい。"
+  },
+  {
+    "id": "81132",
+    "module": "mono_mono_div",
+    "grade": "中2",
+    "chapter": "式の計算",
+    "section": "式の計算",
+    "subsection": "単項式の乗法，除法",
+    "title": "単項式の除法",
+    "message": "次の計算をしなさい。"
+  },
+  {
     "id": "91111",
     "module": "poly_mono_mul",
     "grade": "中3",
@@ -250,7 +270,7 @@
     "message": "次の計算をしなさい。"
   },
   {
-    "id": "91141",
+    "id": "91131",
     "module": "kyoutuu_bunkai",
     "grade": "中3",
     "chapter": "式の展開と因数分解",
@@ -260,7 +280,7 @@
     "message": "次の式を因数分解しなさい。"
   },
   {
-    "id": "91142",
+    "id": "91132",
     "module": "wa_to_sa_no_bunkai",
     "grade": "中3",
     "chapter": "式の展開と因数分解",
@@ -270,7 +290,7 @@
     "message": "次の式を因数分解しなさい。"
   },
   {
-    "id": "91143",
+    "id": "91133",
     "module": "heihou_bunkai",
     "grade": "中3",
     "chapter": "式の展開と因数分解",
@@ -280,7 +300,7 @@
     "message": "次の式を因数分解しなさい。"
   },
   {
-    "id": "91144",
+    "id": "91134",
     "module": "waseki_no_bunkai",
     "grade": "中3",
     "chapter": "式の展開と因数分解",
@@ -290,7 +310,7 @@
     "message": "次の式を因数分解しなさい。"
   },
   {
-    "id": "91145",
+    "id": "91135",
     "module": "insuu_bunkai",
     "grade": "中3",
     "chapter": "式の展開と因数分解",

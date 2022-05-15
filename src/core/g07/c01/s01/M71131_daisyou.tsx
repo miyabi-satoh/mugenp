@@ -1,8 +1,8 @@
 import Fraction from "fraction.js";
 import { MugenContainer } from "~/components/container";
 import { RefreshFunction } from "~/interfaces/types";
-import { byScore, dsp, getRandomInt, minMax, randArray } from "~/utils";
-import { Monomial, LatexOptions } from "~/utils/monomial";
+import { dsp, getRandomInt, randArray } from "~/utils";
+import { Monomial } from "~/utils/monomial";
 
 // "id": "71131",
 // "module": "daisyou",

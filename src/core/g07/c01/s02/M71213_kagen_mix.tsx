@@ -1,8 +1,7 @@
 import { MugenContainer } from "~/components/container";
 import { RefreshFunction } from "~/interfaces/types";
 import { randArray } from "~/utils";
-import { genpou_kihon } from "./genpou_kihon";
-import { kahou_kihon } from "./kahou_kihon";
+import { genpou_kihon, kahou_kihon } from ".";
 
 // "id": "71213",
 // "module": "kagen_mix",

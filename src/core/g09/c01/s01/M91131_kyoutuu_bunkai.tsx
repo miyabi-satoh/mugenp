@@ -1,9 +1,9 @@
 import { MugenContainer } from "~/components/container";
 import { RefreshFunction } from "~/interfaces/types";
 import { dsp, gcd } from "~/utils";
-import { poly_mono } from "../01";
+import { poly_mono } from ".";
 
-// "id": "91141",
+// "id": "91131",
 // "module": "kyoutuu_bunkai",
 // "grade": "中3",
 // "chapter": "式の展開と因数分解",
@@ -13,7 +13,7 @@ const Mugen = () => {
   return <MugenContainer onRefresh={handleRefresh} />;
 };
 
-export { Mugen as M91141 };
+export { Mugen as M91131 };
 export { handleRefresh as kyoutuu_bunkai };
 
 // 共通因数でくくる

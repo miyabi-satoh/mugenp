@@ -1,9 +1,7 @@
 import { MugenContainer } from "~/components/container";
 import { RefreshFunction } from "~/interfaces/types";
 import { randArray } from "~/utils";
-import { heihou_kousiki } from "./heihou_kousiki";
-import { waseki_no_kousiki } from "./waseki_no_kousiki";
-import { wa_to_sa_no_seki } from "./wa_to_sa_no_seki";
+import { heihou_kousiki, waseki_no_kousiki, wa_to_sa_no_seki } from ".";
 
 // "id": "91124",
 // "module": "jyouhou_kousiki",
