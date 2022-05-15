@@ -1,4 +1,3 @@
-import Fraction from "fraction.js";
 import { MugenContainer } from "~/components/container";
 import { RefreshFunction } from "~/interfaces/types";
 import { dsp, getRandomInt, randArray } from "~/utils";
