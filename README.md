@@ -1,34 +1,24 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+2022.05.16
 
-## Getting Started
+![OGP Image](public/mugenp.png)
 
-First, run the development server:
+[Node.js](https://nodejs.org/) v16 環境で開発・運用しています。<br />
+公開サイトは https://mugenp.amiiby.com です。
 
-```bash
-npm run dev
-# or
-yarn dev
-```
+[React](https://reactjs.org/) フレームワークに [Next.js](https://nextjs.org/) v12 を使用しています。<br />
+基本的に [TypeScript](https://www.typescriptlang.org/) で記述しています。
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+UI フレームワークに [Chakra-UI](https://chakra-ui.com/) v2 を使用しています。
 
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
+数式の表示に [better-react-mathjax](https://github.com/fast-reflexes/better-react-mathjax) を使用しています。
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
+有理数の処理に [Fraction.js](https://github.com/infusion/Fraction.js/) を使用しています。
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+前身のプロジェクトとして [mosq](https://github.com/miyabi-satoh/mosq) があります。<br />
+このときはバックエンドに [Django](https://www.djangoproject.com/) を使用して、事前にデータベースへ問題を登録していました。
+また、画面上に問題を表示するのではなく、サーバー側で LaTeX ファイルから PDF ファイルを生成して表示する仕組みでした。
 
-## Learn More
+あるとき、ふと「リアルタイムにランダムに問題生成して画面表示で良くない？ 直近の出題とかぶらなければ良くない？」と思ってリライトした次第です。
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+最終的には、単元を横断して問題を出せるようにしたい。
+というか、数学が得意だろうと苦手だろうと、役に立つサイトにしたい。
