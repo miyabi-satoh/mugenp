@@ -29,7 +29,7 @@ const Header = () => {
       </Heading>
       <Spacer />
       <NextLink href="/about" passHref>
-        <Link d="inline-flex" alignItems="center">
+        <Link display="inline-flex" alignItems="center">
           <Icon as={FaInfoCircle} mr={1} /> About
         </Link>
       </NextLink>
