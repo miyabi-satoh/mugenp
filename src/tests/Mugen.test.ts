@@ -3,7 +3,7 @@
  */
 import "expect-puppeteer";
 import puppeteer from "puppeteer";
-import { readFileSync } from "fs";
+import { readdir, readFileSync, unlink } from "fs";
 import { join } from "path";
 import { Page as PageJson } from "~/interfaces/types";
 
@@ -21,6 +21,21 @@ const testParams = [...json.map((x) => [x.id])];
 
 // スクリーンショットの保存先
 const ssDir = join(process.cwd(), "src", "tests", "screenshots");
+
+// 古いスクリーンショットを削除
+readdir(ssDir, (err, files) => {
+  if (err) {
+    throw err;
+  }
+  files.forEach((file) => {
+    unlink(`${ssDir}/${file}`, (err) => {
+      if (err) {
+        throw err;
+      }
+      //console.log(`deleted ${file}`);
+    });
+  });
+});
 
 describe("スクリーンショット", () => {
   // ユニットテスト起動
