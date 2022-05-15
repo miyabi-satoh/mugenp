@@ -23,12 +23,12 @@ export * from "./M91125_tenkai_to_seiri";
 // 3項 因数分解
 // ・式の因数と因数分解の意味
 // ・共通因数をくくり出して因数分解すること
-export * from "./M91141_kyoutuu_bunkai";
+export * from "./M91131_kyoutuu_bunkai";
 // ・和と差の積の公式を利用して因数分解すること
-export * from "./M91142_wa_to_sa_no_bunkai";
+export * from "./M91132_wa_to_sa_no_bunkai";
 // ・平方の公式を利用して因数分解すること
-export * from "./M91143_heihou_bunkai";
+export * from "./M91133_heihou_bunkai";
 // ・(x＋a)(x＋b)＝x2＋(a＋b)x＋ab を利用して因数分解すること
-export * from "./M91144_waseki_no_bunkai";
+export * from "./M91134_waseki_no_bunkai";
 // ・共通因数をくくり出したり，共通な部分を１つの文字におきかえたりして因数分解すること
-export * from "./M91145_insuu_bunkai";
+export * from "./M91135_insuu_bunkai";

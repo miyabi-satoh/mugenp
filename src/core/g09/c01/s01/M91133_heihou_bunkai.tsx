@@ -4,7 +4,7 @@ import { byScore, dsp, gcd, guard } from "~/utils";
 import { Monomial } from "~/utils/monomial";
 import { Polynomial } from "~/utils/polynomial";
 
-// "id": "91143",
+// "id": "91133",
 // "module": "heihou_bunkai",
 // "grade": "中3",
 // "chapter": "式の展開と因数分解",
@@ -14,7 +14,7 @@ const Mugen = () => {
   return <MugenContainer onRefresh={handleRefresh} />;
 };
 
-export { Mugen as M91143 };
+export { Mugen as M91133 };
 export { handleRefresh as heihou_bunkai };
 
 // 平方公式：(a + b)^2
