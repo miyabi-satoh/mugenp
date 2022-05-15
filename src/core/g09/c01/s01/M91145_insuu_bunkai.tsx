@@ -1,10 +1,12 @@
 import { MugenContainer } from "~/components/container";
 import { RefreshFunction } from "~/interfaces/types";
 import { randArray } from "~/utils";
-import { heihou_bunkai } from "./heihou_bunkai";
-import { kyoutuu_bunkai } from "./kyoutuu_bunkai";
-import { waseki_no_bunkai } from "./waseki_no_bunkai";
-import { wa_to_sa_no_bunkai } from "./wa_to_sa_no_bunkai";
+import {
+  heihou_bunkai,
+  kyoutuu_bunkai,
+  waseki_no_bunkai,
+  wa_to_sa_no_bunkai,
+} from ".";
 
 // "id": "91145",
 // "module": "insuu_bunkai",

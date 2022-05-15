@@ -1,7 +1,7 @@
 import { MugenContainer } from "~/components/container";
 import { RefreshFunction } from "~/interfaces/types";
 import { dsp, gcd } from "~/utils";
-import { poly_mono } from "../01";
+import { poly_mono } from ".";
 
 // "id": "91141",
 // "module": "kyoutuu_bunkai",
