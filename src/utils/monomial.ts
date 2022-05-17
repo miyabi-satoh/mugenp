@@ -290,7 +290,7 @@ export class Monomial {
     Object.keys(other._factors).forEach((key) => {
       newFactors[key] = (other as Monomial)._factors[key].neg();
     });
-    const factors = Monomial.mergeFactors(this._factors, other._factors);
+    const factors = Monomial.mergeFactors(this._factors, newFactors);
 
     return new Monomial(coeff, factors);
   }
