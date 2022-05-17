@@ -210,6 +210,16 @@
     "message": "次の計算をしなさい。"
   },
   {
+    "id": "81133",
+    "module": "mul_div_mix",
+    "grade": "中2",
+    "chapter": "式の計算",
+    "section": "式の計算",
+    "subsection": "単項式の乗法，除法",
+    "title": "乗除混合計算",
+    "message": "次の計算をしなさい。"
+  },
+  {
     "id": "91111",
     "module": "poly_mono_mul",
     "grade": "中3",
