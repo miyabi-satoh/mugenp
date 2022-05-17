@@ -180,6 +180,11 @@ export class Monomial {
   }
 
   toLatex(options: LatexOptions = {}): string {
+    if (this._coeff.equals(0)) {
+      return "";
+    }
+
+    // カッコの設定
     let left = "";
     let right = "";
     if (options.brackets && options.brackets.length == 2) {
@@ -190,42 +195,77 @@ export class Monomial {
       options.sign = true;
     }
 
-    const moji = Object.keys(this._factors)
+    // 分子と分母
+    let numerator = "";
+    let denominator = "";
+    Object.keys(this._factors)
       .sort()
-      .map((key) => {
+      .forEach((key) => {
         const exp = this._factors[key];
         if (exp.equals(0)) {
-          return "";
+          // pass
+        } else if (exp.equals(1)) {
+          numerator += key;
+        } else if (exp.compare(0) > 0) {
+          numerator += key + "^{" + exp.toLatex() + "}";
+        } else if (exp.equals(-1)) {
+          denominator += key;
+        } else {
+          denominator += key + "^{" + exp.neg().toLatex() + "}";
         }
-        if (exp.equals(1)) {
-          return key;
-        }
-        return key + "^{" + exp.toLatex() + "}";
-      })
-      .join("");
+      });
 
-    let coeff = "";
-    if (options.decimal) {
-      coeff = this._coeff.toString();
+    let sign = "";
+    if (this._coeff.s >= 0) {
+      sign = options.sign ? "+" : "";
     } else {
-      coeff = this._coeff.toLatex();
+      sign = "-";
     }
-
-    const sign = options.sign && this.coeff.s >= 0 ? "+" : "";
-    if (!moji) {
-      return left + sign + coeff + right;
+    if (denominator.length > 0) {
+      // 分母に文字がある場合
+      return (
+        left +
+        sign +
+        "\\frac{" +
+        Monomial.mojisiki(String(this._coeff.n), numerator) +
+        "}{" +
+        Monomial.mojisiki(String(this._coeff.d), denominator) +
+        "}" +
+        right
+      );
+    } else {
+      let coeff = "";
+      if (options.decimal) {
+        coeff = this._coeff.abs().toString();
+      } else {
+        coeff = this._coeff.abs().toLatex();
+      }
+      // if (coeff == "1" && numerator.length > 0) {
+      //   return left + sign + numerator + right;
+      // }
+      // if (coeff == "-1" && numerator.length > 0) {
+      //   return left + "-" + numerator + right;
+      // }
+      return left + sign + Monomial.mojisiki(coeff, numerator) + right;
     }
+  }
 
-    if (coeff === "0") {
+  /**
+   * 文字式のルールに従った表現を返す
+   * @param keisuu [string] 係数
+   * @param moji [string] 文字
+   * @returns
+   */
+  private static mojisiki(keisuu: string, moji: string): string {
+    if (keisuu === "0") {
       return "";
+    } else if (keisuu === "1" && moji.length > 0) {
+      return moji;
+    } else if (keisuu === "-1" && moji.length > 0) {
+      return "-" + moji;
+    } else {
+      return keisuu + moji;
     }
-    if (coeff == "1") {
-      return left + sign + moji + right;
-    }
-    if (coeff == "-1") {
-      return left + "-" + moji + right;
-    }
-    return left + sign + coeff + moji + right;
   }
 
   /**
