@@ -49,7 +49,10 @@ const handleRefresh: RefreshFunction = (level, score) => {
   }
 
   const question = poly.toLatex();
-  const answer = poly.compact().toLatex();
+  let answer = poly.compact().toLatex();
+  if (answer.length === 0) {
+    answer = "0";
+  }
 
   return [dsp(question), dsp(answer)];
 };

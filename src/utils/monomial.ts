@@ -41,6 +41,7 @@ export type LatexOptions = {
   sign?: boolean;
   brackets?: string;
   decimal?: boolean;
+  showZero?: boolean;
 };
 
 type Factor = {
@@ -181,7 +182,7 @@ export class Monomial {
 
   toLatex(options: LatexOptions = {}): string {
     if (this._coeff.equals(0)) {
-      return "";
+      return options.showZero ? "0" : "";
     }
 
     // カッコの設定
