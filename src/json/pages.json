@@ -348,5 +348,15 @@
     "subsection": "因数分解",
     "title": "因数分解ミックス",
     "message": "次の式を因数分解しなさい。"
+  },
+  {
+    "id": "91136",
+    "module": "kyoutuu_kousiki",
+    "grade": "中3",
+    "chapter": "式の展開と因数分解",
+    "section": "式の展開と因数分解",
+    "subsection": "因数分解",
+    "title": "2段階の因数分解",
+    "message": "次の式を因数分解しなさい。"
   }
 ]
