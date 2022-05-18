@@ -34,7 +34,8 @@ const handleRefresh: RefreshFunction = (level, score) => {
   const aValue = values.reduce(
     (pv, cv) => new Monomial(pv.coeff.add(cv.coeff))
   );
-  const answer = aValue.toLatex();
+  const showZero = true;
+  const answer = aValue.toLatex({ showZero });
 
   return [dsp(question), dsp(answer)];
 };

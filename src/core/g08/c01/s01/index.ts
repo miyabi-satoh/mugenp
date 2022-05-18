@@ -21,6 +21,7 @@ export * from "./M81125_bunsuukei_kagen";
 
 // 3項 単項式の乗法，除法
 // ・単項式どうしの乗法，除法
-// ・乗除の混じった単項式の計算
 export * from "./M81131_mono_mono_mul";
 export * from "./M81132_mono_mono_div";
+// ・乗除の混じった単項式の計算
+export * from "./M81133_mul_div_mix";

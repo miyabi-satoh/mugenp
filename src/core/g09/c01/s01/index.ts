@@ -32,3 +32,4 @@ export * from "./M91133_heihou_bunkai";
 export * from "./M91134_waseki_no_bunkai";
 // ・共通因数をくくり出したり，共通な部分を１つの文字におきかえたりして因数分解すること
 export * from "./M91135_insuu_bunkai";
+export * from "./M91136_kyoutuu_bunkai";

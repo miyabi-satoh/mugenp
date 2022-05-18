@@ -109,12 +109,13 @@ const handleRefresh: RefreshFunction = (level, score) => {
     values.reverse();
   }
 
+  const showZero = true;
   const question = values
-    .map((x) => x[0].toLatex({ decimal: x[1] }))
+    .map((x) => x[0].toLatex({ decimal: x[1], showZero }))
     .join(",\\quad ");
   const answer = values
     .sort((a, b) => a[0].coeff.compare(b[0].coeff))
-    .map((x) => x[0].toLatex({ decimal: x[1] }))
+    .map((x) => x[0].toLatex({ decimal: x[1], showZero }))
     .join(" < ");
 
   return [dsp(question), dsp(answer)];
