@@ -28,6 +28,7 @@ export * from "./M71223_bunsuu_mul";
 // ・分数をふくむ除法
 export * from "./M71224_bunsuu_div";
 // ・乗法の計算法則と3数以上の乗除
+export * from "./M71225_mul_div_mix";
 
 // 3項 いろいろな計算
 // ・指数の意味
