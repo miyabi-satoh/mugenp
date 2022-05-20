@@ -38,7 +38,11 @@ const Header = () => {
 };
 
 const Footer = () => {
-  return <Center py={1}>Copyright &copy; miyabi-satoh</Center>;
+  return (
+    <Center py={1}>
+      Copyright &copy; 2022 amiiby.com All Rights Reserved.
+    </Center>
+  );
 };
 
 const Main = ({ children }: PropsWithChildren<{}>) => {
