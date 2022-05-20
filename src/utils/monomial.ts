@@ -151,6 +151,29 @@ export class Monomial {
     return degree;
   }
 
+  likes(other: MonomialConstructor): boolean {
+    if (!(other instanceof Monomial)) {
+      other = new Monomial(other);
+    }
+
+    // 最初にキーを比較
+    const factorsA = JSON.stringify(this.factors);
+    const factorsB = JSON.stringify(other.factors);
+    if (factorsA !== factorsB) {
+      return false;
+    }
+
+    // キー一致なら次数を比較
+    if (
+      this.factors.find(
+        (key) => !this._factors[key].equals((other as Monomial)._factors[key])
+      )
+    ) {
+      return false;
+    }
+    return true;
+  }
+
   toString(): string {
     const moji = Object.keys(this._factors)
       .sort()
@@ -333,6 +356,14 @@ export class Monomial {
         }
       });
     });
+
+    // 0乗になった文字は取り除く
+    Object.keys(ret)
+      .filter((key) => ret[key].equals(0))
+      .forEach((key) => {
+        delete ret[key];
+      });
+
     return ret;
   }
 

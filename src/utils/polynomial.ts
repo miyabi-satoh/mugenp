@@ -87,7 +87,7 @@ export class Polynomial {
     let str = "";
     this._monomials.forEach((x) => {
       let sign = "";
-      if (str.length > 0 && x.coeff.compare(1) >= 0) {
+      if (str.length > 0 && x.coeff.compare(0) > 0) {
         sign = "+";
       }
       str += sign + x.toLatex();
