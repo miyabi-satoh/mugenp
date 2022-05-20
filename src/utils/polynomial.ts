@@ -84,15 +84,14 @@ export class Polynomial {
       right = "\\right" + right;
     }
 
-    let str = this._monomials
-      .map((x, i) => {
-        let sign = "";
-        if (i > 0 && x.coeff.compare(1) >= 0) {
-          sign = "+";
-        }
-        return sign + x.toLatex();
-      })
-      .join("");
+    let str = "";
+    this._monomials.forEach((x) => {
+      let sign = "";
+      if (str.length > 0 && x.coeff.compare(1) >= 0) {
+        sign = "+";
+      }
+      str += sign + x.toLatex();
+    });
     if (str.length === 0) {
       str = "0";
     }
