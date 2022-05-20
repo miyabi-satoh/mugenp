@@ -21,6 +21,8 @@ describe("Fractionクラス", () => {
     expect(x.compare(0) < 0).toBeFalsy();
     expect(x.compare(0) == 0).toBeTruthy();
     expect(x.compare(0) > 0).toBeFalsy();
+    expect(x.s > 0).toBeTruthy();
+    expect(x.s < 0).toBeFalsy();
   });
 
   test("3/10", () => {
