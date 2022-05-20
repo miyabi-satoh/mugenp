@@ -250,6 +250,16 @@
     "message": "次の計算をしなさい。"
   },
   {
+    "id": "81211",
+    "module": "tousiki_henkei",
+    "grade": "中2",
+    "chapter": "式の計算",
+    "section": "文字式の利用",
+    "subsection": "文字式の利用",
+    "title": "等式変形",
+    "message": "次の等式を[　]内の文字について解きなさい。"
+  },
+  {
     "id": "91111",
     "module": "poly_mono_mul",
     "grade": "中3",

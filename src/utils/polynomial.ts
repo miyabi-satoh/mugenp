@@ -74,6 +74,7 @@ export class Polynomial {
     );
   }
 
+  // TODO:Monomialと引数を揃える
   toLatex(brackets?: string): string {
     let left = "";
     let right = "";
@@ -82,19 +83,20 @@ export class Polynomial {
       left = "\\left" + left;
       right = "\\right" + right;
     }
-    return (
-      left +
-      this._monomials
-        .map((x, i) => {
-          let sign = "";
-          if (i > 0 && x.isPositive) {
-            sign = "+";
-          }
-          return sign + x.toLatex();
-        })
-        .join("") +
-      right
-    );
+
+    let str = "";
+    this._monomials.forEach((x) => {
+      let sign = "";
+      if (str.length > 0 && x.coeff.compare(0) > 0) {
+        sign = "+";
+      }
+      str += sign + x.toLatex();
+    });
+    if (str.length === 0) {
+      str = "0";
+    }
+
+    return left + str + right;
   }
 
   orderTo(ascend?: boolean): Polynomial;

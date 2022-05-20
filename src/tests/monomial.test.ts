@@ -50,6 +50,16 @@ describe("Monomialクラス", () => {
     const x = new Monomial(a);
     expect(x.neg().toString()).toBe(expected);
   });
+
+  test.each([
+    ["1", "1", true],
+    ["1", "x", false],
+    ["x", "x", true],
+    ["x", "xy", false],
+  ])("%s likes(%s) = %s", (a, b, expected) => {
+    const x = new Monomial(a);
+    expect(x.likes(b)).toBe(expected);
+  });
 });
 
 describe("create()のテスト", () => {
