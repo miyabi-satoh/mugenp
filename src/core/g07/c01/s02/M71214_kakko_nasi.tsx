@@ -33,12 +33,14 @@ const handleRefresh: RefreshFunction = (level, score) => {
     values.push(x);
   } while (values.length < 2);
 
-  const question = values.map((x, i) => x.toLatex({ sign: i != 0 })).join("");
+  const showZero = true;
+  const question = values
+    .map((x, i) => x.toLatex({ sign: i != 0, showZero }))
+    .join("");
 
   const aValue = values.reduce(
     (pv, cv) => new Monomial(pv.coeff.add(cv.coeff))
   );
-  const showZero = true;
   const answer = aValue.toLatex({ showZero });
 
   return [dsp(question), dsp(answer)];
