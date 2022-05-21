@@ -32,6 +32,7 @@ export * from "./M71225_mul_div_mix";
 
 // 3項 いろいろな計算
 // ・指数の意味
+export * from "./M71231_sisuu";
 // ・四則をふくむ式の計算
 // ・分配法則
 
