@@ -1,8 +1,7 @@
 import { Container, Heading, Icon, Link, Text } from "@chakra-ui/react";
 import { MathJax } from "better-react-mathjax";
 import type { NextPage } from "next";
-import { PropsWithChildren, useEffect } from "react";
-import TagManager from "react-gtm-module";
+import { PropsWithChildren } from "react";
 import { FaExternalLinkAlt } from "react-icons/fa";
 import { Layout } from "~/components/layout";
 
@@ -62,10 +61,6 @@ const ExternalLink = ({
 );
 
 const About: NextPage = () => {
-  useEffect(() => {
-    TagManager.initialize({ gtmId: "GTM-MVKQTLQ" });
-  }, []);
-
   return (
     <Layout>
       <Container p={4} maxW="container.md">

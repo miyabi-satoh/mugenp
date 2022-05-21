@@ -15,8 +15,7 @@ import { readFileSync } from "fs";
 import type { GetStaticProps, NextPage } from "next";
 import NextLink from "next/link";
 import { join } from "path";
-import { ChangeEvent, useCallback, useEffect, useMemo } from "react";
-import TagManager from "react-gtm-module";
+import { ChangeEvent, useCallback, useMemo } from "react";
 import { Layout } from "~/components/layout";
 import { useLocalStorage } from "~/hooks/useLocalStorage";
 import { Page } from "~/interfaces/types";
@@ -96,10 +95,6 @@ const Home: NextPage<PageProps> = ({ pages }) => {
     },
     [setSubSection]
   );
-
-  useEffect(() => {
-    TagManager.initialize({ gtmId: "GTM-MVKQTLQ" });
-  }, []);
 
   // useEffect(() => {
   //   setGrade(grades[0]);
