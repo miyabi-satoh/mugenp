@@ -6,6 +6,7 @@ import {
   Box,
   Spacer,
   Icon,
+  Show,
 } from "@chakra-ui/react";
 import NextLink from "next/link";
 import { PropsWithChildren } from "react";
@@ -40,7 +41,8 @@ const Header = () => {
 const Footer = () => {
   return (
     <Center py={1}>
-      Copyright &copy; 2022 amiiby.com All Rights Reserved.
+      Copyright &copy; 2022 amiiby.com
+      <Show above="sm"> All Rights Reserved.</Show>
     </Center>
   );
 };
