@@ -22,8 +22,18 @@ export { Mugen as M71122 };
 // 基準とした量からの増減や過不足
 const handleRefresh: RefreshFunction = (level, score) => {
   const patterns = [
-    "{x}{unit}を基準としたとき、{y}{unit}を符号を使って表しなさい。",
-    "{x}{unit}を基準にして{y}{unit}と表すとき、実際には何{unit}のことですか。",
+    [
+      "{base}{unit}を基準としたとき、{x}{unit}を符号を使って表しなさい。",
+      "{diff}{unit}",
+    ],
+    [
+      "{base}{unit}を基準にして{diff}{unit}と表すとき、実際には何{unit}のことですか。",
+      "{x}{unit}",
+    ],
+    [
+      "ある数を基準にして、{x}を{diff}と表すとき、基準となる数を答えなさい。",
+      "{base}",
+    ],
   ];
   const units = ["個", "円", "歩", "m", "km", "kg", "分", "時間", "日", "年"];
 
@@ -33,23 +43,19 @@ const handleRefresh: RefreshFunction = (level, score) => {
     max: guard(idx, 5, 11, 19),
     allowNegative: true,
   });
+  const x = diff.coeff.add(base);
   const unit = randArray(...units);
 
+  const pattern = randArray(...patterns);
   let question = "";
   let answer = "";
-  if (randArray(true, false)) {
-    question = patterns[0]
-      .replaceAll("{x}", dsp(String(base)))
+  [question, answer] = pattern.map((p) => {
+    return p
+      .replaceAll("{base}", dsp(String(base)))
       .replaceAll("{unit}", unit)
-      .replaceAll("{y}", dsp(diff.coeff.add(base).toLatex()));
-    answer = dsp(diff.toLatex({ sign: true })) + unit;
-  } else {
-    question = patterns[1]
-      .replaceAll("{x}", dsp(String(base)))
-      .replaceAll("{unit}", unit)
-      .replaceAll("{y}", dsp(diff.toLatex({ sign: true })));
-    answer = dsp(diff.coeff.add(base).toLatex()) + unit;
-  }
+      .replaceAll("{x}", dsp(x.toLatex()))
+      .replaceAll("{diff}", dsp(diff.toLatex({ sign: true })));
+  });
 
   return [question, answer];
 };
