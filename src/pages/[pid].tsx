@@ -4,9 +4,10 @@ import dynamic from "next/dynamic";
 import { join } from "path";
 import { Page } from "~/interfaces/types";
 import { NextSeo } from "next-seo";
-import { useMemo } from "react";
+import { useEffect, useMemo } from "react";
 import { Layout } from "~/components/layout";
 import { Box, Container, Heading } from "@chakra-ui/react";
+import TagManager from "react-gtm-module";
 
 type PathParams = {
   pid: string;
@@ -59,6 +60,10 @@ const Mugen = (page: Page) => {
   const title = useMemo(() => {
     return `${page.grade} ${page.section} / ${page.subsection}`;
   }, [page]);
+
+  useEffect(() => {
+    TagManager.initialize({ gtmId: "GTM-K2BJQBJ" });
+  }, []);
 
   return (
     <Layout>
