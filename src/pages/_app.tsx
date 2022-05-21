@@ -3,14 +3,8 @@ import { ChakraProvider } from "@chakra-ui/react";
 import { theme } from "~/theme";
 import { MathJaxContext } from "better-react-mathjax";
 import { DefaultSeo } from "next-seo";
-import TagManager from "react-gtm-module";
-import { useEffect } from "react";
 
 function MyApp({ Component, pageProps }: AppProps) {
-  useEffect(() => {
-    TagManager.initialize({ gtmId: "GTM-MVKQTLQ" });
-  }, []);
-
   return (
     <ChakraProvider theme={theme}>
       <MathJaxContext>
