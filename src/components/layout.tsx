@@ -6,11 +6,17 @@ import {
   Box,
   Spacer,
   Icon,
-  Show,
+  ShowProps,
 } from "@chakra-ui/react";
+import dynamic from "next/dynamic";
 import NextLink from "next/link";
 import { PropsWithChildren } from "react";
 import { FaInfoCircle } from "react-icons/fa";
+
+const Show = dynamic<ShowProps>(
+  () => import("@chakra-ui/react").then((mod: any) => mod.Show),
+  { ssr: false }
+);
 
 const Container = ({ children }: PropsWithChildren<{}>) => {
   return (
@@ -48,9 +54,17 @@ const Footer = () => {
 };
 
 const Main = ({ children }: PropsWithChildren<{}>) => {
+  const Adsense = dynamic(
+    () => import("~/components/adsense").then((mod: any) => mod.Adsense),
+    { ssr: false }
+  );
+
   return (
     <Box flex="1" shadow="sm" overflowY="scroll">
       {children}
+      <Box m={4}>
+        <Adsense />
+      </Box>
     </Box>
   );
 };
