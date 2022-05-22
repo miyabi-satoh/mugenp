@@ -11,6 +11,7 @@ import {
 import dynamic from "next/dynamic";
 import NextLink from "next/link";
 import { PropsWithChildren, useEffect, useRef, useState } from "react";
+import { use100vh } from "react-div-100vh";
 import { FaInfoCircle } from "react-icons/fa";
 
 const Show = dynamic<ShowProps>(
@@ -19,6 +20,7 @@ const Show = dynamic<ShowProps>(
 );
 
 const Container = ({ children }: PropsWithChildren<{}>) => {
+  const height = use100vh();
   const [adSenseInjectorObserver, setAdSenseInjectorObserver] =
     useState<MutationObserver | null>();
   const ref = useRef<HTMLDivElement>(null);
@@ -46,7 +48,7 @@ const Container = ({ children }: PropsWithChildren<{}>) => {
   }, []);
 
   return (
-    <Flex ref={ref} direction="column" h="100vh">
+    <Flex ref={ref} direction="column" h={height ? height : "100vh"}>
       {children}
     </Flex>
   );
