@@ -2,10 +2,6 @@ import { ColorModeScript } from "@chakra-ui/react";
 import { Html, Head, Main, NextScript } from "next/document";
 import { theme } from "~/theme";
 
-declare global {
-  var adsbygoogle: unknown[];
-}
-
 const MyDocument = () => {
   return (
     <Html lang="ja">

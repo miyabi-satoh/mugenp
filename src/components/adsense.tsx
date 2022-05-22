@@ -1,6 +1,10 @@
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 
+declare global {
+  var adsbygoogle: unknown[];
+}
+
 export const Adsense = () => {
   const { asPath } = useRouter();
 
