@@ -1,6 +1,7 @@
 import { Container, Heading, Icon, Link, Text } from "@chakra-ui/react";
 import { MathJax } from "better-react-mathjax";
 import type { NextPage } from "next";
+import dynamic from "next/dynamic";
 import { PropsWithChildren } from "react";
 import { FaExternalLinkAlt } from "react-icons/fa";
 import { Layout } from "~/components/layout";
@@ -61,6 +62,11 @@ const ExternalLink = ({
 );
 
 const About: NextPage = () => {
+  const Adsense = dynamic(
+    () => import("~/components/adsense").then((mod: any) => mod.Adsense),
+    { ssr: false }
+  );
+
   return (
     <Layout>
       <Container p={4} maxW="container.md">
@@ -68,7 +74,7 @@ const About: NextPage = () => {
         <Paragraph>
           公立の中学校で学習する数学の主要な計算問題を無限に演習できる無料サイトです。
         </Paragraph>
-
+        <Adsense />
         <Heading3>経緯(いきさつ)</Heading3>
         <Paragraph>
           当初は紙ベースの演習プリントを作成する仕組みを構築しようとして
