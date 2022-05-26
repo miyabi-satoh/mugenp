@@ -13,6 +13,7 @@ import {
 import { MathJax } from "better-react-mathjax";
 import { readFileSync } from "fs";
 import type { GetStaticProps, NextPage } from "next";
+import dynamic from "next/dynamic";
 import NextLink from "next/link";
 import { join } from "path";
 import { ChangeEvent, useCallback, useMemo } from "react";
@@ -60,6 +61,11 @@ const STORAGE_KEY_GRADE = "mugenp.amiiby.com/grade";
 const STORAGE_KEY_SUBSECTION = "mugenp.amiiby.com/subsection";
 
 const Home: NextPage<PageProps> = ({ pages }) => {
+  const Adsense = dynamic(
+    () => import("~/components/adsense").then((mod: any) => mod.Adsense),
+    { ssr: false }
+  );
+
   const grades = useMemo(() => {
     const _grades = pages.map((x) => x.grade);
     return _grades.filter((e, pos) => _grades.indexOf(e) == pos);
@@ -156,6 +162,9 @@ const Home: NextPage<PageProps> = ({ pages }) => {
               <Card key={page.id} page={page} />
             ))}
         </SimpleGrid>
+        <Center my={4}>
+          <Adsense />
+        </Center>
       </Container>
     </Layout>
   );
