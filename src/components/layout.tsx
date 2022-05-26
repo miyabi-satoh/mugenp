@@ -7,11 +7,12 @@ import {
   Spacer,
   Icon,
   ShowProps,
+  useMediaQuery,
 } from "@chakra-ui/react";
 import dynamic from "next/dynamic";
 import NextLink from "next/link";
 import { PropsWithChildren, useEffect, useRef, useState } from "react";
-import { use100vh } from "react-div-100vh";
+import { measureHeight, use100vh } from "react-div-100vh";
 import { FaInfoCircle } from "react-icons/fa";
 
 const Show = dynamic<ShowProps>(
@@ -20,10 +21,11 @@ const Show = dynamic<ShowProps>(
 );
 
 const Container = ({ children }: PropsWithChildren<{}>) => {
-  const height = use100vh();
+  const [height, setHeight] = useState<number | null>();
   const [adSenseInjectorObserver, setAdSenseInjectorObserver] =
     useState<MutationObserver | null>();
   const ref = useRef<HTMLDivElement>(null);
+  const [isLandscape] = useMediaQuery("(orientation: landscape)");
 
   useEffect(() => {
     if (!adSenseInjectorObserver && ref.current) {
@@ -47,8 +49,18 @@ const Container = ({ children }: PropsWithChildren<{}>) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  useEffect(() => {
+    const timerId = setTimeout(() => {
+      setHeight(measureHeight());
+    }, 100);
+
+    return () => {
+      clearTimeout(timerId);
+    };
+  }, [isLandscape]);
+
   return (
-    <Flex ref={ref} direction="column" h={height ? height : "100vh"}>
+    <Flex ref={ref} direction="column" h={height ? `${height}px` : "100vh"}>
       {children}
     </Flex>
   );
