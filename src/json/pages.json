@@ -408,5 +408,15 @@
     "subsection": "因数分解",
     "title": "2段階の因数分解",
     "message": "次の式を因数分解しなさい。"
+  },
+  {
+    "id": "91211",
+    "module": "kazu_no_keisan",
+    "grade": "中3",
+    "chapter": "式の展開と因数分解",
+    "section": "式の計算の利用",
+    "subsection": "式の計算の利用",
+    "title": "数の計算への利用",
+    "message": "乗法公式や因数分解を利用して次の計算をしなさい。"
   }
 ]
