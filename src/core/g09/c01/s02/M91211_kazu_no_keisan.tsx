@@ -26,7 +26,7 @@ const handleRefresh: RefreshFunction = (level, score) => {
     case 1: // x^2 -> (a + b)^2
       {
         const a = 10 * getRandomInt(10, 4);
-        const b = getRandomInt(9, 1);
+        const b = getRandomInt(3, 1) * randArray(1, -1);
         question = `${a + b}^2`;
         answer = `${(a + b) * (a + b)}`;
       }
