@@ -1,14 +1,6 @@
 import { RefreshFunction } from "~/interfaces/types";
 import { MugenContainer } from "~/components/container";
-import {
-  byScore,
-  dsp,
-  gcd,
-  getRandomInt,
-  guard,
-  minMax,
-  randArray,
-} from "~/utils";
+import { dsp, gcd, getRandomInt, guard, minMax, randArray } from "~/utils";
 import { Monomial } from "~/utils/monomial";
 import { Polynomial } from "~/utils/polynomial";
 
