@@ -24,7 +24,7 @@ export const Adsense = () => {
         data-ad-client="ca-pub-1226899637934496"
         data-ad-slot="2305250435"
         data-ad-format="horizontal"
-        data-full-width-responsive="false"
+        data-full-width-responsive="true"
         data-adtest={process.env.NODE_ENV === "production" ? "off" : "on"}
       ></ins>
     </div>

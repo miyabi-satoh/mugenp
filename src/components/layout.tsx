@@ -82,17 +82,9 @@ const Footer = () => {
 };
 
 const Main = ({ children }: PropsWithChildren<{}>) => {
-  const Adsense = dynamic(
-    () => import("~/components/adsense").then((mod: any) => mod.Adsense),
-    { ssr: false }
-  );
-
   return (
     <Box flex="1" shadow="sm" overflowY="scroll">
       {children}
-      <Box px={4} py={8} maxW="container.md">
-        <Adsense />
-      </Box>
     </Box>
   );
 };

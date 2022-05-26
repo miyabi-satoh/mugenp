@@ -6,7 +6,7 @@ import { Page } from "~/interfaces/types";
 import { NextSeo } from "next-seo";
 import { useMemo } from "react";
 import { Layout } from "~/components/layout";
-import { Box, Container, Heading } from "@chakra-ui/react";
+import { Box, Center, Container, Heading } from "@chakra-ui/react";
 
 type PathParams = {
   pid: string;
@@ -42,6 +42,11 @@ export const getStaticProps: GetStaticProps<Page> = async (context) => {
 };
 
 const Mugen = (page: Page) => {
+  const Adsense = dynamic(
+    () => import("~/components/adsense").then((mod: any) => mod.Adsense),
+    { ssr: false }
+  );
+
   const MugenContainer = dynamic(() =>
     import("~/core").then((mod: any) => mod[`M${page.id}`])
   );
@@ -79,6 +84,9 @@ const Mugen = (page: Page) => {
           }}
         />
         <MugenContainer />
+        <Center my={4}>
+          <Adsense />
+        </Center>
       </Container>
     </Layout>
   );
