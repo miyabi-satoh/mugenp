@@ -162,10 +162,8 @@ const Home: NextPage<PageProps> = ({ pages }) => {
               <Card key={page.id} page={page} />
             ))}
         </SimpleGrid>
-        <Center my={4}>
-          <Adsense />
-        </Center>
       </Container>
+      <Adsense />
     </Layout>
   );
 };
