@@ -6,7 +6,7 @@ import { Page } from "~/interfaces/types";
 import { NextSeo } from "next-seo";
 import { useMemo } from "react";
 import { Layout } from "~/components/layout";
-import { Box, Center, Container, Heading } from "@chakra-ui/react";
+import { Box, Container, Heading } from "@chakra-ui/react";
 
 type PathParams = {
   pid: string;
@@ -84,10 +84,8 @@ const Mugen = (page: Page) => {
           }}
         />
         <MugenContainer />
-        <Center my={4}>
-          <Adsense />
-        </Center>
       </Container>
+      <Adsense />
     </Layout>
   );
 };

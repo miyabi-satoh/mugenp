@@ -1,3 +1,4 @@
+import { Center } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 
@@ -17,16 +18,18 @@ export const Adsense = () => {
   }, [asPath]);
 
   return (
-    <div key={asPath}>
+    <Center key={asPath} my={4}>
       <ins
         className="adsbygoogle"
-        style={{ display: "block", minWidth: "250px", minHeight: "50px" }}
+        style={{
+          display: "block",
+          width: "300px",
+        }}
         data-ad-client="ca-pub-1226899637934496"
         data-ad-slot="2305250435"
-        data-ad-format="horizontal"
-        data-full-width-responsive="true"
+        data-ad-format="rectangle"
         data-adtest={process.env.NODE_ENV === "production" ? "off" : "on"}
       ></ins>
-    </div>
+    </Center>
   );
 };

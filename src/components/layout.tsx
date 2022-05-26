@@ -21,6 +21,7 @@ const Show = dynamic<ShowProps>(
 );
 
 const Container = ({ children }: PropsWithChildren<{}>) => {
+  const trigger = use100vh();
   const [height, setHeight] = useState<number | null>();
   const [adSenseInjectorObserver, setAdSenseInjectorObserver] =
     useState<MutationObserver | null>();
@@ -57,7 +58,7 @@ const Container = ({ children }: PropsWithChildren<{}>) => {
     return () => {
       clearTimeout(timerId);
     };
-  }, [isLandscape]);
+  }, [isLandscape, trigger]);
 
   return (
     <Flex ref={ref} direction="column" h={height ? `${height}px` : "100vh"}>
