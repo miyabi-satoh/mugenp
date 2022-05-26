@@ -90,7 +90,7 @@ const Main = ({ children }: PropsWithChildren<{}>) => {
   return (
     <Box flex="1" shadow="sm" overflowY="scroll">
       {children}
-      <Box m={4}>
+      <Box px={4} py={8} maxW="container.md">
         <Adsense />
       </Box>
     </Box>
