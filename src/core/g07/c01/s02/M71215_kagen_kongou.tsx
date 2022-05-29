@@ -1,7 +1,6 @@
-import Fraction from "fraction.js";
 import { MugenP, GeneratorFunc } from "~/components/mugenp";
-import { randArray } from "~/utils";
-import { Monomial } from "~/utils/monomial";
+import { getRandomInt, randArray, shuffle } from "~/utils";
+import { Term } from "~/utils/expression";
 
 // "id": "71215",
 // "module": "kagen_kongou",
@@ -17,48 +16,41 @@ export const M71215 = () => {
 
 // 加減混合計算
 const generatorFunc: GeneratorFunc = (level) => {
-  let len = 3;
-  if (level > 2) {
-    len = randArray(3, 4);
-  }
+  // Lv1: かっこあり
+  // Lv2: かっこなし
+  // Lv3: かっこランダム／最大4項
+  const getBrackets = () => {
+    if (level == 1) {
+      return "()";
+    } else if (level == 2) {
+      return "";
+    }
+    return randArray("()", "");
+  };
+
+  // 項数
+  const len = level > 2 ? randArray(3, 4) : 3;
+
+  // 符号
+  const signs = shuffle(1, 1, -1, -1);
 
   let question = "";
-  let aValue = new Fraction(0);
+  let value = 0;
   for (let i = 0; i < len; i++) {
-    const x = Monomial.create({
-      max: 9,
-      allowNegative: true,
-    });
-    // Lv1: かっこあり
-    // Lv2: かっこなし
-    // Lv3: かっこランダム
-    let brackets = "";
-    if (level === 1) {
-      brackets = "()";
-    } else if (level == 2) {
-      brackets = "";
-    } else {
-      brackets = randArray("()", "");
+    const x = getRandomInt(9, 1) * signs[i];
+    const brackets = getBrackets();
+    const sign = i > 0;
+    let pm = 1;
+    if (i > 0 && brackets != "") {
+      pm = randArray(1, -1);
+      question += pm == 1 ? " + " : " - ";
     }
 
-    let operator = "";
-    if (i != 0 && brackets) {
-      operator = randArray("+", "-");
-    }
-
-    const sign: boolean = i != 0 && brackets === "";
-    question += operator + x.toLatex({ brackets, sign });
-    if (operator === "-") {
-      aValue = aValue.sub(x.coeff);
-    } else {
-      aValue = aValue.add(x.coeff);
-    }
+    question += new Term(x).toLatex({ brackets, sign });
+    value += x * pm;
   }
 
-  if (!question.includes("-")) {
-    return null;
-  }
-  const answer = aValue.toLatex();
+  const answer = new Term(value).toLatex();
 
   return { question, answer };
 };
