@@ -1,6 +1,5 @@
-import { RefreshFunction } from "~/interfaces/types";
-import { MugenContainer } from "~/components/container";
-import { dsp, gcd, getRandomInt, guard, minMax, randArray } from "~/utils";
+import { MugenP, GeneratorFunc } from "~/components/mugenp";
+import { gcd, getRandomInt, guard, minMax, randArray } from "~/utils";
 import { Monomial } from "~/utils/monomial";
 import { Polynomial } from "~/utils/polynomial";
 
@@ -12,14 +11,12 @@ import { Polynomial } from "~/utils/polynomial";
 // "subsection": "因数分解",
 // "title": "2段階の因数分解",
 // "message": "次の式を因数分解しなさい。"
-const Mugen = () => {
-  return <MugenContainer onRefresh={handleRefresh} />;
+export const M91136 = () => {
+  return <MugenP maxLv={6} generator={generatorFunc} />;
 };
 
-export { Mugen as M91136 };
-
 // 2段階の因数分解
-const handleRefresh: RefreshFunction = (level, score) => {
+const generatorFunc: GeneratorFunc = (level) => {
   const idx = level - 1;
 
   // 共通因数
@@ -128,5 +125,5 @@ const handleRefresh: RefreshFunction = (level, score) => {
   const question = qExpr.mul(common).toLatex();
   const answer = (common.coeff.equals(-1) ? "-" : common.toLatex()) + aTex;
 
-  return [dsp(question), dsp(answer)];
+  return { question, answer };
 };

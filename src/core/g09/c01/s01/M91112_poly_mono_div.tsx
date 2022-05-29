@@ -1,7 +1,5 @@
-import { MugenContainer } from "~/components/container";
+import { MugenP, GeneratorFunc } from "~/components/mugenp";
 import { poly_mono } from "~/core";
-import { RefreshFunction } from "~/interfaces/types";
-import { dsp } from "~/utils";
 
 // "id": "91112",
 // "module": "poly_mono_div",
@@ -9,15 +7,13 @@ import { dsp } from "~/utils";
 // "chapter": "式の展開と因数分解",
 // "title": "\\( (a+b)\\div c \\) の計算",
 // "message": "次の計算をしなさい。"
-const Mugen = () => {
-  return <MugenContainer onRefresh={handleRefresh} />;
+export const M91112 = () => {
+  return <MugenP maxLv={5} generator={generatorFunc} />;
 };
 
-export { Mugen as M91112 };
-
 // 多項式 ÷ 単項式
-const handleRefresh: RefreshFunction = (level, score) => {
-  let [polyAns, mono] = poly_mono(level, score);
+const generatorFunc: GeneratorFunc = (level) => {
+  let [polyAns, mono] = poly_mono(level);
 
   let poly = polyAns.mul(mono).compact().orderTo();
   if (level < 5 && poly.terms[0].isNegative) {
@@ -30,5 +26,5 @@ const handleRefresh: RefreshFunction = (level, score) => {
     " \\div " +
     mono.toLatex({ brackets: mono.isNegative ? "()" : "" });
   const answer = polyAns.toLatex();
-  return [dsp(question), dsp(answer)];
+  return { question, answer };
 };

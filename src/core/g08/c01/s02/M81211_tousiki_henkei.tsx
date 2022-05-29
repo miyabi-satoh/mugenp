@@ -1,7 +1,6 @@
 import Fraction from "fraction.js";
-import { MugenContainer } from "~/components/container";
-import { RefreshFunction } from "~/interfaces/types";
-import { dsp, gcd, getRandomInt, guard, lcm, minMax, randArray } from "~/utils";
+import { MugenP, GeneratorFunc } from "~/components/mugenp";
+import { gcd, getRandomInt, guard, lcm, minMax, randArray } from "~/utils";
 import { Monomial } from "~/utils/monomial";
 import { Polynomial } from "~/utils/polynomial";
 
@@ -13,14 +12,12 @@ import { Polynomial } from "~/utils/polynomial";
 // "subsection": "文字式の利用",
 // "title": "等式変形",
 // "message": "次の等式を[　]内の文字について解きなさい。"
-const Mugen = () => {
-  return <MugenContainer maxLv={9} answerPrefix="" onRefresh={handleRefresh} />;
+export const M81211 = () => {
+  return <MugenP maxLv={9} answerPrefix="" generator={generatorFunc} />;
 };
 
-export { Mugen as M81211 };
-
 // 等式変形
-const handleRefresh: RefreshFunction = (level, score) => {
+const generatorFunc: GeneratorFunc = (level) => {
   const idx = level - 1;
   // 項を生成する
   const terms: Monomial[] = [];
@@ -40,7 +37,7 @@ const handleRefresh: RefreshFunction = (level, score) => {
   });
   if (terms.length <= 2) {
     // 2項以下はスキップ
-    return ["", ""];
+    return null;
   }
   if (terms.length >= 4) {
     terms.pop();
@@ -57,7 +54,7 @@ const handleRefresh: RefreshFunction = (level, score) => {
   if (level === 1) {
     // Lv1は = 0 を除外
     if (poly[0].length === 0) {
-      return ["", ""];
+      return null;
     }
   }
   if (level >= 3) {
@@ -131,7 +128,7 @@ const handleRefresh: RefreshFunction = (level, score) => {
     // 答えに分数が含まれる場合
     if (level <= 3) {
       // Lv3まではスキップ
-      return ["", ""];
+      return null;
     }
     // 分母の最小公倍数を求める
     denominator = lcm(...poly[1].terms.map((t) => t.d));
@@ -149,5 +146,5 @@ const handleRefresh: RefreshFunction = (level, score) => {
     answer += "\\frac{" + poly[1].toLatex() + `}{${denominator}}`;
   }
 
-  return [dsp(question), dsp(answer)];
+  return { question, answer };
 };

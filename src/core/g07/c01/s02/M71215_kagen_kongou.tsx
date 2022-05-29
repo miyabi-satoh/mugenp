@@ -1,7 +1,6 @@
 import Fraction from "fraction.js";
-import { MugenContainer } from "~/components/container";
-import { RefreshFunction } from "~/interfaces/types";
-import { dsp, randArray } from "~/utils";
+import { MugenP, GeneratorFunc } from "~/components/mugenp";
+import { randArray } from "~/utils";
 import { Monomial } from "~/utils/monomial";
 
 // "id": "71215",
@@ -12,14 +11,12 @@ import { Monomial } from "~/utils/monomial";
 // "subsection": "正の数・負の数の加法，減法",
 // "title": "加減混合計算",
 // "message": "次の計算をしなさい。"
-const Mugen = () => {
-  return <MugenContainer onRefresh={handleRefresh} />;
+export const M71215 = () => {
+  return <MugenP maxLv={3} generator={generatorFunc} />;
 };
 
-export { Mugen as M71215 };
-
 // 加減混合計算
-const handleRefresh: RefreshFunction = (level, score) => {
+const generatorFunc: GeneratorFunc = (level) => {
   let len = 3;
   if (level > 2) {
     len = randArray(3, 4);
@@ -59,9 +56,9 @@ const handleRefresh: RefreshFunction = (level, score) => {
   }
 
   if (!question.includes("-")) {
-    return ["", ""];
+    return null;
   }
   const answer = aValue.toLatex();
 
-  return [dsp(question), dsp(answer)];
+  return { question, answer };
 };

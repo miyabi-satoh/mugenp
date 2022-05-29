@@ -1,6 +1,5 @@
-import { MugenContainer } from "~/components/container";
-import { RefreshFunction } from "~/interfaces/types";
-import { dsp, getRandomInt, guard, isFiniteDenom, randArray } from "~/utils";
+import { MugenP, GeneratorFunc } from "~/components/mugenp";
+import { getRandomInt, guard, randArray } from "~/utils";
 import { Monomial } from "~/utils/monomial";
 
 // "id": "71231",
@@ -11,14 +10,12 @@ import { Monomial } from "~/utils/monomial";
 // "subsection": "いろいろな計算",
 // "title": "指数",
 // "message": "次の計算をしなさい。"
-const Mugen = () => {
-  return <MugenContainer onRefresh={handleRefresh} />;
+export const M71231 = () => {
+  return <MugenP maxLv={5} generator={generatorFunc} />;
 };
 
-export { Mugen as M71231 };
-
 // 指数
-const handleRefresh: RefreshFunction = (level, score) => {
+const generatorFunc: GeneratorFunc = (level) => {
   const idx = level - 1;
   const e = getRandomInt(3, 2);
   const limit = e > 2 ? 5 : 13;
@@ -59,5 +56,5 @@ const handleRefresh: RefreshFunction = (level, score) => {
   }
   const answer = aValue.toLatex({ decimal });
 
-  return [dsp(question), dsp(answer)];
+  return { question, answer };
 };

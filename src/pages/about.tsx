@@ -72,9 +72,16 @@ const About: NextPage = () => {
       <Container p={4} maxW="container.md">
         <Heading2>このサイトについて</Heading2>
         <Paragraph>
-          公立の中学校で学習する数学の主要な計算問題を無限に演習できる無料サイトです。
+          公立の中学校で学習する数学の主要な計算問題を
+          無限に演習できる無料サイトです。
+          <br />
+          学校での小テストや定期テスト対策として、何度でも練習できます。
+          <br />
+          現在開発中であり、単元は今後も増えていく予定です。
         </Paragraph>
+
         <Adsense />
+
         <Heading3>経緯(いきさつ)</Heading3>
         <Paragraph>
           当初は紙ベースの演習プリントを作成する仕組みを構築しようとして
@@ -85,19 +92,26 @@ const About: NextPage = () => {
           現在の形になりました。
         </Paragraph>
         <Paragraph>
-          MuGenP は <Bold>Mu</Bold>ddled(ごちゃまぜに)<Bold>Gen</Bold>
-          erated(生成された)<Bold>P</Bold>ractice(練習問題)の意味です。(後付け)
+          MuGenP は <Bold>Mu</Bold>ddled(ごちゃまぜに)
+          <Bold>Gen</Bold>erated(生成された)
+          <Bold>P</Bold>ractice(練習問題)の意味です。(後付け)
         </Paragraph>
 
         <Heading3>計算能力の向上に役立ちます</Heading3>
         <Paragraph>
           計算能力を向上させるには、一にも二にも反復演習です。
           <br />
-          このサイトは問題をランダムに自動生成するので、様々なパターンの問題を繰り返し演習することができます。
+          このサイトは問題をランダムに自動生成するので、
+          様々なパターンの問題を繰り返し演習することができます。
         </Paragraph>
         <Paragraph>
-          また、独自の判定ロジックにより、正解数に応じて問題のパターンが変化するようになっています。
+          また、独自の判定ロジックにより、
+          正解数に応じて問題のパターンが変化するようになっています。
           これにより適度なレベルの演習を積むことができます。
+        </Paragraph>
+        <Paragraph>
+          注意点としては、問題と解答だけの構成になっており、
+          途中式や解説はございません。
         </Paragraph>
 
         <Heading3>お手軽に利用できます</Heading3>
@@ -107,10 +121,13 @@ const About: NextPage = () => {
           面倒なユーザー登録などもありません。
         </Paragraph>
         <Paragraph>
-          Google
-          ChromeやSafariなどの、いわゆるモダンブラウザをターゲットに制作しています。
+          Google ChromeやSafariなどの、
+          いわゆるモダンブラウザをターゲットに制作しています。
           <br />
-          問題生成は端末側で行われるので、ページが表示された後はサーバーとの通信を必要としません。
+          PC、スマートフォン、タブレットなどから利用できます。
+          <br />
+          問題生成は端末側で行われるので、
+          ページが表示された後はサーバーとの通信を必要としません。
         </Paragraph>
 
         <Heading3>主要な技術的要素</Heading3>
@@ -129,11 +146,13 @@ const About: NextPage = () => {
           <ExternalLink href="https://developer.mozilla.org/ja/docs/Web/JavaScript">
             JavaScript
           </ExternalLink>
-          はウェブページでよく使用されるスクリプト言語ですが、このサイトではTypeScriptを採用しています。
+          はウェブページでよく使用されるスクリプト言語ですが、
+          このサイトではTypeScriptを採用しています。
           <ExternalLink href="https://www.typescriptlang.org/">
             TypeScript
           </ExternalLink>
-          はマイクロソフトによって開発されたJavaScriptの拡張言語で、静的型付けやクラスベースオブジェクト指向が特徴です。
+          はマイクロソフトによって開発されたJavaScriptの拡張言語で、
+          静的型付けやクラスベースオブジェクト指向が特徴です。
         </Paragraph>
 
         <Heading4>
@@ -184,19 +203,22 @@ const About: NextPage = () => {
           </ExternalLink>
         </Heading4>
         <Paragraph>
-          このサイトをホスティングしているNTTPCコミュニケーションズのサービスです。
+          このサイトをホスティングしている
+          NTTPCコミュニケーションズのサービスです。
           いっちゃん安い月額396円（税込）のプランを使っています。
           <ExternalLink href="https://ja.wikipedia.org/wiki/VPS">
             VPS
           </ExternalLink>
-          は Virtual Private Server
-          の略称で、一台の物理的なサーバコンピュータ上に構築された仮想的なサーバコンピュータのことです。
+          は Virtual Private Server の略称で、
+          一台の物理的なサーバコンピュータ上に構築された
+          仮想的なサーバコンピュータのことです。
         </Paragraph>
 
         <Heading3>製作者について</Heading3>
         <Paragraph>
-          某個別指導塾で講師をしています。
-          某大学の工学部情報処理学科卒、某この木なんの木気になる木系列の会社でSEをしていたという経歴はありますがプログラミングはすべて独学です。
+          某個別指導塾の現役講師です。 某大学の工学部情報処理学科卒、
+          某この木なんの木気になる木系列の会社でSEをしていたという経歴はありますが
+          プログラミングはすべて独学です。
         </Paragraph>
         <Paragraph>
           プログラミングに限らず、何事もすべて独力で学べます。
@@ -204,7 +226,8 @@ const About: NextPage = () => {
           大切なのは、易しすぎず難しすぎず、適切なレベルの教材に出会えるか？です。
         </Paragraph>
         <Paragraph>
-          このサイトが、利用するすべての人にとって「適切なレベル」であるように研究を続けます。
+          このサイトが利用するすべての人にとって「適切なレベル」であるよう、
+          改善を続けていきます。
         </Paragraph>
       </Container>
     </Layout>

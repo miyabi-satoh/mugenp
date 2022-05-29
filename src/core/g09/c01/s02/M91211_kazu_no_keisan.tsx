@@ -1,8 +1,5 @@
-import { RefreshFunction } from "~/interfaces/types";
-import { MugenContainer } from "~/components/container";
-import { dsp, gcd, getRandomInt, guard, minMax, randArray } from "~/utils";
-import { Monomial } from "~/utils/monomial";
-import { Polynomial } from "~/utils/polynomial";
+import { MugenP, GeneratorFunc } from "~/components/mugenp";
+import { getRandomInt, randArray } from "~/utils";
 
 // "id": "91211",
 // "module": "kazu_no_keisan",
@@ -12,14 +9,12 @@ import { Polynomial } from "~/utils/polynomial";
 // "subsection": "式の計算の利用",
 // "title": "数の計算への利用",
 // "message": "乗法公式や因数分解を利用して次の計算をしなさい。"
-const Mugen = () => {
-  return <MugenContainer onRefresh={handleRefresh} />;
+export const M91211 = () => {
+  return <MugenP maxLv={1} generator={generatorFunc} />;
 };
 
-export { Mugen as M91211 };
-
 // 数の計算への利用
-const handleRefresh: RefreshFunction = (level, score) => {
+const generatorFunc: GeneratorFunc = (level) => {
   let question = "";
   let answer = "";
   switch (getRandomInt(2)) {
@@ -51,5 +46,5 @@ const handleRefresh: RefreshFunction = (level, score) => {
       break;
   }
 
-  return [dsp(question), dsp(answer)];
+  return { question, answer };
 };

@@ -1,6 +1,5 @@
-import { MugenContainer } from "~/components/container";
-import { RefreshFunction } from "~/interfaces/types";
-import { dsp, randArray } from "~/utils";
+import { MugenP, GeneratorFunc } from "~/components/mugenp";
+import { randArray } from "~/utils";
 import { Monomial } from "~/utils/monomial";
 
 // "id": "71222",
@@ -11,14 +10,12 @@ import { Monomial } from "~/utils/monomial";
 // "subsection": "正の数・負の数の乗法，除法",
 // "title": "正の数・負の数の除法",
 // "message": "次の計算をしなさい。"
-const Mugen = () => {
-  return <MugenContainer onRefresh={handleRefresh} />;
+export const M71222 = () => {
+  return <MugenP maxLv={3} generator={generatorFunc} />;
 };
 
-export { Mugen as M71222 };
-
 // 正の数・負の数の除法
-const handleRefresh: RefreshFunction = (level, score) => {
+const generatorFunc: GeneratorFunc = (level) => {
   // Lv1: 正の数でわる
   // Lv2: 負の数でわる
   // Lv3: 混合
@@ -43,5 +40,5 @@ const handleRefresh: RefreshFunction = (level, score) => {
 
   const answer = c.toLatex();
 
-  return [dsp(question), dsp(answer)];
+  return { question, answer };
 };

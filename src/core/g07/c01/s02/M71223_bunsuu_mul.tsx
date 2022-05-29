@@ -1,6 +1,5 @@
-import { MugenContainer } from "~/components/container";
-import { RefreshFunction } from "~/interfaces/types";
-import { dsp, guard, randArray } from "~/utils";
+import { MugenP, GeneratorFunc } from "~/components/mugenp";
+import { guard, randArray } from "~/utils";
 import { Monomial } from "~/utils/monomial";
 
 // "id": "71223",
@@ -11,14 +10,12 @@ import { Monomial } from "~/utils/monomial";
 // "subsection": "正の数・負の数の乗法，除法",
 // "title": "分数を含む乗法",
 // "message": "次の計算をしなさい。"
-const Mugen = () => {
-  return <MugenContainer onRefresh={handleRefresh} />;
+export const M71223 = () => {
+  return <MugenP maxLv={3} generator={generatorFunc} />;
 };
 
-export { Mugen as M71223 };
-
 // 分数を含む乗法
-const handleRefresh: RefreshFunction = (level, score) => {
+const generatorFunc: GeneratorFunc = (level) => {
   // Lv1: 整数×分数=整数
   // Lv2: 整数×分数=分数
   // Lv3: 分数×分数
@@ -36,20 +33,20 @@ const handleRefresh: RefreshFunction = (level, score) => {
     allowNegative: true,
   });
   if (b.d === 1) {
-    return ["", ""];
+    return null;
   }
   const c = a.mul(b);
 
   if (level === 1) {
     if (a.d !== 1) {
-      return ["", ""];
+      return null;
     }
     if (c.d !== 1) {
-      return ["", ""];
+      return null;
     }
   } else if (level === 2) {
     if (a.d !== 1) {
-      return ["", ""];
+      return null;
     }
   }
 
@@ -60,5 +57,5 @@ const handleRefresh: RefreshFunction = (level, score) => {
 
   const answer = c.toLatex();
 
-  return [dsp(question), dsp(answer)];
+  return { question, answer };
 };

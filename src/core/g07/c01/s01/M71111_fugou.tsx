@@ -1,7 +1,6 @@
-import { MugenContainer } from "~/components/container";
-import { RefreshFunction } from "~/interfaces/types";
-import { dsp, getRandomInt, randArray } from "~/utils";
-import { LatexOptions, Monomial } from "~/utils/monomial";
+import { GeneratorFunc, MugenP } from "~/components/mugenp";
+import { dsp, getRandomInt, minMax, randArray } from "~/utils";
+import { Term } from "~/utils/expression";
 
 // "id": "71111",
 // "module": "fugou",
@@ -11,63 +10,62 @@ import { LatexOptions, Monomial } from "~/utils/monomial";
 // "subsection": "０より小さい数",
 // "title": "正の符号・負の符号",
 // "message": "次の数について、正の符号または負の符号をつけて表しなさい。"
-const Mugen = () => {
-  return <MugenContainer answerPrefix="" maxLv={3} onRefresh={handleRefresh} />;
+export const M71111 = () => {
+  return (
+    <MugenP
+      answerPrefix=""
+      displayStyle={false}
+      maxLv={3}
+      generator={generatorFunc}
+    />
+  );
 };
-
-export { Mugen as M71111 };
 
 // 0よりX[大きい,小さい]数を答える
-const handleRefresh: RefreshFunction = (level, score) => {
-  let qValue: Monomial;
-  const opt: LatexOptions = {};
+const generatorFunc: GeneratorFunc = (level) => {
+  let qValue: Term;
+  let decimal = false;
+  const mode = getRandomInt(minMax(1, level, 3), 1);
+  if (mode === 1) {
+    // 1〜9の整数
+    qValue = new Term(getRandomInt(9, 1));
+  } else if (mode === 2) {
+    // 小数
+    // 場合分けにより、以下のパターンをバランスよく作る
+    //  0.X
+    //  0.XX
+    //  X.X
+    //  X.XX
 
-  const mode = getRandomInt(level, 1);
-  switch (mode) {
-    case 1:
-      qValue = seisuu();
-      break;
-    case 2:
-      qValue = syousuu();
-      opt.decimal = true;
-      break;
-    default:
-      qValue = bunsuu();
+    // 整数部
+    let num = getRandomInt(1, 0);
+    if (num != 0) {
+      num *= getRandomInt(9, 1);
+    }
+    // 小数部
+    let double = getRandomInt(9, 1);
+    if (randArray(true, false)) {
+      double = double * 10 + getRandomInt(9, 1);
+    }
+    qValue = new Term(`${num}.${double}`);
+    decimal = true;
+  } else {
+    // 分数
+    qValue = new Term(getRandomInt(10, 1) / 12);
   }
 
-  let aValue: Monomial;
-  let qType: string;
+  let aValue: Term;
+  let format: string;
   if (randArray(true, false)) {
     aValue = qValue;
-    qType = " 大きな";
+    format = `${dsp("0")} よりも {q} 大きな数`;
   } else {
     aValue = qValue.neg();
-    qType = " 小さな";
+    format = `${dsp("0")} よりも {q} 小さな数`;
   }
 
-  const question = `${dsp("0")} よりも ${dsp(qValue.toLatex(opt))}${qType}数`;
-  const answer = dsp(aValue.toLatex({ ...opt, sign: true }));
-  return [question, answer];
-};
-
-const seisuu = (): Monomial => {
-  return Monomial.create({
-    max: 9,
-  });
-};
-
-const syousuu = (): Monomial => {
-  const m = Monomial.create({
-    max: 50,
-  });
-  const y = getRandomInt(m.toString().length, 1);
-  return m.div(Math.pow(10, y));
-};
-
-const bunsuu = (): Monomial => {
-  return Monomial.create({
-    max: 9,
-    maxD: 9,
-    maxN: 9,
-  });
+  const question = format.replace("{q}", `${dsp(qValue.toLatex({ decimal }))}`);
+  const sign = true;
+  const answer = dsp(aValue.toLatex({ decimal, sign }));
+  return { question, answer };
 };

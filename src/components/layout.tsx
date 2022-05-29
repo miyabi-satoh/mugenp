@@ -4,16 +4,24 @@ import {
   Center,
   Link,
   Box,
-  Spacer,
   Icon,
   ShowProps,
   useMediaQuery,
+  HStack,
 } from "@chakra-ui/react";
 import dynamic from "next/dynamic";
 import NextLink from "next/link";
 import { PropsWithChildren, useEffect, useRef, useState } from "react";
 import { measureHeight, use100vh } from "react-div-100vh";
 import { FaInfoCircle } from "react-icons/fa";
+import {
+  FacebookIcon,
+  FacebookShareButton,
+  LineIcon,
+  LineShareButton,
+  TwitterIcon,
+  TwitterShareButton,
+} from "react-share";
 
 const Show = dynamic<ShowProps>(
   () => import("@chakra-ui/react").then((mod: any) => mod.Show),
@@ -68,14 +76,31 @@ const Container = ({ children }: PropsWithChildren<{}>) => {
 };
 
 const Header = () => {
+  const shareUrl = `https://mugenp.amiiby.com/`;
+  const title = `MuGenP`;
   return (
-    <Flex shadow="sm" py={2} px={4} alignItems="center">
+    <Flex shadow="sm" py={2} px={[2, 4]} alignItems="center">
       <Heading as="h1" size="lg">
         <NextLink href="/" passHref>
           <Link _hover={{ textDecorationLine: "none" }}>MuGenP</Link>
         </NextLink>
       </Heading>
-      <Spacer />
+      <Center flexGrow="1">
+        <HStack spacing={2} mx={[2, 4]}>
+          <Show above="sm">
+            <Box>SNSでシェア</Box>
+          </Show>
+          <FacebookShareButton url={shareUrl} quote={title}>
+            <FacebookIcon size={32} round />
+          </FacebookShareButton>
+          <TwitterShareButton url={shareUrl} title={title}>
+            <TwitterIcon size={32} round />
+          </TwitterShareButton>
+          <LineShareButton url={shareUrl} title={title}>
+            <LineIcon size={32} round />
+          </LineShareButton>
+        </HStack>
+      </Center>
       <NextLink href="/about" passHref>
         <Link display="inline-flex" alignItems="center">
           <Icon as={FaInfoCircle} mr={1} /> About

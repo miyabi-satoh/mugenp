@@ -7,7 +7,7 @@ os.chdir(os.path.dirname(os.path.abspath(__file__)))
 pic_data = sorted(glob.glob("./screenshots/*.png"))
 
 if pic_data:
-    size = (768, 685)
+    size = (768, 740)
     fourcc = cv2.VideoWriter_fourcc('m', 'p', '4', 'v')
     save = cv2.VideoWriter(
         './screenshots/slideshow.mp4',

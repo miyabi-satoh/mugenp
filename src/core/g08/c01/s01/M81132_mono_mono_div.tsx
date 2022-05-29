@@ -1,6 +1,5 @@
-import { MugenContainer } from "~/components/container";
-import { RefreshFunction } from "~/interfaces/types";
-import { dsp, guard, randArray } from "~/utils";
+import { MugenP, GeneratorFunc } from "~/components/mugenp";
+import { guard, randArray } from "~/utils";
 import { Monomial } from "~/utils/monomial";
 
 // "id": "81132",
@@ -11,14 +10,12 @@ import { Monomial } from "~/utils/monomial";
 // "subsection": "単項式の乗法，除法",
 // "title": "単項式の除法",
 // "message": "次の計算をしなさい。"
-const Mugen = () => {
-  return <MugenContainer onRefresh={handleRefresh} />;
+export const M81132 = () => {
+  return <MugenP maxLv={4} generator={generatorFunc} />;
 };
 
-export { Mugen as M81132 };
-
 // 単項式の除法
-const handleRefresh: RefreshFunction = (level, score) => {
+const generatorFunc: GeneratorFunc = (level) => {
   // Lv1: 係数は自然数のみ
   // Lv2: ＋係数に負の数
   // Lv3: ＋分数で割る
@@ -55,5 +52,5 @@ const handleRefresh: RefreshFunction = (level, score) => {
 
   const answer = mono[0].toLatex();
 
-  return [dsp(question), dsp(answer)];
+  return { question, answer };
 };

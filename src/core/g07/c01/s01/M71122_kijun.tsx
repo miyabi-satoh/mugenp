@@ -1,7 +1,5 @@
-import { MugenContainer } from "~/components/container";
-import { RefreshFunction } from "~/interfaces/types";
-import { dsp, getRandomInt, guard, randArray } from "~/utils";
-import { Monomial } from "~/utils/monomial";
+import { MugenP, GeneratorFunc } from "~/components/mugenp";
+import { dsp, getRandomInt, randArray } from "~/utils";
 
 // "id": "71122",
 // "module": "kijun",
@@ -11,16 +9,20 @@ import { Monomial } from "~/utils/monomial";
 // "subsection": "正の数・負の数で量を表す",
 // "title": "基準からの増減や過不足",
 // "message": "次の問いに答えなさい。"
-const Mugen = () => {
+export const M71122 = () => {
   return (
-    <MugenContainer answerPrefix="" columns={1} onRefresh={handleRefresh} />
+    <MugenP
+      answerPrefix=""
+      displayStyle={false}
+      maxLv={3}
+      columns={1}
+      generator={generatorFunc}
+    />
   );
 };
 
-export { Mugen as M71122 };
-
 // 基準とした量からの増減や過不足
-const handleRefresh: RefreshFunction = (level, score) => {
+const generatorFunc: GeneratorFunc = (level) => {
   const patterns = [
     [
       "{base}{unit}を基準としたとき、{x}{unit}を符号を使って表しなさい。",
@@ -37,25 +39,36 @@ const handleRefresh: RefreshFunction = (level, score) => {
   ];
   const units = ["個", "円", "歩", "m", "km", "kg", "分", "時間", "日", "年"];
 
-  const idx = level - 1;
-  const base = getRandomInt(60, 40);
-  const diff = Monomial.create({
-    max: guard(idx, 5, 11, 19),
-    allowNegative: true,
-  });
-  const x = diff.coeff.add(base);
   const unit = randArray(...units);
-
   const pattern = randArray(...patterns);
-  let question = "";
-  let answer = "";
-  [question, answer] = pattern.map((p) => {
+  const base = getRandomInt(60, 40);
+
+  let diff: number;
+  if (level == 1) {
+    // 繰り上がり・繰り下がりが無いようにする
+    const num = base % 10;
+    const array: number[] = [];
+    for (let i = 3; i <= num; i++) {
+      array.push(i * -1);
+    }
+    for (let i = 3; i <= 9 - num; i++) {
+      array.push(i);
+    }
+    diff = randArray(...array);
+  } else if (level == 2) {
+    diff = getRandomInt(9, 1) * randArray(1, -1);
+  } else {
+    diff = getRandomInt(19, 6) * randArray(1, -1);
+  }
+  const x = base + diff;
+  const strDiff = `${diff > 0 ? "+" : ""}${diff}`;
+  const [question, answer] = pattern.map((p) => {
     return p
       .replaceAll("{base}", dsp(String(base)))
       .replaceAll("{unit}", unit)
-      .replaceAll("{x}", dsp(x.toLatex()))
-      .replaceAll("{diff}", dsp(diff.toLatex({ sign: true })));
+      .replaceAll("{x}", dsp(String(x)))
+      .replaceAll("{diff}", dsp(strDiff));
   });
 
-  return [question, answer];
+  return { question, answer };
 };

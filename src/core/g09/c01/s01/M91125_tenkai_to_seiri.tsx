@@ -1,6 +1,5 @@
-import { MugenContainer } from "~/components/container";
-import { RefreshFunction } from "~/interfaces/types";
-import { byScore, dsp, guard } from "~/utils";
+import { MugenP, GeneratorFunc } from "~/components/mugenp";
+import { guard, randArray } from "~/utils";
 import { Monomial } from "~/utils/monomial";
 import { Polynomial } from "~/utils/polynomial";
 
@@ -10,16 +9,14 @@ import { Polynomial } from "~/utils/polynomial";
 // "chapter": "式の展開と因数分解",
 // "title": "展開と整理",
 // "message": "次の計算をしなさい。"
-const Mugen = () => {
-  return <MugenContainer columns={1} onRefresh={handleRefresh} />;
+export const M91125 = () => {
+  return <MugenP columns={1} maxLv={5} generator={generatorFunc} />;
 };
 
-export { Mugen as M91125 };
-
 // 展開と整理 m(x + a)(x + b) + n(x + c)(x + d)
-const handleRefresh: RefreshFunction = (level, score) => {
+const generatorFunc: GeneratorFunc = (level) => {
   const idx = level - 1;
-  const y = byScore(score, "", "y");
+  const y = level > 2 ? randArray("", "y") : "";
   const mn = [];
   const p = [];
   const s = [];
@@ -103,5 +100,5 @@ const handleRefresh: RefreshFunction = (level, score) => {
     answer = "0";
   }
 
-  return [dsp(question), dsp(answer)];
+  return { question, answer };
 };

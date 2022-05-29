@@ -1,6 +1,5 @@
-import { MugenContainer } from "~/components/container";
-import { RefreshFunction } from "~/interfaces/types";
-import { dsp, getRandomInt, guard, randArray } from "~/utils";
+import { MugenP, GeneratorFunc } from "~/components/mugenp";
+import { getRandomInt, guard, randArray } from "~/utils";
 import { Monomial } from "~/utils/monomial";
 import { Polynomial } from "~/utils/polynomial";
 
@@ -12,14 +11,12 @@ import { Polynomial } from "~/utils/polynomial";
 // "subsection": "いろいろな多項式の計算",
 // "title": "多項式と数の乗法",
 // "message": "次の計算をしなさい。"
-const Mugen = () => {
-  return <MugenContainer onRefresh={handleRefresh} />;
+export const M81121 = () => {
+  return <MugenP maxLv={3} generator={generatorFunc} />;
 };
 
-export { Mugen as M81121 };
-
 // 多項式と数の乗法
-const handleRefresh: RefreshFunction = (level, score) => {
+const generatorFunc: GeneratorFunc = (level) => {
   // 文字は固定パターンから、ランダムに2つ選択
   const pattern = [];
   let kousuu = 2;
@@ -75,8 +72,7 @@ const handleRefresh: RefreshFunction = (level, score) => {
 
   const answer = poly.mul(mono).toLatex();
   if (answer.includes("frac")) {
-    return ["", ""];
+    return null;
   }
-
-  return [dsp(question), dsp(answer)];
+  return { question, answer };
 };

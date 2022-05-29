@@ -1,5 +1,4 @@
-import { MugenContainer } from "~/components/container";
-import { RefreshFunction } from "~/interfaces/types";
+import { MugenP, GeneratorFunc } from "~/components/mugenp";
 import { randArray } from "~/utils";
 import { heihou_kousiki, waseki_no_kousiki, wa_to_sa_no_seki } from ".";
 
@@ -9,16 +8,10 @@ import { heihou_kousiki, waseki_no_kousiki, wa_to_sa_no_seki } from ".";
 // "chapter": "式の展開と因数分解",
 // "title": "乗法公式まとめ",
 // "message": "次の式を展開しなさい。"
-const Mugen = () => {
-  return <MugenContainer maxLv={7} onRefresh={handleRefresh} />;
+export const M91124 = () => {
+  return <MugenP maxLv={7} generator={generatorFunc} />;
 };
 
-export { Mugen as M91124 };
-
-const handleRefresh: RefreshFunction = (level, score) => {
-  return randArray(
-    heihou_kousiki,
-    wa_to_sa_no_seki,
-    waseki_no_kousiki
-  )(level, score);
+const generatorFunc: GeneratorFunc = (level) => {
+  return randArray(heihou_kousiki, wa_to_sa_no_seki, waseki_no_kousiki)(level);
 };

@@ -1,6 +1,5 @@
-import { MugenContainer } from "~/components/container";
-import { RefreshFunction } from "~/interfaces/types";
-import { dsp, getRandomInt } from "~/utils";
+import { MugenP, GeneratorFunc } from "~/components/mugenp";
+import { getRandomInt } from "~/utils";
 import { Monomial } from "~/utils/monomial";
 import { Polynomial } from "~/utils/polynomial";
 
@@ -12,14 +11,12 @@ import { Polynomial } from "~/utils/polynomial";
 // "subsection": "式の加法，減法",
 // "title": "同類項の整理",
 // "message": "次の式の同類項をまとめて簡単にしなさい。"
-const Mugen = () => {
-  return <MugenContainer onRefresh={handleRefresh} />;
+export const M81112 = () => {
+  return <MugenP maxLv={3} generator={generatorFunc} />;
 };
 
-export { Mugen as M81112 };
-
 // 同類項の整理
-const handleRefresh: RefreshFunction = (level, score) => {
+const generatorFunc: GeneratorFunc = (level) => {
   // 固定パターンの文字から、ランダムに2つ選択
   const pattern = [];
   if (level === 1) {
@@ -54,5 +51,5 @@ const handleRefresh: RefreshFunction = (level, score) => {
     answer = "0";
   }
 
-  return [dsp(question), dsp(answer)];
+  return { question, answer };
 };

@@ -1,6 +1,5 @@
-import { MugenContainer } from "~/components/container";
-import { RefreshFunction } from "~/interfaces/types";
-import { dsp, gcd, getRandomInt, lcm, randArray } from "~/utils";
+import { MugenP, GeneratorFunc } from "~/components/mugenp";
+import { gcd, getRandomInt, lcm, randArray } from "~/utils";
 import { Monomial } from "~/utils/monomial";
 import { Polynomial } from "~/utils/polynomial";
 
@@ -12,14 +11,12 @@ import { Polynomial } from "~/utils/polynomial";
 // "subsection": "いろいろな多項式の計算",
 // "title": "分数形の式と加減法",
 // "message": "次の計算をしなさい。"
-const Mugen = () => {
-  return <MugenContainer onRefresh={handleRefresh} />;
+export const M81125 = () => {
+  return <MugenP maxLv={4} generator={generatorFunc} />;
 };
 
-export { Mugen as M81125 };
-
 // 分数形の式と加減法
-const handleRefresh: RefreshFunction = (level, score) => {
+const generatorFunc: GeneratorFunc = (level) => {
   // 文字は固定パターンから、ランダムに2つ選択
   const moji: string[] = ["x", "y"];
 
@@ -58,7 +55,7 @@ const handleRefresh: RefreshFunction = (level, score) => {
       ...poly[i].terms.map((t) => t.coeff.valueOf())
     );
     if (g !== 1) {
-      return ["", ""];
+      return null;
     }
   }
 
@@ -83,7 +80,7 @@ const handleRefresh: RefreshFunction = (level, score) => {
 
   // 係数 < 20 でフィルタ
   if (p.terms.find((t) => t.coeff.abs().compare(20) >= 0)) {
-    return ["", ""];
+    return null;
   }
 
   // 答えを約分
@@ -101,10 +98,10 @@ const handleRefresh: RefreshFunction = (level, score) => {
   } else {
     // ややこしい事になるので、分数形の分子初項がマイナスは除外する
     if (p.terms[0].isNegative) {
-      return ["", ""];
+      return null;
     }
     answer = `\\frac{${p.toLatex()}}{${l}}`;
   }
 
-  return [dsp(question), dsp(answer)];
+  return { question, answer };
 };
