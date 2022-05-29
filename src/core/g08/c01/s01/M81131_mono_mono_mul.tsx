@@ -1,5 +1,4 @@
-import { MugenContainer } from "~/components/container";
-import { RefreshFunction } from "~/interfaces/types";
+import { MugenP, GeneratorFunc } from "~/components/mugenp";
 import { dsp, guard, randArray } from "~/utils";
 import { Monomial } from "~/utils/monomial";
 
@@ -11,14 +10,12 @@ import { Monomial } from "~/utils/monomial";
 // "subsection": "単項式の乗法，除法",
 // "title": "単項式の乗法",
 // "message": "次の計算をしなさい。"
-const Mugen = () => {
-  return <MugenContainer onRefresh={handleRefresh} />;
+export const M81131 = () => {
+  return <MugenP maxLv={4} generator={generatorFunc} />;
 };
 
-export { Mugen as M81131 };
-
 // 単項式の乗法
-const handleRefresh: RefreshFunction = (level, score) => {
+const generatorFunc: GeneratorFunc = (level) => {
   // Lv1: 係数は自然数のみ
   // Lv2: ＋係数に負の数
   // Lv3: ＋たまに2項目を2乗
@@ -69,5 +66,7 @@ const handleRefresh: RefreshFunction = (level, score) => {
 
   let answer = mono[0].mul(mono[1]).toLatex();
 
-  return [dsp(question), dsp(answer)];
+  question = dsp(question);
+  answer = dsp(answer);
+  return { question, answer };
 };

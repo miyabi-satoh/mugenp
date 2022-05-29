@@ -1,5 +1,4 @@
-import { MugenContainer } from "~/components/container";
-import { RefreshFunction } from "~/interfaces/types";
+import { MugenP, GeneratorFunc } from "~/components/mugenp";
 import { randArray } from "~/utils";
 import {
   heihou_bunkai,
@@ -14,17 +13,15 @@ import {
 // "chapter": "式の展開と因数分解",
 // "title": "因数分解まとめ",
 // "message": "次の式を因数分解しなさい。"
-const Mugen = () => {
-  return <MugenContainer maxLv={7} onRefresh={handleRefresh} />;
+export const M91135 = () => {
+  return <MugenP maxLv={7} generator={generatorFunc} />;
 };
 
-export { Mugen as M91135 };
-
-const handleRefresh: RefreshFunction = (level, score) => {
+const generatorFunc: GeneratorFunc = (level) => {
   return randArray(
     kyoutuu_bunkai,
     wa_to_sa_no_bunkai,
     heihou_bunkai,
     waseki_no_bunkai
-  )(level, score);
+  )(level);
 };

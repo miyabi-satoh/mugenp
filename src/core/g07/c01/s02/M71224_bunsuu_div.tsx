@@ -1,5 +1,4 @@
-import { MugenContainer } from "~/components/container";
-import { RefreshFunction } from "~/interfaces/types";
+import { MugenP, GeneratorFunc } from "~/components/mugenp";
 import { dsp, guard, randArray } from "~/utils";
 import { Monomial } from "~/utils/monomial";
 
@@ -11,14 +10,12 @@ import { Monomial } from "~/utils/monomial";
 // "subsection": "正の数・負の数の乗法，除法",
 // "title": "分数を含む除法",
 // "message": "次の計算をしなさい。"
-const Mugen = () => {
-  return <MugenContainer onRefresh={handleRefresh} />;
+export const M71224 = () => {
+  return <MugenP maxLv={3} generator={generatorFunc} />;
 };
 
-export { Mugen as M71224 };
-
 // 分数を含む除法
-const handleRefresh: RefreshFunction = (level, score) => {
+const generatorFunc: GeneratorFunc = (level) => {
   // Lv1: 整数÷分数=整数
   // Lv2: 整数÷分数=分数
   // Lv3: 分数÷分数
@@ -36,29 +33,30 @@ const handleRefresh: RefreshFunction = (level, score) => {
     allowNegative: true,
   });
   if (b.d === 1) {
-    return ["", ""];
+    return { question: "", answer: "" };
   }
   const c = a.div(b);
 
   if (level === 1) {
     if (a.d !== 1) {
-      return ["", ""];
+      return { question: "", answer: "" };
     }
     if (c.d !== 1) {
-      return ["", ""];
+      return { question: "", answer: "" };
     }
   } else if (level === 2) {
     if (a.d !== 1) {
-      return ["", ""];
+      return { question: "", answer: "" };
     }
   }
 
-  const question =
+  const question = dsp(
     a.toLatex({ brackets: a.isNegative ? "()" : randArray("", "()") }) +
-    " \\div " +
-    b.toLatex({ brackets: b.isNegative ? "()" : randArray("", "()") });
+      " \\div " +
+      b.toLatex({ brackets: b.isNegative ? "()" : randArray("", "()") })
+  );
 
-  const answer = c.toLatex();
+  const answer = dsp(c.toLatex());
 
-  return [dsp(question), dsp(answer)];
+  return { question, answer };
 };

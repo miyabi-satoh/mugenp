@@ -1,6 +1,5 @@
-import { RefreshFunction } from "~/interfaces/types";
-import { MugenContainer } from "~/components/container";
-import { byScore, dsp, gcd, guard } from "~/utils";
+import { MugenP, GeneratorFunc } from "~/components/mugenp";
+import { dsp, gcd, guard, randArray } from "~/utils";
 import { Monomial } from "~/utils/monomial";
 import { Polynomial } from "~/utils/polynomial";
 
@@ -10,15 +9,12 @@ import { Polynomial } from "~/utils/polynomial";
 // "chapter": "式の展開と因数分解",
 // "title": "\\( (a^2 - b^2) \\) の因数分解",
 // "message": "次の式を因数分解しなさい。"
-const Mugen = () => {
-  return <MugenContainer onRefresh={handleRefresh} />;
+export const M91132 = () => {
+  return <MugenP generator={wa_to_sa_no_bunkai} />;
 };
 
-export { Mugen as M91132 };
-export { handleRefresh as wa_to_sa_no_bunkai };
-
 // 和と差の公式：(a + b)(a - b)
-const handleRefresh: RefreshFunction = (level, score) => {
+export const wa_to_sa_no_bunkai: GeneratorFunc = (level) => {
   const idx = level - 1;
   let ax = Monomial.create({
     factors: "x",
@@ -28,7 +24,7 @@ const handleRefresh: RefreshFunction = (level, score) => {
     allowNegative: level > 5,
   });
   let b = Monomial.create({
-    factors: byScore(score, "", "y"),
+    factors: level > 2 ? randArray("", "y") : "",
     max: guard(idx, 3, 5, 7, 9, 11, 13),
     maxD: guard(idx, 1, 1, 1, 2, 5),
     maxN: guard(idx, 1, 1, 1, 3, 5),
@@ -44,8 +40,8 @@ const handleRefresh: RefreshFunction = (level, score) => {
   const p1 = new Polynomial(ax, b);
   const p2 = new Polynomial(ax, b.neg());
 
-  const question = p1.mul(p2).compact().toLatex();
-  const answer = p1.toLatex("()") + p2.toLatex("()");
+  const question = dsp(p1.mul(p2).compact().toLatex());
+  const answer = dsp(p1.toLatex("()") + p2.toLatex("()"));
 
-  return [dsp(question), dsp(answer)];
+  return { question, answer };
 };

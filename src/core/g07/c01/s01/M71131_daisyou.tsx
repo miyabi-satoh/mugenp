@@ -1,8 +1,6 @@
-import Fraction from "fraction.js";
-import { MugenContainer } from "~/components/container";
-import { RefreshFunction } from "~/interfaces/types";
-import { dsp, getRandomInt, randArray } from "~/utils";
-import { Monomial } from "~/utils/monomial";
+import { MugenP, GeneratorFunc } from "~/components/mugenp";
+import { dsp, getRandomInt, randArray, shuffle } from "~/utils";
+import { Term } from "~/utils/expression";
 
 // "id": "71131",
 // "module": "daisyou",
@@ -12,111 +10,143 @@ import { Monomial } from "~/utils/monomial";
 // "subsection": "絶対値と数の大小",
 // "title": "正の数・負の数の大小",
 // "message": "次の各組の数の大小を、不等号(＜)を使って表しなさい。"
-const Mugen = () => {
-  return <MugenContainer answerPrefix="" onRefresh={handleRefresh} />;
+export const M71131 = () => {
+  return <MugenP answerPrefix="" maxLv={6} generator={generatorFunc} />;
 };
 
-export { Mugen as M71131 };
+type DataType = {
+  term: Term;
+  decimal: boolean;
+};
 
 // 正の数・負の数の大小
-const handleRefresh: RefreshFunction = (level, score) => {
-  const values: Array<[Monomial, boolean]> = [];
-
-  switch (level) {
-    case 1: // Lv1: 整数、整数
+const generatorFunc: GeneratorFunc = (level) => {
+  const values: DataType[] = [];
+  if (level == 1) {
+    const base = getRandomInt(-9, -1);
+    const diff = getRandomInt(5, 1);
+    const decimal = false;
+    values.push(
       {
-        const len = randArray(2, 2, 2, 3);
-        const base = Monomial.create({
-          max: 5,
-          allowNegative: true,
-          allowZero: true,
-        });
-        values.push([base, false]);
-        do {
-          const diff = Monomial.create({
-            max: 4,
-            allowNegative: true,
-          });
-          const other = new Monomial(base.coeff.add(diff.coeff));
-          if (!values.find((v) => v[0].toString() === other.toString())) {
-            values.push([other, false]);
-          }
-        } while (values.length < len);
-      }
-      break;
-    case 2: // Lv2: 整数、小数
+        term: new Term(base),
+        decimal,
+      },
       {
-        const len = randArray(2, 2, 2, 3);
-        const base = Monomial.create({
-          max: 5,
-          allowNegative: true,
-          allowZero: true,
-        });
-        values.push([base, false]);
-        do {
-          const diff = Monomial.create({
-            max: 9,
-            allowNegative: true,
-          }).coeff.div(10);
-          // base +/- 0.1〜0.9の範囲
-          const other = new Monomial(base.coeff.add(diff));
-          if (!values.find((v) => v[0].toString() === other.toString())) {
-            values.push([other, true]);
-          }
-        } while (values.length < len);
+        term: new Term(base + diff),
+        decimal,
       }
-      break;
-    case 3: // Lv3: 整数、分数/小数
+    );
+  } else if (level == 2) {
+    const base = getRandomInt(-5, -1);
+    const diff = getRandomInt(4, 1);
+    const decimal = false;
+    values.push(
       {
-        const len = randArray(2, 2, 2, 3);
-        const base = Monomial.create({
-          max: 5,
-          allowNegative: true,
-          allowZero: true,
-        });
-        values.push([base, false]);
-        do {
-          const diff = new Fraction(randArray(1, -1), getRandomInt(5, 2));
-          const other = new Monomial(base.coeff.add(diff));
-          if (!values.find((v) => v[0].toString() === other.toString())) {
-            values.push([other, [2, 5, 10].includes(other.d)]);
-          }
-        } while (values.length < len);
-      }
-      break;
-    default:
+        term: new Term(base),
+        decimal,
+      },
       {
-        // Lv4〜: 混在
-        const len = randArray(2, 3, 3);
-        const base = Monomial.create({
-          max: 5,
-          allowNegative: true,
-          allowZero: true,
-        });
-        do {
-          const diff = new Fraction(getRandomInt(5, -5), getRandomInt(5, 1));
-          const other = new Monomial(base.coeff.add(diff));
-          if (!values.find((v) => v[0].toString() === other.toString())) {
-            values.push([other, [2, 5, 10].includes(other.d)]);
-          }
-        } while (values.length < len);
+        term: new Term(base - diff),
+        decimal,
       }
-      break;
+    );
+  } else if (level == 3) {
+    // ここからは3項
+    const base = getRandomInt(-5, -1);
+    const diff1 = getRandomInt(4, 1);
+    const diff2 = getRandomInt(4, 1);
+    const decimal = false;
+    values.push(
+      {
+        term: new Term(base),
+        decimal,
+      },
+      {
+        term: new Term(base - diff1),
+        decimal,
+      },
+      {
+        term: new Term(base + diff2),
+        decimal,
+      }
+    );
+  } else if (level == 4) {
+    // X.Y と X.YZ
+    const base_n = getRandomInt(0, 3);
+    const base_d = getRandomInt(9);
+    const base = Number(`-${base_n}.${base_d}`);
+    const diff1 = getRandomInt(9, 1) / 100;
+    const diff2 = getRandomInt(9, 1) / 100;
+    const decimal = true;
+    values.push(
+      {
+        term: new Term(base),
+        decimal,
+      },
+      {
+        term: new Term(base - diff1),
+        decimal,
+      },
+      {
+        term: new Term(base + diff2),
+        decimal,
+      }
+    );
+  } else if (level == 5) {
+    // 分数
+    const base_n = getRandomInt(-1, -9);
+    const base_d = getRandomInt(12, 2);
+    const diff1 = getRandomInt(8, 1);
+    const diff2 = getRandomInt(8, 1);
+    const decimal = false;
+    values.push(
+      {
+        term: new Term(base_n, base_d),
+        decimal,
+      },
+      {
+        term: new Term(base_n - diff1, base_d),
+        decimal,
+      },
+      {
+        term: new Term(base_n + diff2, base_d),
+        decimal,
+      }
+    );
+  } else {
+    // 色々
+    const base_n = getRandomInt(0, 3);
+    const base_d = getRandomInt(9);
+    const base = Number(`-${base_n}.${base_d}`);
+    const diff1 = getRandomInt(9, 1) / 10;
+    const diff2 = getRandomInt(9, 1) / 10;
+    values.push(
+      {
+        term: new Term(base),
+        decimal: true,
+      },
+      {
+        term: new Term(base - diff1),
+        decimal: randArray(true, false),
+      },
+      {
+        term: new Term(base + diff2),
+        decimal: randArray(true, false),
+      }
+    );
   }
 
-  // 確率50%でリバース
-  if (randArray(true, false)) {
-    values.reverse();
-  }
+  const question = dsp(
+    shuffle(...values)
+      .map(({ term, decimal }) => term.toLatex({ decimal }))
+      .join(",\\quad ")
+  );
+  const answer = dsp(
+    values
+      .sort((a, b) => a.term.c.compare(b.term.c))
+      .map(({ term, decimal }) => term.toLatex({ decimal }))
+      .join(" < ")
+  );
 
-  const showZero = true;
-  const question = values
-    .map((x) => x[0].toLatex({ decimal: x[1], showZero }))
-    .join(",\\quad ");
-  const answer = values
-    .sort((a, b) => a[0].coeff.compare(b[0].coeff))
-    .map((x) => x[0].toLatex({ decimal: x[1], showZero }))
-    .join(" < ");
-
-  return [dsp(question), dsp(answer)];
+  return { question, answer };
 };

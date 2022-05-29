@@ -1,12 +1,18 @@
 /**
  * 本番環境かどうかの判定
+ * @date 5/28/2022 - 10:30:08 PM
+ *
+ * @type {boolean}
  */
-export const isDev = process.env.NODE_ENV !== "production";
+export const isDev: boolean = process.env.NODE_ENV !== "production";
 
 /**
  * 数式をインラインスタイルにして返す
- * @param {string} x - 数式
- * @returns インラインスタイルの数式
+ * @date 5/28/2022 - 10:33:13 PM
+ *
+ * @export
+ * @param {string} x
+ * @returns {string}
  */
 export function dsp(x: string): string {
   return `\\(\\displaystyle ${x}\\)`;
@@ -14,10 +20,12 @@ export function dsp(x: string): string {
 
 /**
  * min以上 max以下のランダムな整数を返す
+ * @date 5/28/2022 - 10:33:34 PM
  *
- * @param {number} max - 最大値
- * @param {number} [min=0] - 最小値(省略時:0)
- * @returns {number} 結果
+ * @export
+ * @param {number} max
+ * @param {number} [min=0]
+ * @returns {number}
  */
 export function getRandomInt(max: number, min: number = 0): number {
   if (min > max) {
@@ -30,9 +38,13 @@ export function getRandomInt(max: number, min: number = 0): number {
 
 /**
  * scoreを元にした抽選
+ * @date 5/28/2022 - 10:34:48 PM
  *
- * F(x) = 100 - (x^2/2)
- * F(0) = 100, F(10) = 50
+ * @export
+ * @template T
+ * @param {number} score
+ * @param {...T[]} ary
+ * @returns {T}
  */
 export function byScore<T>(score: number, ...ary: T[]): T {
   const threshold = Math.max(100 / ary.length, 100 - (score * score) / 2);
@@ -44,6 +56,11 @@ export function byScore<T>(score: number, ...ary: T[]): T {
  * 最大公約数を求める
  *
  * https://mebee.info/2021/04/26/post-26097/
+ * @date 5/28/2022 - 10:35:26 PM
+ *
+ * @export
+ * @param {...number[]} args
+ * @returns {number}
  */
 export function gcd(...args: number[]): number {
   const f = (x: number, y: number): number => (y ? f(y, x % y) : x);
@@ -61,6 +78,11 @@ export function gcd(...args: number[]): number {
  * 最小公倍数を求める
  *
  * https://tech-blog.s-yoshiki.com/entry/63/
+ * @date 5/28/2022 - 10:35:49 PM
+ *
+ * @export
+ * @param {...number[]} args
+ * @returns {number}
  */
 export function lcm(...args: number[]): number {
   const f = (n: number, m: number) => (n * m) / gcd(n, m);
@@ -75,6 +97,13 @@ export function lcm(...args: number[]): number {
 
 /**
  * 安全な配列からのチョイス
+ * @date 5/28/2022 - 10:36:16 PM
+ *
+ * @export
+ * @template T
+ * @param {number} idx
+ * @param {...T[]} ary
+ * @returns {T}
  */
 export function guard<T>(idx: number, ...ary: T[]): T {
   if (ary[idx] === undefined) {
@@ -89,6 +118,12 @@ export function guard<T>(idx: number, ...ary: T[]): T {
 
 /**
  * 配列からランダムに要素を返す
+ * @date 5/28/2022 - 10:36:38 PM
+ *
+ * @export
+ * @template T
+ * @param {...T[]} array
+ * @returns {T}
  */
 export function randArray<T>(...array: T[]): T {
   var rand = getRandomInt(array.length - 1);
@@ -98,26 +133,37 @@ export function randArray<T>(...array: T[]): T {
 
 /**
  * 最小値と最大値の範囲内に収めた数値を返す
+ * @date 5/28/2022 - 10:36:57 PM
+ *
+ * @export
+ * @param {number} min
+ * @param {number} n
+ * @param {number} max
+ * @returns {number}
  */
 export function minMax(min: number, n: number, max: number): number {
   return Math.max(min, Math.min(n, max));
 }
 
 /**
- * 有限小数の分母ならtrueを返す
+ * 配列のシャッフル
+ * @date 5/29/2022 - 12:45:29 AM
+ *
+ * @export
+ * @template T
+ * @param {...T[]} array
+ * @returns {T[]}
  */
-export function isFiniteDenom(n: number): boolean {
-  switch (n) {
-    case 2:
-    case 4:
-    case 5:
-    case 10:
-    case 20:
-    case 25:
-    case 40:
-    case 50:
-    case 100:
-      return true;
+export function shuffle<T>(...array: T[]): T[] {
+  const cloneArray = [...array];
+
+  for (let i = cloneArray.length - 1; i >= 0; i--) {
+    let rand = Math.floor(Math.random() * (i + 1));
+    // 配列の要素の順番を入れ替える
+    let tmpStorage = cloneArray[i];
+    cloneArray[i] = cloneArray[rand];
+    cloneArray[rand] = tmpStorage;
   }
-  return false;
+
+  return cloneArray;
 }

@@ -1,5 +1,4 @@
-import { MugenContainer } from "~/components/container";
-import { RefreshFunction } from "~/interfaces/types";
+import { MugenP, GeneratorFunc } from "~/components/mugenp";
 import { dsp, gcd } from "~/utils";
 import { poly_mono } from ".";
 
@@ -9,21 +8,18 @@ import { poly_mono } from ".";
 // "chapter": "式の展開と因数分解",
 // "title": "共通因数でくくる",
 // "message": "次の式を因数分解しなさい。"
-const Mugen = () => {
-  return <MugenContainer onRefresh={handleRefresh} />;
+export const M91131 = () => {
+  return <MugenP maxLv={5} generator={kyoutuu_bunkai} />;
 };
 
-export { Mugen as M91131 };
-export { handleRefresh as kyoutuu_bunkai };
-
 // 共通因数でくくる
-const handleRefresh: RefreshFunction = (level, score) => {
-  let [poly, mono] = poly_mono(level, score);
+export const kyoutuu_bunkai: GeneratorFunc = (level) => {
+  let [poly, mono] = poly_mono(level);
   if (poly.terms.find((x) => x.isFrac)) {
-    return ["", ""];
+    return { question: "", answer: "" };
   }
   if (mono.isFrac) {
-    return ["", ""];
+    return { question: "", answer: "" };
   }
   if (poly.terms[0].isNegative) {
     poly = poly.neg();
@@ -36,7 +32,7 @@ const handleRefresh: RefreshFunction = (level, score) => {
   poly = poly.div(g);
   mono = mono.mul(g);
 
-  const question = poly.mul(mono).toLatex();
-  const answer = mono.toLatex() + poly.toLatex("()");
-  return [dsp(question), dsp(answer)];
+  const question = dsp(poly.mul(mono).toLatex());
+  const answer = dsp(mono.toLatex() + poly.toLatex("()"));
+  return { question, answer };
 };

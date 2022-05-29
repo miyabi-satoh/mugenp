@@ -1,5 +1,4 @@
-import { MugenContainer } from "~/components/container";
-import { RefreshFunction } from "~/interfaces/types";
+import { MugenP, GeneratorFunc } from "~/components/mugenp";
 import { dsp, getRandomInt, guard, randArray } from "~/utils";
 import { Monomial } from "~/utils/monomial";
 
@@ -11,14 +10,12 @@ import { Monomial } from "~/utils/monomial";
 // "subsection": "正の数・負の数の乗法，除法",
 // "title": "乗除混合計算",
 // "message": "次の計算をしなさい。"
-const Mugen = () => {
-  return <MugenContainer onRefresh={handleRefresh} />;
+export const M71225 = () => {
+  return <MugenP maxLv={6} generator={generatorFunc} />;
 };
 
-export { Mugen as M71225 };
-
 // 乗除混合計算
-const handleRefresh: RefreshFunction = (level, score) => {
+const generatorFunc: GeneratorFunc = (level) => {
   // Lv1: 問題整数、答え整数
   // Lv2: 答え分数
   // Lv3: 初項マイナス
@@ -45,7 +42,7 @@ const handleRefresh: RefreshFunction = (level, score) => {
     b = b.mul(getRandomInt(12, 2));
   }
   if (a.abs().equals(b.abs())) {
-    return ["", ""];
+    return { question: "", answer: "" };
   }
   let c = Monomial.create({
     max: 12,
@@ -57,7 +54,7 @@ const handleRefresh: RefreshFunction = (level, score) => {
     c = c.mul(getRandomInt(12, 2));
   }
   if (c.abs().equals(a.abs()) || c.abs().equals(b.abs())) {
-    return ["", ""];
+    return { question: "", answer: "" };
   }
 
   if (level === 4 || level === 5) {
@@ -73,7 +70,7 @@ const handleRefresh: RefreshFunction = (level, score) => {
     }
 
     if (fracCount > level - 3) {
-      return ["", ""];
+      return { question: "", answer: "" };
     }
   }
 
@@ -93,29 +90,30 @@ const handleRefresh: RefreshFunction = (level, score) => {
 
   if (level === 1) {
     if (a.isFrac || b.isFrac || c.isFrac || aValue.isFrac) {
-      return ["", ""];
+      return { question: "", answer: "" };
     }
   } else if (level === 2) {
     if (a.isFrac || b.isFrac || c.isFrac) {
-      return ["", ""];
+      return { question: "", answer: "" };
     }
   }
 
   if (aValue.coeff.abs().compare(99) > 0) {
-    return ["", ""];
+    return { question: "", answer: "" };
   }
   if (aValue.coeff.n > 99 || aValue.coeff.d > 99) {
-    return ["", ""];
+    return { question: "", answer: "" };
   }
 
-  const question =
+  const question = dsp(
     a.toLatex({ brackets: randArray("", "()") }) +
-    opAB +
-    b.toLatex({ brackets: b.isNegative ? "()" : randArray("", "()") }) +
-    opBC +
-    c.toLatex({ brackets: c.isNegative ? "()" : randArray("", "()") });
+      opAB +
+      b.toLatex({ brackets: b.isNegative ? "()" : randArray("", "()") }) +
+      opBC +
+      c.toLatex({ brackets: c.isNegative ? "()" : randArray("", "()") })
+  );
 
-  const answer = aValue.toLatex();
+  const answer = dsp(aValue.toLatex());
 
-  return [dsp(question), dsp(answer)];
+  return { question, answer };
 };

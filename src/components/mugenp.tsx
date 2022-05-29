@@ -1,23 +1,30 @@
 import { Box, Button, Flex, Select, SimpleGrid } from "@chakra-ui/react";
 import { MathJax } from "better-react-mathjax";
 import { ChangeEventHandler, useEffect, useMemo, useState } from "react";
-import { RefreshFunction } from "~/interfaces/types";
 import { FaArrowUp, FaArrowDown } from "react-icons/fa";
 import { isDev, minMax } from "~/utils";
+
+type QA = {
+  question: string;
+  answer: string;
+};
+
+export type GeneratorFunc = (level: number) => QA;
+
 type Props = {
   columns?: number | number[];
   maxLv?: number;
   answerPrefix?: string;
-  onRefresh: RefreshFunction;
+  generator: GeneratorFunc;
 };
 
 const NUM_OF_Q = isDev ? 10 : 4;
 
-export const MugenContainer = ({
+export const MugenP = ({
   columns = [1, 1, 2],
   maxLv = 5,
   answerPrefix = "=",
-  onRefresh,
+  generator,
 }: Props) => {
   const [score, setScore] = useState(-1);
   const [totalScore, setTotalScore] = useState(0);
@@ -67,7 +74,7 @@ export const MugenContainer = ({
       let _stock = [...stock];
       let s_time = new Date();
       while (newQuestions.length < NUM_OF_Q) {
-        const [question, answer] = onRefresh(level, totalScore);
+        const { question, answer } = generator(level);
         if (!!question && !!answer) {
           if (_stock.includes(question) || _stock.includes(answer)) {
             const e_time = new Date();
@@ -117,6 +124,7 @@ export const MugenContainer = ({
             難易度を上げる
           </Button>
         </Box> */}
+      <Box>【Lv.{level == maxLv ? "Max" : level}】</Box>
       <SimpleGrid columns={columns} mb={4}>
         {questions.map((q, index) => (
           <Box key={`${q}${index}`}>

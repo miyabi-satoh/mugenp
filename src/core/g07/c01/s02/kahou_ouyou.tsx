@@ -1,16 +1,15 @@
-import { MugenContainer } from "~/components/container";
-import { RefreshFunction } from "~/interfaces/types";
-import { dsp, getRandomInt, isFiniteDenom, randArray } from "~/utils";
+import { GeneratorFunc, MugenP } from "~/components/mugenp";
+import { dsp, getRandomInt, randArray } from "~/utils";
 import { Monomial } from "~/utils/monomial";
 
 const Mugen = () => {
-  return <MugenContainer onRefresh={handleRefresh} />;
+  return <MugenP generator={generatorFunc} />;
 };
 
 export { Mugen as M71211 };
 
 // 加法の応用
-const handleRefresh: RefreshFunction = (level, score) => {
+const generatorFunc: GeneratorFunc = (level) => {
   // score|Lv|M1|M2|M3|M4
   // 0    | 1| 4| 0| 0| 0
   // 1    | 1| 4| 0| 0| 0
@@ -39,17 +38,17 @@ const handleRefresh: RefreshFunction = (level, score) => {
   // 18   | 4| 1| 1| 1| 1
   // 19   | 4| 1| 1| 1| 1
   const modeArray = [];
-  if (score < 3) {
+  if (level < 1) {
     modeArray.push(1, 1, 1, 1);
-  } else if (score < 6) {
+  } else if (level < 2) {
     modeArray.push(1, 1, 1, 2);
-  } else if (score < 9) {
+  } else if (level < 3) {
     modeArray.push(1, 1, 2, 2);
-  } else if (score < 12) {
+  } else if (level < 4) {
     modeArray.push(1, 2, 2, 2);
-  } else if (score < 15) {
+  } else if (level < 5) {
     modeArray.push(1, 2, 2, 3);
-  } else if (score < 18) {
+  } else if (level < 6) {
     modeArray.push(1, 2, 3, 3);
   } else {
     modeArray.push(1, 2, 3, 4);
@@ -105,21 +104,23 @@ const handleRefresh: RefreshFunction = (level, score) => {
             allowNegative: true,
             allowZero: true,
           }).div(m);
-          values.push([x, isFiniteDenom(x.d)]);
+          values.push([x, false]);
         }
       }
       break;
   }
 
-  const question = values
-    .map((x) => x[0].toLatex({ sign: true, brackets: "()", decimal: x[1] }))
-    .join(" + ");
+  const question = dsp(
+    values
+      .map((x) => x[0].toLatex({ sign: true, brackets: "()", decimal: x[1] }))
+      .join(" + ")
+  );
 
   const aValue = values.reduce((pv, cv) => [
     new Monomial(pv[0].coeff.add(cv[0].coeff)),
     false,
   ])[0];
-  const answer = aValue.toLatex({ decimal: !question.includes("frac") });
+  const answer = dsp(aValue.toLatex({ decimal: !question.includes("frac") }));
 
-  return [dsp(question), dsp(answer)];
+  return { question, answer };
 };

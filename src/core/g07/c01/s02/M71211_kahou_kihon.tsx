@@ -1,5 +1,4 @@
-import { MugenContainer } from "~/components/container";
-import { RefreshFunction } from "~/interfaces/types";
+import { MugenP, GeneratorFunc } from "~/components/mugenp";
 import { dsp } from "~/utils";
 import { Monomial } from "~/utils/monomial";
 
@@ -11,15 +10,12 @@ import { Monomial } from "~/utils/monomial";
 // "subsection": "正の数・負の数の加法，減法",
 // "title": "加法の基本",
 // "message": "次の計算をしなさい。"
-const Mugen = () => {
-  return <MugenContainer onRefresh={handleRefresh} />;
+export const M71211 = () => {
+  return <MugenP maxLv={1} generator={kahou_kihon} />;
 };
 
-export { Mugen as M71211 };
-export { handleRefresh as kahou_kihon };
-
 // 加法の基本
-const handleRefresh: RefreshFunction = (level, score) => {
+export const kahou_kihon: GeneratorFunc = (level) => {
   const values: Monomial[] = [];
   do {
     const x = Monomial.create({
@@ -29,13 +25,15 @@ const handleRefresh: RefreshFunction = (level, score) => {
     values.push(x);
   } while (values.length < 2);
 
-  const question = values.map((x) => x.toLatex({ brackets: "()" })).join(" + ");
+  const question = dsp(
+    values.map((x) => x.toLatex({ brackets: "()" })).join(" + ")
+  );
 
   const aValue = values.reduce(
     (pv, cv) => new Monomial(pv.coeff.add(cv.coeff))
   );
   const showZero = true;
-  const answer = aValue.toLatex({ showZero });
+  const answer = dsp(aValue.toLatex({ showZero }));
 
-  return [dsp(question), dsp(answer)];
+  return { question, answer };
 };

@@ -1,5 +1,4 @@
-import { MugenContainer } from "~/components/container";
-import { RefreshFunction } from "~/interfaces/types";
+import { MugenP, GeneratorFunc } from "~/components/mugenp";
 import { dsp, getRandomInt, guard, randArray } from "~/utils";
 import { Monomial, TermSpec } from "~/utils/monomial";
 import { Polynomial } from "~/utils/polynomial";
@@ -10,15 +9,13 @@ import { Polynomial } from "~/utils/polynomial";
 // "chapter": "式の展開と因数分解",
 // "title": "\\( (a+b)\\times c \\) の計算",
 // "message": "次の計算をしなさい。"
-const Mugen = () => {
-  return <MugenContainer onRefresh={handleRefresh} />;
+export const M91111 = () => {
+  return <MugenP maxLv={5} generator={generatorFunc} />;
 };
 
-export { Mugen as M91111 };
-
 // 多項式 × 単項式
-const handleRefresh: RefreshFunction = (level, score) => {
-  let [poly, mono] = poly_mono(level, score);
+const generatorFunc: GeneratorFunc = (level) => {
+  let [poly, mono] = poly_mono(level);
   if (level < 5 && poly.terms[0].isNegative) {
     poly = poly.neg();
   }
@@ -36,14 +33,12 @@ const handleRefresh: RefreshFunction = (level, score) => {
   } else {
     question = mono.toLatex() + poly.toLatex("()");
   }
-  const answer = polyAns.toLatex();
-  return [dsp(question), dsp(answer)];
+  question = dsp(question);
+  const answer = dsp(polyAns.toLatex());
+  return { question, answer };
 };
 
-export const poly_mono = (
-  level: number,
-  score: number
-): [Polynomial, Monomial] => {
+export const poly_mono = (level: number): [Polynomial, Monomial] => {
   // 単項式の文字
   const monoVars: string[] = [];
   if (level == 1) {

@@ -1,6 +1,5 @@
-import { MugenContainer } from "~/components/container";
-import { RefreshFunction } from "~/interfaces/types";
-import { byScore, dsp, guard } from "~/utils";
+import { MugenP, GeneratorFunc } from "~/components/mugenp";
+import { dsp, guard, randArray } from "~/utils";
 import { Monomial, TermSpec } from "~/utils/monomial";
 import { Polynomial } from "~/utils/polynomial";
 
@@ -10,18 +9,15 @@ import { Polynomial } from "~/utils/polynomial";
 // "chapter": "式の展開と因数分解",
 // "title": "\\((x+a)(x+b)\\) の展開",
 // "message": "次の式を展開しなさい。"
-const Mugen = () => {
-  return <MugenContainer maxLv={7} onRefresh={handleRefresh} />;
+export const M91121 = () => {
+  return <MugenP maxLv={7} generator={waseki_no_kousiki} />;
 };
 
-export { Mugen as M91121 };
-export { handleRefresh as waseki_no_kousiki };
-
 // 和積の公式：(ax + b)(ax + c)
-const handleRefresh: RefreshFunction = (level, score) => {
+export const waseki_no_kousiki: GeneratorFunc = (level) => {
   const idx = level - 1;
   const bcSpec: TermSpec = {
-    factors: byScore(score, "", "y"),
+    factors: level > 2 ? randArray("", "y") : "",
     max: guard(idx, 3, 3, 5, 7, 9),
     maxD: guard(idx, 1, 1, 1, 5),
     maxN: guard(idx, 1, 1, 1, 5),
@@ -32,13 +28,13 @@ const handleRefresh: RefreshFunction = (level, score) => {
 
   if (b.coeff.abs().compare(c.coeff.abs()) == 0) {
     // 平方公式、和と差の公式の問題になってしまうのでスキップ
-    return ["", ""];
+    return { question: "", answer: "" };
   }
   if (level < 7) {
     if (b.isFrac || c.isFrac) {
       // 同分母以外はNG
       if (b.d !== c.d) {
-        return ["", ""];
+        return { question: "", answer: "" };
       }
     }
   }
@@ -52,22 +48,22 @@ const handleRefresh: RefreshFunction = (level, score) => {
   if (level < 6) {
     // b,cが分数だったら、a=1
     if (b.isFrac && !ax.coeff.equals(1)) {
-      return ["", ""];
+      return { question: "", answer: "" };
     }
     // aが分数だったら、b,cは整数
     if (ax.isFrac && (b.isFrac || c.isFrac)) {
-      return ["", ""];
+      return { question: "", answer: "" };
     }
   } else if (level < 7) {
     // aが負の数だったら、a,b,cは整数
     if (ax.isNegative && (ax.isFrac || b.isFrac || c.isFrac)) {
-      return ["", ""];
+      return { question: "", answer: "" };
     }
   }
 
   const p1 = new Polynomial(ax, b);
   const p2 = new Polynomial(ax, c);
-  const question = p1.toLatex("()") + p2.toLatex("()");
-  const answer = p1.mul(p2).compact().toLatex();
-  return [dsp(question), dsp(answer)];
+  const question = dsp(p1.toLatex("()") + p2.toLatex("()"));
+  const answer = dsp(p1.mul(p2).compact().toLatex());
+  return { question, answer };
 };

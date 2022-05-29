@@ -1,5 +1,4 @@
-import { MugenContainer } from "~/components/container";
-import { RefreshFunction } from "~/interfaces/types";
+import { MugenP, GeneratorFunc } from "~/components/mugenp";
 import { dsp, getRandomInt, guard, minMax, randArray } from "~/utils";
 import { Monomial } from "~/utils/monomial";
 import { Polynomial } from "~/utils/polynomial";
@@ -12,14 +11,12 @@ import { Polynomial } from "~/utils/polynomial";
 // "subsection": "いろいろな多項式の計算",
 // "title": "多項式と数の除法",
 // "message": "次の計算をしなさい。"
-const Mugen = () => {
-  return <MugenContainer onRefresh={handleRefresh} />;
+export const M81122 = () => {
+  return <MugenP maxLv={4} generator={generatorFunc} />;
 };
 
-export { Mugen as M81122 };
-
 // 多項式と数の除法
-const handleRefresh: RefreshFunction = (level, score) => {
+const generatorFunc: GeneratorFunc = (level) => {
   // 割る数
   const idx = level - 1;
   let mono: Monomial;
@@ -63,14 +60,16 @@ const handleRefresh: RefreshFunction = (level, score) => {
   }
   poly = poly.orderTo();
 
-  const question = `${poly.toLatex("()")} \\div ${mono.toLatex({
-    brackets: mono.isNegative ? "()" : "",
-  })}`;
+  const question = dsp(
+    `${poly.toLatex("()")} \\div ${mono.toLatex({
+      brackets: mono.isNegative ? "()" : "",
+    })}`
+  );
 
-  const answer = poly.div(mono).toLatex();
+  const answer = dsp(poly.div(mono).toLatex());
   if (answer.includes("frac")) {
-    return ["", ""];
+    return { question: "", answer: "" };
   }
 
-  return [dsp(question), dsp(answer)];
+  return { question, answer };
 };

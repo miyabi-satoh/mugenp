@@ -1,5 +1,4 @@
-import { MugenContainer } from "~/components/container";
-import { RefreshFunction } from "~/interfaces/types";
+import { MugenP, GeneratorFunc } from "~/components/mugenp";
 import { dsp, getRandomInt, minMax, randArray } from "~/utils";
 import { Monomial } from "~/utils/monomial";
 import { Polynomial } from "~/utils/polynomial";
@@ -10,14 +9,12 @@ import { Polynomial } from "~/utils/polynomial";
 // "chapter": "式の展開と因数分解",
 // "title": "\\( (a+b)(c+d) \\) の展開",
 // "message": "次の式を展開をしなさい。"
-const Mugen = () => {
-  return <MugenContainer onRefresh={handleRefresh} />;
+export const M91113 = () => {
+  return <MugenP maxLv={6} generator={generatorFunc} />;
 };
 
-export { Mugen as M91113 };
-
 // 多項式 × 多項式
-const handleRefresh: RefreshFunction = (level, score) => {
+const generatorFunc: GeneratorFunc = (level) => {
   // 多項式の文字
   //  Lv1 : (x) + (N)
   //  Lv2 : (x) + (N)
@@ -49,7 +46,7 @@ const handleRefresh: RefreshFunction = (level, score) => {
 
     do {
       let p = Monomial.create({
-        max: minMax(3, score, 9),
+        max: minMax(3, level * 2, 9),
         maxD: kousuu == 3 || level < 5 ? 1 : 5,
         maxN: 5,
         allowNegative: true,
@@ -77,7 +74,9 @@ const handleRefresh: RefreshFunction = (level, score) => {
   // 式として作成
   let polyAns = expressions[0].mul(expressions[1]).compact();
 
-  const question = expressions[0].toLatex("()") + expressions[1].toLatex("()");
-  const answer = polyAns.toLatex();
-  return [dsp(question), dsp(answer)];
+  const question = dsp(
+    expressions[0].toLatex("()") + expressions[1].toLatex("()")
+  );
+  const answer = dsp(polyAns.toLatex());
+  return { question, answer };
 };

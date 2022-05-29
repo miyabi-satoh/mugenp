@@ -1,5 +1,4 @@
-import { MugenContainer } from "~/components/container";
-import { RefreshFunction } from "~/interfaces/types";
+import { MugenP, GeneratorFunc } from "~/components/mugenp";
 import { dsp, getRandomInt, randArray } from "~/utils";
 import { Monomial } from "~/utils/monomial";
 import { Polynomial } from "~/utils/polynomial";
@@ -12,14 +11,12 @@ import { Polynomial } from "~/utils/polynomial";
 // "subsection": "式の加法，減法",
 // "title": "多項式の加法，減法",
 // "message": "次の計算をしなさい。"
-const Mugen = () => {
-  return <MugenContainer onRefresh={handleRefresh} />;
+export const M81113 = () => {
+  return <MugenP maxLv={3} generator={generatorFunc} />;
 };
 
-export { Mugen as M81113 };
-
 // 多項式の加法，減法
-const handleRefresh: RefreshFunction = (level, score) => {
+const generatorFunc: GeneratorFunc = (level) => {
   // 文字は固定パターンから、ランダムに2つ選択
   const pattern = [];
   let kousuu = 2;
@@ -54,7 +51,9 @@ const handleRefresh: RefreshFunction = (level, score) => {
 
   const operator = randArray("+", "-");
 
-  const question = poly[0].toLatex("()") + operator + poly[1].toLatex("()");
+  const question = dsp(
+    poly[0].toLatex("()") + operator + poly[1].toLatex("()")
+  );
 
   if (operator === "-") {
     poly[1] = poly[1].neg();
@@ -64,6 +63,7 @@ const handleRefresh: RefreshFunction = (level, score) => {
   if (answer.length === 0) {
     answer = "0";
   }
+  answer = dsp(answer);
 
-  return [dsp(question), dsp(answer)];
+  return { question, answer };
 };
