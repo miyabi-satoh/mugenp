@@ -37,22 +37,6 @@ export function getRandomInt(max: number, min: number = 0): number {
 }
 
 /**
- * scoreを元にした抽選
- * @date 5/28/2022 - 10:34:48 PM
- *
- * @export
- * @template T
- * @param {number} score
- * @param {...T[]} ary
- * @returns {T}
- */
-export function byScore<T>(score: number, ...ary: T[]): T {
-  const threshold = Math.max(100 / ary.length, 100 - (score * score) / 2);
-  const found = ary.find((x) => getRandomInt(100) <= threshold);
-  return found !== undefined ? found : ary[0];
-}
-
-/**
  * 最大公約数を求める
  *
  * https://mebee.info/2021/04/26/post-26097/
