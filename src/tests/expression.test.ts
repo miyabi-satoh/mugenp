@@ -130,5 +130,37 @@ describe("class Term", () => {
       const expr = new Term(5);
       expect(expr.toLatex({ sign: true })).toBe("+5");
     });
+    test("({sign}) => 0", () => {
+      const expr = new Term(0);
+      expect(expr.toLatex({ sign: true })).toBe("0");
+    });
+    test("({sign}) => +x", () => {
+      const expr = new Term(1, "x");
+      expect(expr.toLatex({ sign: true })).toBe("+ x");
+    });
+    test("({sign}) => -x", () => {
+      const expr = new Term(-1, "x");
+      expect(expr.toLatex({ sign: true })).toBe("- x");
+    });
+    test("({brackets}) => (+3)", () => {
+      const expr = new Term(3);
+      expect(expr.toLatex({ brackets: "()" })).toBe("\\left( +3 \\right)");
+    });
+    test("({brackets}) => (-3)", () => {
+      const expr = new Term(-3);
+      expect(expr.toLatex({ brackets: "()" })).toBe("\\left( -3 \\right)");
+    });
+    test("({brackets}) => 0", () => {
+      const expr = new Term(0);
+      expect(expr.toLatex({ brackets: "()" })).toBe("0");
+    });
+    test("({brackets}) => (+x)", () => {
+      const expr = new Term(1, "x");
+      expect(expr.toLatex({ brackets: "()" })).toBe("\\left( + x \\right)");
+    });
+    test("({brackets}) => (-x)", () => {
+      const expr = new Term(-1, "x");
+      expect(expr.toLatex({ brackets: "()" })).toBe("\\left( - x \\right)");
+    });
   });
 });
