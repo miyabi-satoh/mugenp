@@ -59,19 +59,19 @@ describe("スクリーンショット", () => {
     async (id) => {
       await page.goto(`http://localhost:3001/${id}`);
       expect(page.url()).toBe(`http://localhost:3001/${id}`);
-      const text = await page.evaluate(() => document.body.textContent);
-      expect(text).not.toContain("スコア");
       for (let i = 0; i < 10; i++) {
         await page.click("#toggle-answer");
         await page.waitForTimeout(1);
         await page.screenshot({
           path: join(ssDir, `${id}_${i}.png`),
         });
-        // await page.waitForTimeout(500);
+        const text = await page.evaluate(() => document.body.textContent);
+        if (text && text.includes("【Lv.Max】")) {
+          break;
+        }
+
         await page.select("#select-score", score);
-        // await page.waitForTimeout(200);
         await page.click("#button-next");
-        // await page.waitForTimeout(200);
       }
     },
     timeout
