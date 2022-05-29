@@ -1,5 +1,5 @@
 import { MugenP, GeneratorFunc } from "~/components/mugenp";
-import { dsp, guard, randArray } from "~/utils";
+import { guard, randArray } from "~/utils";
 import { Monomial, TermSpec } from "~/utils/monomial";
 import { Polynomial } from "~/utils/polynomial";
 
@@ -28,13 +28,13 @@ export const waseki_no_kousiki: GeneratorFunc = (level) => {
 
   if (b.coeff.abs().compare(c.coeff.abs()) == 0) {
     // 平方公式、和と差の公式の問題になってしまうのでスキップ
-    return { question: "", answer: "" };
+    return null;
   }
   if (level < 7) {
     if (b.isFrac || c.isFrac) {
       // 同分母以外はNG
       if (b.d !== c.d) {
-        return { question: "", answer: "" };
+        return null;
       }
     }
   }
@@ -48,22 +48,22 @@ export const waseki_no_kousiki: GeneratorFunc = (level) => {
   if (level < 6) {
     // b,cが分数だったら、a=1
     if (b.isFrac && !ax.coeff.equals(1)) {
-      return { question: "", answer: "" };
+      return null;
     }
     // aが分数だったら、b,cは整数
     if (ax.isFrac && (b.isFrac || c.isFrac)) {
-      return { question: "", answer: "" };
+      return null;
     }
   } else if (level < 7) {
     // aが負の数だったら、a,b,cは整数
     if (ax.isNegative && (ax.isFrac || b.isFrac || c.isFrac)) {
-      return { question: "", answer: "" };
+      return null;
     }
   }
 
   const p1 = new Polynomial(ax, b);
   const p2 = new Polynomial(ax, c);
-  const question = dsp(p1.toLatex("()") + p2.toLatex("()"));
-  const answer = dsp(p1.mul(p2).compact().toLatex());
+  const question = p1.toLatex("()") + p2.toLatex("()");
+  const answer = p1.mul(p2).compact().toLatex();
   return { question, answer };
 };

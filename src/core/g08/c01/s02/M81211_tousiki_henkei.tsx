@@ -1,6 +1,6 @@
 import Fraction from "fraction.js";
 import { MugenP, GeneratorFunc } from "~/components/mugenp";
-import { dsp, gcd, getRandomInt, guard, lcm, minMax, randArray } from "~/utils";
+import { gcd, getRandomInt, guard, lcm, minMax, randArray } from "~/utils";
 import { Monomial } from "~/utils/monomial";
 import { Polynomial } from "~/utils/polynomial";
 
@@ -37,7 +37,7 @@ const generatorFunc: GeneratorFunc = (level) => {
   });
   if (terms.length <= 2) {
     // 2項以下はスキップ
-    return { question: "", answer: "" };
+    return null;
   }
   if (terms.length >= 4) {
     terms.pop();
@@ -54,7 +54,7 @@ const generatorFunc: GeneratorFunc = (level) => {
   if (level === 1) {
     // Lv1は = 0 を除外
     if (poly[0].length === 0) {
-      return { question: "", answer: "" };
+      return null;
     }
   }
   if (level >= 3) {
@@ -91,7 +91,7 @@ const generatorFunc: GeneratorFunc = (level) => {
     });
   }
 
-  const question = dsp(
+  const question =
     poly
       .map((p, i) => {
         if (prefix[i].d > 1) {
@@ -102,8 +102,7 @@ const generatorFunc: GeneratorFunc = (level) => {
           return p.toLatex();
         }
       })
-      .join(" = ") + ` \\qquad [\\,${target}\\,]`
-  );
+      .join(" = ") + ` \\qquad [\\,${target}\\,]`;
 
   // prefixを元に戻す
   poly = poly.map((p, i) => p.mul(prefix[i]));
@@ -129,7 +128,7 @@ const generatorFunc: GeneratorFunc = (level) => {
     // 答えに分数が含まれる場合
     if (level <= 3) {
       // Lv3まではスキップ
-      return { question: "", answer: "" };
+      return null;
     }
     // 分母の最小公倍数を求める
     denominator = lcm(...poly[1].terms.map((t) => t.d));
@@ -146,7 +145,6 @@ const generatorFunc: GeneratorFunc = (level) => {
   } else {
     answer += "\\frac{" + poly[1].toLatex() + `}{${denominator}}`;
   }
-  answer = dsp(answer);
 
   return { question, answer };
 };

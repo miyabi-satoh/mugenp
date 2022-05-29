@@ -11,7 +11,13 @@ import { dsp, getRandomInt, randArray } from "~/utils";
 // "message": "次の問いに答えなさい。"
 export const M71122 = () => {
   return (
-    <MugenP answerPrefix="" maxLv={3} columns={1} generator={generatorFunc} />
+    <MugenP
+      answerPrefix=""
+      displayStyle={false}
+      maxLv={3}
+      columns={1}
+      generator={generatorFunc}
+    />
   );
 };
 

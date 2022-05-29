@@ -1,6 +1,6 @@
 import Fraction from "fraction.js";
 import { MugenP, GeneratorFunc } from "~/components/mugenp";
-import { dsp, getRandomInt, guard } from "~/utils";
+import { getRandomInt, guard } from "~/utils";
 import { Monomial } from "~/utils/monomial";
 import { Polynomial } from "~/utils/polynomial";
 
@@ -72,23 +72,21 @@ const generatorFunc: GeneratorFunc = (level) => {
   for (let i = 0; i < stock.length - 1; i++) {
     for (let j = i + 1; j < stock.length; j++) {
       if (stock[i].equals(stock[j])) {
-        return { question: "", answer: "" };
+        return null;
       }
     }
   }
 
-  const question = dsp(
+  const question =
     mono[0].toLatex() +
-      poly[0].toLatex("()") +
-      mono[1].toLatex({ sign: true }) +
-      poly[1].toLatex("()")
-  );
+    poly[0].toLatex("()") +
+    mono[1].toLatex({ sign: true }) +
+    poly[1].toLatex("()");
 
   let answer = poly[0].mul(mono[0]).add(poly[1].mul(mono[1])).toLatex();
   if (answer.length === 0) {
     answer = "0";
   }
-  answer = dsp(answer);
 
   return { question, answer };
 };

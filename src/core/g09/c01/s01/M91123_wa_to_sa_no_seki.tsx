@@ -1,5 +1,5 @@
 import { MugenP, GeneratorFunc } from "~/components/mugenp";
-import { dsp, guard, randArray } from "~/utils";
+import { guard, randArray } from "~/utils";
 import { Monomial } from "~/utils/monomial";
 import { Polynomial } from "~/utils/polynomial";
 
@@ -34,8 +34,8 @@ export const wa_to_sa_no_seki: GeneratorFunc = (level) => {
   const p1 = new Polynomial(ax, b);
   const p2 = new Polynomial(ax, b.neg());
 
-  const question = dsp(p1.toLatex("()") + p2.toLatex("()"));
-  const answer = dsp(p1.mul(p2).compact().toLatex());
+  const question = p1.toLatex("()") + p2.toLatex("()");
+  const answer = p1.mul(p2).compact().toLatex();
 
   return { question, answer };
 };

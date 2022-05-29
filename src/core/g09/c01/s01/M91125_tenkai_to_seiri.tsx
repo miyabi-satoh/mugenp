@@ -1,5 +1,5 @@
 import { MugenP, GeneratorFunc } from "~/components/mugenp";
-import { dsp, guard, randArray } from "~/utils";
+import { guard, randArray } from "~/utils";
 import { Monomial } from "~/utils/monomial";
 import { Polynomial } from "~/utils/polynomial";
 
@@ -100,7 +100,5 @@ const generatorFunc: GeneratorFunc = (level) => {
     answer = "0";
   }
 
-  question = dsp(question);
-  answer = dsp(answer);
   return { question, answer };
 };

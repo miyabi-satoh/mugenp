@@ -1,5 +1,5 @@
 import { GeneratorFunc, MugenP } from "~/components/mugenp";
-import { dsp, getRandomInt, randArray } from "~/utils";
+import { getRandomInt, randArray } from "~/utils";
 import { Monomial } from "~/utils/monomial";
 
 const Mugen = () => {
@@ -110,17 +110,15 @@ const generatorFunc: GeneratorFunc = (level) => {
       break;
   }
 
-  const question = dsp(
-    values
-      .map((x) => x[0].toLatex({ sign: true, brackets: "()", decimal: x[1] }))
-      .join(" + ")
-  );
+  const question = values
+    .map((x) => x[0].toLatex({ sign: true, brackets: "()", decimal: x[1] }))
+    .join(" + ");
 
   const aValue = values.reduce((pv, cv) => [
     new Monomial(pv[0].coeff.add(cv[0].coeff)),
     false,
   ])[0];
-  const answer = dsp(aValue.toLatex({ decimal: !question.includes("frac") }));
+  const answer = aValue.toLatex({ decimal: !question.includes("frac") });
 
   return { question, answer };
 };

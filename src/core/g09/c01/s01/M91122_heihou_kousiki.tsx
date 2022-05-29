@@ -1,5 +1,5 @@
 import { MugenP, GeneratorFunc } from "~/components/mugenp";
-import { dsp, guard, randArray } from "~/utils";
+import { guard, randArray } from "~/utils";
 import { Monomial } from "~/utils/monomial";
 import { Polynomial } from "~/utils/polynomial";
 
@@ -36,21 +36,21 @@ export const heihou_kousiki: GeneratorFunc = (level) => {
     ax.coeff.abs().compare(1) != 0 &&
     ax.coeff.abs().compare(b.coeff.abs()) == 0
   ) {
-    return { question: "", answer: "" };
+    return null;
   }
 
   if (level === 4) {
     if (b.isFrac && !ax.coeff.equals(1)) {
-      return { question: "", answer: "" };
+      return null;
     }
   } else if (level === 5) {
     if (ax.isNegative && (ax.isFrac || b.isFrac)) {
-      return { question: "", answer: "" };
+      return null;
     }
   }
 
   const p = new Polynomial(ax, b);
-  const question = dsp(p.toLatex("()") + "^2");
-  const answer = dsp(p.mul(p).compact().toLatex());
+  const question = p.toLatex("()") + "^2";
+  const answer = p.mul(p).compact().toLatex();
   return { question, answer };
 };

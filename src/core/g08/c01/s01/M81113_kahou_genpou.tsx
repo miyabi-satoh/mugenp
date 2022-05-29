@@ -1,5 +1,5 @@
 import { MugenP, GeneratorFunc } from "~/components/mugenp";
-import { dsp, getRandomInt, randArray } from "~/utils";
+import { getRandomInt, randArray } from "~/utils";
 import { Monomial } from "~/utils/monomial";
 import { Polynomial } from "~/utils/polynomial";
 
@@ -51,9 +51,7 @@ const generatorFunc: GeneratorFunc = (level) => {
 
   const operator = randArray("+", "-");
 
-  const question = dsp(
-    poly[0].toLatex("()") + operator + poly[1].toLatex("()")
-  );
+  const question = poly[0].toLatex("()") + operator + poly[1].toLatex("()");
 
   if (operator === "-") {
     poly[1] = poly[1].neg();
@@ -63,7 +61,6 @@ const generatorFunc: GeneratorFunc = (level) => {
   if (answer.length === 0) {
     answer = "0";
   }
-  answer = dsp(answer);
 
   return { question, answer };
 };

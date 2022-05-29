@@ -13,7 +13,14 @@ import { Polynomial } from "~/utils/polynomial";
 // "title": "単項式・多項式・次数",
 // "message": "次の式が単項式ならば次数を、多項式ならば項と次数を答えなさい。"
 export const M81111 = () => {
-  return <MugenP maxLv={1} answerPrefix="" generator={generatorFunc} />;
+  return (
+    <MugenP
+      maxLv={1}
+      answerPrefix=""
+      displayStyle={false}
+      generator={generatorFunc}
+    />
+  );
 };
 
 // 単項式・多項式・次数

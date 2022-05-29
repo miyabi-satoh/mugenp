@@ -1,5 +1,5 @@
 import { MugenP, GeneratorFunc } from "~/components/mugenp";
-import { dsp, getRandomInt, randArray, shuffle } from "~/utils";
+import { getRandomInt, randArray, shuffle } from "~/utils";
 import { Term } from "~/utils/expression";
 
 // "id": "71131",
@@ -136,17 +136,14 @@ const generatorFunc: GeneratorFunc = (level) => {
     );
   }
 
-  const question = dsp(
-    shuffle(...values)
-      .map(({ term, decimal }) => term.toLatex({ decimal }))
-      .join(",\\quad ")
-  );
-  const answer = dsp(
-    values
-      .sort((a, b) => a.term.c.compare(b.term.c))
-      .map(({ term, decimal }) => term.toLatex({ decimal }))
-      .join(" < ")
-  );
+  const question = shuffle(...values)
+    .map(({ term, decimal }) => term.toLatex({ decimal }))
+    .join(",\\quad ");
+
+  const answer = values
+    .sort((a, b) => a.term.c.compare(b.term.c))
+    .map(({ term, decimal }) => term.toLatex({ decimal }))
+    .join(" < ");
 
   return { question, answer };
 };

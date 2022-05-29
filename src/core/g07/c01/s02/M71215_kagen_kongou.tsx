@@ -1,6 +1,6 @@
 import Fraction from "fraction.js";
 import { MugenP, GeneratorFunc } from "~/components/mugenp";
-import { dsp, randArray } from "~/utils";
+import { randArray } from "~/utils";
 import { Monomial } from "~/utils/monomial";
 
 // "id": "71215",
@@ -56,10 +56,9 @@ const generatorFunc: GeneratorFunc = (level) => {
   }
 
   if (!question.includes("-")) {
-    return { question: "", answer: "" };
+    return null;
   }
-  question = dsp(question);
-  const answer = dsp(aValue.toLatex());
+  const answer = aValue.toLatex();
 
   return { question, answer };
 };

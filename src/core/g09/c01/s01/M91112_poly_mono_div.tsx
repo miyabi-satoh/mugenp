@@ -1,6 +1,5 @@
 import { MugenP, GeneratorFunc } from "~/components/mugenp";
 import { poly_mono } from "~/core";
-import { dsp } from "~/utils";
 
 // "id": "91112",
 // "module": "poly_mono_div",
@@ -22,11 +21,10 @@ const generatorFunc: GeneratorFunc = (level) => {
     polyAns = polyAns.neg();
   }
 
-  const question = dsp(
+  const question =
     poly.toLatex("()") +
-      " \\div " +
-      mono.toLatex({ brackets: mono.isNegative ? "()" : "" })
-  );
-  const answer = dsp(polyAns.toLatex());
+    " \\div " +
+    mono.toLatex({ brackets: mono.isNegative ? "()" : "" });
+  const answer = polyAns.toLatex();
   return { question, answer };
 };

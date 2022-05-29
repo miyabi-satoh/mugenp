@@ -1,5 +1,5 @@
 import { MugenP, GeneratorFunc } from "~/components/mugenp";
-import { dsp, guard, randArray } from "~/utils";
+import { guard, randArray } from "~/utils";
 import { Monomial } from "~/utils/monomial";
 
 // "id": "81132",
@@ -45,13 +45,12 @@ const generatorFunc: GeneratorFunc = (level) => {
 
   mono.push(mono[0].mul(mono[1]));
 
-  const question = dsp(
+  const question =
     mono[2].toLatex({ brackets: mono[2].isNegative ? "()" : "" }) +
-      " \\div " +
-      mono[1].toLatex({ brackets: mono[1].isNegative ? "()" : "" })
-  );
+    " \\div " +
+    mono[1].toLatex({ brackets: mono[1].isNegative ? "()" : "" });
 
-  const answer = dsp(mono[0].toLatex());
+  const answer = mono[0].toLatex();
 
   return { question, answer };
 };

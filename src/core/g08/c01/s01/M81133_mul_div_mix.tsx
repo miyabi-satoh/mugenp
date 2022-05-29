@@ -1,5 +1,5 @@
 import { MugenP, GeneratorFunc } from "~/components/mugenp";
-import { dsp, guard, randArray } from "~/utils";
+import { guard, randArray } from "~/utils";
 import { Monomial } from "~/utils/monomial";
 
 // "id": "81133",
@@ -46,7 +46,7 @@ const generatorFunc: GeneratorFunc = (level) => {
   q.push(mono[1].toLatex({ brackets: mono[1].isNegative ? "()" : "" }));
   q.push(mono[2].toLatex({ brackets: mono[2].isNegative ? "()" : "" }));
   if (q[0] === q[1] || q[0] === q[2] || q[1] === q[2]) {
-    return { question: "", answer: "" };
+    return null;
   }
 
   let question: string = q[0];
@@ -63,8 +63,6 @@ const generatorFunc: GeneratorFunc = (level) => {
   }
 
   let answer = aValue.toLatex();
-  question = dsp(question);
-  answer = dsp(answer);
 
   return { question, answer };
 };

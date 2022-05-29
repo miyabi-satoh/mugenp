@@ -1,5 +1,5 @@
 import { MugenP, GeneratorFunc } from "~/components/mugenp";
-import { dsp, getRandomInt, minMax, randArray } from "~/utils";
+import { getRandomInt, minMax, randArray } from "~/utils";
 import { Monomial } from "~/utils/monomial";
 import { Polynomial } from "~/utils/polynomial";
 
@@ -74,9 +74,7 @@ const generatorFunc: GeneratorFunc = (level) => {
   // 式として作成
   let polyAns = expressions[0].mul(expressions[1]).compact();
 
-  const question = dsp(
-    expressions[0].toLatex("()") + expressions[1].toLatex("()")
-  );
-  const answer = dsp(polyAns.toLatex());
+  const question = expressions[0].toLatex("()") + expressions[1].toLatex("()");
+  const answer = polyAns.toLatex();
   return { question, answer };
 };

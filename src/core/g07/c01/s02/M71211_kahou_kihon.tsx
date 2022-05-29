@@ -1,5 +1,4 @@
 import { MugenP, GeneratorFunc } from "~/components/mugenp";
-import { dsp } from "~/utils";
 import { Monomial } from "~/utils/monomial";
 
 // "id": "71211",
@@ -25,15 +24,13 @@ export const kahou_kihon: GeneratorFunc = (level) => {
     values.push(x);
   } while (values.length < 2);
 
-  const question = dsp(
-    values.map((x) => x.toLatex({ brackets: "()" })).join(" + ")
-  );
+  const question = values.map((x) => x.toLatex({ brackets: "()" })).join(" + ");
 
   const aValue = values.reduce(
     (pv, cv) => new Monomial(pv.coeff.add(cv.coeff))
   );
   const showZero = true;
-  const answer = dsp(aValue.toLatex({ showZero }));
+  const answer = aValue.toLatex({ showZero });
 
   return { question, answer };
 };

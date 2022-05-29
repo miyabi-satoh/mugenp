@@ -1,5 +1,5 @@
 import { MugenP, GeneratorFunc } from "~/components/mugenp";
-import { dsp, getRandomInt, randArray } from "~/utils";
+import { getRandomInt, randArray } from "~/utils";
 
 // "id": "91211",
 // "module": "kazu_no_keisan",
@@ -46,7 +46,5 @@ const generatorFunc: GeneratorFunc = (level) => {
       break;
   }
 
-  question = dsp(question);
-  answer = dsp(answer);
   return { question, answer };
 };

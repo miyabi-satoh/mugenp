@@ -1,5 +1,5 @@
 import { MugenP, GeneratorFunc } from "~/components/mugenp";
-import { dsp, guard, randArray } from "~/utils";
+import { guard, randArray } from "~/utils";
 import { Monomial } from "~/utils/monomial";
 
 // "id": "71223",
@@ -33,30 +33,29 @@ const generatorFunc: GeneratorFunc = (level) => {
     allowNegative: true,
   });
   if (b.d === 1) {
-    return { question: "", answer: "" };
+    return null;
   }
   const c = a.mul(b);
 
   if (level === 1) {
     if (a.d !== 1) {
-      return { question: "", answer: "" };
+      return null;
     }
     if (c.d !== 1) {
-      return { question: "", answer: "" };
+      return null;
     }
   } else if (level === 2) {
     if (a.d !== 1) {
-      return { question: "", answer: "" };
+      return null;
     }
   }
 
-  const question = dsp(
+  const question =
     a.toLatex({ brackets: a.isNegative ? "()" : randArray("", "()") }) +
-      " \\times " +
-      b.toLatex({ brackets: b.isNegative ? "()" : randArray("", "()") })
-  );
+    " \\times " +
+    b.toLatex({ brackets: b.isNegative ? "()" : randArray("", "()") });
 
-  const answer = dsp(c.toLatex());
+  const answer = c.toLatex();
 
   return { question, answer };
 };

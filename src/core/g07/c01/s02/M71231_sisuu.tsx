@@ -1,5 +1,5 @@
 import { MugenP, GeneratorFunc } from "~/components/mugenp";
-import { dsp, getRandomInt, guard, randArray } from "~/utils";
+import { getRandomInt, guard, randArray } from "~/utils";
 import { Monomial } from "~/utils/monomial";
 
 // "id": "71231",
@@ -43,7 +43,7 @@ const generatorFunc: GeneratorFunc = (level) => {
   if (level <= 2 || (!decimal && x.isFrac)) {
     brackets = "()";
   }
-  const question = dsp(x.toLatex({ brackets, decimal }) + `^${e}`);
+  const question = x.toLatex({ brackets, decimal }) + `^${e}`;
 
   let aValue = x;
   for (let i = 1; i < e; i++) {
@@ -54,7 +54,7 @@ const generatorFunc: GeneratorFunc = (level) => {
       aValue = aValue.neg();
     }
   }
-  const answer = dsp(aValue.toLatex({ decimal }));
+  const answer = aValue.toLatex({ decimal });
 
   return { question, answer };
 };

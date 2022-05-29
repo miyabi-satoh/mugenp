@@ -11,7 +11,14 @@ import { Term } from "~/utils/expression";
 // "title": "反対の性質を持つ量",
 // "message": "[ ]内の言葉を使って、次のことを表しなさい。"
 export const M71121 = () => {
-  return <MugenP answerPrefix="" maxLv={3} generator={generatorFunc} />;
+  return (
+    <MugenP
+      answerPrefix=""
+      displayStyle={false}
+      maxLv={3}
+      generator={generatorFunc}
+    />
+  );
 };
 
 // 反対の意味の言葉を使う

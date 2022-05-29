@@ -11,7 +11,14 @@ import { Term } from "~/utils/expression";
 // "title": "正の符号・負の符号",
 // "message": "次の数について、正の符号または負の符号をつけて表しなさい。"
 export const M71111 = () => {
-  return <MugenP answerPrefix="" maxLv={3} generator={generatorFunc} />;
+  return (
+    <MugenP
+      answerPrefix=""
+      displayStyle={false}
+      maxLv={3}
+      generator={generatorFunc}
+    />
+  );
 };
 
 // 0よりX[大きい,小さい]数を答える

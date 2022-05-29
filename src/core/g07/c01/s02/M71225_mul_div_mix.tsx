@@ -1,5 +1,5 @@
 import { MugenP, GeneratorFunc } from "~/components/mugenp";
-import { dsp, getRandomInt, guard, randArray } from "~/utils";
+import { getRandomInt, guard, randArray } from "~/utils";
 import { Monomial } from "~/utils/monomial";
 
 // "id": "71225",
@@ -42,7 +42,7 @@ const generatorFunc: GeneratorFunc = (level) => {
     b = b.mul(getRandomInt(12, 2));
   }
   if (a.abs().equals(b.abs())) {
-    return { question: "", answer: "" };
+    return null;
   }
   let c = Monomial.create({
     max: 12,
@@ -54,7 +54,7 @@ const generatorFunc: GeneratorFunc = (level) => {
     c = c.mul(getRandomInt(12, 2));
   }
   if (c.abs().equals(a.abs()) || c.abs().equals(b.abs())) {
-    return { question: "", answer: "" };
+    return null;
   }
 
   if (level === 4 || level === 5) {
@@ -70,7 +70,7 @@ const generatorFunc: GeneratorFunc = (level) => {
     }
 
     if (fracCount > level - 3) {
-      return { question: "", answer: "" };
+      return null;
     }
   }
 
@@ -90,30 +90,29 @@ const generatorFunc: GeneratorFunc = (level) => {
 
   if (level === 1) {
     if (a.isFrac || b.isFrac || c.isFrac || aValue.isFrac) {
-      return { question: "", answer: "" };
+      return null;
     }
   } else if (level === 2) {
     if (a.isFrac || b.isFrac || c.isFrac) {
-      return { question: "", answer: "" };
+      return null;
     }
   }
 
   if (aValue.coeff.abs().compare(99) > 0) {
-    return { question: "", answer: "" };
+    return null;
   }
   if (aValue.coeff.n > 99 || aValue.coeff.d > 99) {
-    return { question: "", answer: "" };
+    return null;
   }
 
-  const question = dsp(
+  const question =
     a.toLatex({ brackets: randArray("", "()") }) +
-      opAB +
-      b.toLatex({ brackets: b.isNegative ? "()" : randArray("", "()") }) +
-      opBC +
-      c.toLatex({ brackets: c.isNegative ? "()" : randArray("", "()") })
-  );
+    opAB +
+    b.toLatex({ brackets: b.isNegative ? "()" : randArray("", "()") }) +
+    opBC +
+    c.toLatex({ brackets: c.isNegative ? "()" : randArray("", "()") });
 
-  const answer = dsp(aValue.toLatex());
+  const answer = aValue.toLatex();
 
   return { question, answer };
 };

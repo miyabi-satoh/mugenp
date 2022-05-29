@@ -1,5 +1,5 @@
 import { MugenP, GeneratorFunc } from "~/components/mugenp";
-import { dsp, gcd, getRandomInt, guard, minMax, randArray } from "~/utils";
+import { gcd, getRandomInt, guard, minMax, randArray } from "~/utils";
 import { Monomial } from "~/utils/monomial";
 import { Polynomial } from "~/utils/polynomial";
 
@@ -122,8 +122,8 @@ const generatorFunc: GeneratorFunc = (level) => {
       break;
   }
 
-  const question = dsp(qExpr.mul(common).toLatex());
-  const answer = dsp((common.coeff.equals(-1) ? "-" : common.toLatex()) + aTex);
+  const question = qExpr.mul(common).toLatex();
+  const answer = (common.coeff.equals(-1) ? "-" : common.toLatex()) + aTex;
 
   return { question, answer };
 };

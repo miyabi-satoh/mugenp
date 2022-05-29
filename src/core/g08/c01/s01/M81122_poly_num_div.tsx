@@ -1,5 +1,5 @@
 import { MugenP, GeneratorFunc } from "~/components/mugenp";
-import { dsp, getRandomInt, guard, minMax, randArray } from "~/utils";
+import { getRandomInt, guard, minMax, randArray } from "~/utils";
 import { Monomial } from "~/utils/monomial";
 import { Polynomial } from "~/utils/polynomial";
 
@@ -60,15 +60,13 @@ const generatorFunc: GeneratorFunc = (level) => {
   }
   poly = poly.orderTo();
 
-  const question = dsp(
-    `${poly.toLatex("()")} \\div ${mono.toLatex({
-      brackets: mono.isNegative ? "()" : "",
-    })}`
-  );
+  const question = `${poly.toLatex("()")} \\div ${mono.toLatex({
+    brackets: mono.isNegative ? "()" : "",
+  })}`;
 
-  const answer = dsp(poly.div(mono).toLatex());
+  const answer = poly.div(mono).toLatex();
   if (answer.includes("frac")) {
-    return { question: "", answer: "" };
+    return null;
   }
 
   return { question, answer };

@@ -1,5 +1,5 @@
 import { MugenP, GeneratorFunc } from "~/components/mugenp";
-import { dsp, guard, randArray } from "~/utils";
+import { guard, randArray } from "~/utils";
 import { Monomial, TermSpec } from "~/utils/monomial";
 import { Polynomial } from "~/utils/polynomial";
 
@@ -26,7 +26,7 @@ export const waseki_no_bunkai: GeneratorFunc = (level) => {
 
   if (b.coeff.abs().compare(c.coeff.abs()) == 0) {
     // 平方公式、和と差の公式の問題になってしまうのでスキップ
-    return { question: "", answer: "" };
+    return null;
   }
   const ax = Monomial.create({
     factors: "x",
@@ -34,7 +34,7 @@ export const waseki_no_bunkai: GeneratorFunc = (level) => {
 
   const p1 = new Polynomial(ax, b);
   const p2 = new Polynomial(ax, c);
-  const question = dsp(p1.mul(p2).compact().toLatex());
-  const answer = dsp(p1.toLatex("()") + p2.toLatex("()"));
+  const question = p1.mul(p2).compact().toLatex();
+  const answer = p1.toLatex("()") + p2.toLatex("()");
   return { question, answer };
 };

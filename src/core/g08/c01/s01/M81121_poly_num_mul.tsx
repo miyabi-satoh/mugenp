@@ -1,5 +1,5 @@
 import { MugenP, GeneratorFunc } from "~/components/mugenp";
-import { dsp, getRandomInt, guard, randArray } from "~/utils";
+import { getRandomInt, guard, randArray } from "~/utils";
 import { Monomial } from "~/utils/monomial";
 import { Polynomial } from "~/utils/polynomial";
 
@@ -70,10 +70,9 @@ const generatorFunc: GeneratorFunc = (level) => {
     })}`;
   }
 
-  const answer = dsp(poly.mul(mono).toLatex());
+  const answer = poly.mul(mono).toLatex();
   if (answer.includes("frac")) {
-    return { question: "", answer: "" };
+    return null;
   }
-  question = dsp(question);
   return { question, answer };
 };

@@ -1,5 +1,5 @@
 import { MugenP, GeneratorFunc } from "~/components/mugenp";
-import { dsp, gcd } from "~/utils";
+import { gcd } from "~/utils";
 import { poly_mono } from ".";
 
 // "id": "91131",
@@ -16,10 +16,10 @@ export const M91131 = () => {
 export const kyoutuu_bunkai: GeneratorFunc = (level) => {
   let [poly, mono] = poly_mono(level);
   if (poly.terms.find((x) => x.isFrac)) {
-    return { question: "", answer: "" };
+    return null;
   }
   if (mono.isFrac) {
-    return { question: "", answer: "" };
+    return null;
   }
   if (poly.terms[0].isNegative) {
     poly = poly.neg();
@@ -32,7 +32,7 @@ export const kyoutuu_bunkai: GeneratorFunc = (level) => {
   poly = poly.div(g);
   mono = mono.mul(g);
 
-  const question = dsp(poly.mul(mono).toLatex());
-  const answer = dsp(mono.toLatex() + poly.toLatex("()"));
+  const question = poly.mul(mono).toLatex();
+  const answer = mono.toLatex() + poly.toLatex("()");
   return { question, answer };
 };

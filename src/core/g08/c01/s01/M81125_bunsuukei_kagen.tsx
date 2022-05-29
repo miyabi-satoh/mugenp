@@ -1,5 +1,5 @@
 import { MugenP, GeneratorFunc } from "~/components/mugenp";
-import { dsp, gcd, getRandomInt, lcm, randArray } from "~/utils";
+import { gcd, getRandomInt, lcm, randArray } from "~/utils";
 import { Monomial } from "~/utils/monomial";
 import { Polynomial } from "~/utils/polynomial";
 
@@ -55,15 +55,14 @@ const generatorFunc: GeneratorFunc = (level) => {
       ...poly[i].terms.map((t) => t.coeff.valueOf())
     );
     if (g !== 1) {
-      return { question: "", answer: "" };
+      return null;
     }
   }
 
-  const question = dsp(
+  const question =
     `\\frac{${poly[0].toLatex()}}{${denominators[0]}}` +
-      operator +
-      `\\frac{${poly[1].toLatex()}}{${denominators[1]}}`
-  );
+    operator +
+    `\\frac{${poly[1].toLatex()}}{${denominators[1]}}`;
 
   // 分母の最小公倍数を取得する
   let l = lcm(...denominators);
@@ -81,7 +80,7 @@ const generatorFunc: GeneratorFunc = (level) => {
 
   // 係数 < 20 でフィルタ
   if (p.terms.find((t) => t.coeff.abs().compare(20) >= 0)) {
-    return { question: "", answer: "" };
+    return null;
   }
 
   // 答えを約分
@@ -99,11 +98,10 @@ const generatorFunc: GeneratorFunc = (level) => {
   } else {
     // ややこしい事になるので、分数形の分子初項がマイナスは除外する
     if (p.terms[0].isNegative) {
-      return { question: "", answer: "" };
+      return null;
     }
     answer = `\\frac{${p.toLatex()}}{${l}}`;
   }
-  answer = dsp(answer);
 
   return { question, answer };
 };

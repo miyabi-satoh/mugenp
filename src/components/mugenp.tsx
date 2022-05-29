@@ -1,20 +1,34 @@
 import { Box, Button, Flex, Select, SimpleGrid } from "@chakra-ui/react";
 import { MathJax } from "better-react-mathjax";
-import { ChangeEventHandler, useEffect, useMemo, useState } from "react";
+import { ChangeEvent, useCallback, useEffect, useMemo, useState } from "react";
 import { FaArrowUp, FaArrowDown } from "react-icons/fa";
-import { isDev, minMax } from "~/utils";
+import { dsp, isDev, minMax } from "~/utils";
 
+/**
+ * 問題と解答の型
+ * @date 5/29/2022 - 6:56:35 PM
+ *
+ * @typedef {QA}
+ */
 type QA = {
   question: string;
   answer: string;
 };
 
-export type GeneratorFunc = (level: number) => QA;
+/**
+ * QAを生成する関数の型
+ * @date 5/29/2022 - 6:57:07 PM
+ *
+ * @export
+ * @typedef {GeneratorFunc}
+ */
+export type GeneratorFunc = (level: number) => QA | null;
 
 type Props = {
   columns?: number | number[];
   maxLv?: number;
   answerPrefix?: string;
+  displayStyle?: boolean;
   generator: GeneratorFunc;
 };
 
@@ -24,19 +38,23 @@ export const MugenP = ({
   columns = [1, 1, 2],
   maxLv = 5,
   answerPrefix = "=",
+  displayStyle = true,
   generator,
 }: Props) => {
   const [score, setScore] = useState(-1);
   const [totalScore, setTotalScore] = useState(0);
   const [refresh, setRefresh] = useState(true);
   const [showAnswer, setShowAnswer] = useState(false);
-  const [questions, setQuestions] = useState<string[]>([]);
-  const [answers, setAnswers] = useState<string[]>([]);
+  const [qas, setQAs] = useState<QA[]>([]);
   const [stock, setStock] = useState<string[]>([]);
 
   const level = useMemo(() => {
     return minMax(0, Math.floor(totalScore / (NUM_OF_Q / 2)), maxLv - 1) + 1;
   }, [maxLv, totalScore]);
+
+  const wrap = (s: string) => {
+    return displayStyle ? dsp(s) : s;
+  };
 
   const handleLevelDown = () => {
     if (totalScore > 0) {
@@ -50,7 +68,7 @@ export const MugenP = ({
     setRefresh(true);
   };
 
-  const handleNext = () => {
+  const handleNext = useCallback(() => {
     if (score < 0) {
       alert("正解数を選択してください。");
       return;
@@ -61,22 +79,24 @@ export const MugenP = ({
     setShowAnswer(false);
     setScore(-1);
     setRefresh(true);
-  };
+  }, [score, totalScore]);
 
-  const handleChangeScore: ChangeEventHandler<HTMLSelectElement> = (ev) => {
-    setScore(Number(ev.target.value));
-  };
+  const handleChangeScore = useCallback(
+    (ev: ChangeEvent<HTMLSelectElement>) => {
+      setScore(Number(ev.target.value));
+    },
+    []
+  );
 
   useEffect(() => {
     if (refresh) {
-      const newQuestions: string[] = [];
-      const newAnswers: string[] = [];
+      const newQAs: QA[] = [];
       let _stock = [...stock];
       let s_time = new Date();
-      while (newQuestions.length < NUM_OF_Q) {
-        const { question, answer } = generator(level);
-        if (!!question && !!answer) {
-          if (_stock.includes(question) || _stock.includes(answer)) {
+      while (newQAs.length < NUM_OF_Q) {
+        const r = generator(level);
+        if (r) {
+          if (_stock.includes(r.question) || _stock.includes(r.answer)) {
             const e_time = new Date();
             const diff = e_time.getTime() - s_time.getTime();
             if (diff > 50) {
@@ -89,15 +109,13 @@ export const MugenP = ({
             continue;
           }
 
-          newQuestions.push(question);
-          newAnswers.push(answer);
-          _stock.push(question, answer);
+          newQAs.push(r);
+          _stock.push(r.question, r.answer);
         }
       }
 
       setShowAnswer(false);
-      setQuestions([...newQuestions]);
-      setAnswers([...newAnswers]);
+      setQAs(newQAs);
       setStock(_stock.slice(-4 * NUM_OF_Q));
       setRefresh(false);
     }
@@ -126,19 +144,17 @@ export const MugenP = ({
         </Box> */}
       <Box>【Lv.{level == maxLv ? "Max" : level}】</Box>
       <SimpleGrid columns={columns} mb={4}>
-        {questions.map((q, index) => (
-          <Box key={`${q}${index}`}>
+        {qas.map((qa, index) => (
+          <Box key={`${qa.question}${index}`}>
             <Flex h="3em" align="center">
               <Box w="2em" textAlign="center" mr={2}>
                 ({index + 1})
               </Box>
-              <MathJax>{q}</MathJax>
+              <MathJax>{wrap(qa.question)}</MathJax>
             </Flex>
             <Box h="3em" my={2} ml={6} color="red">
               {showAnswer && (
-                <MathJax>
-                  {answerPrefix} {answers[index]}
-                </MathJax>
+                <MathJax>{wrap(answerPrefix + " " + qa.answer)}</MathJax>
               )}
             </Box>
           </Box>
