@@ -246,7 +246,17 @@ export class Term {
    * @param {{ decimal?: boolean; sign?: boolean }} [opt={}]
    * @returns {string}
    */
-  toLatex(opt: { decimal?: boolean; sign?: boolean } = {}): string {
+  toLatex(
+    opt: { decimal?: boolean; sign?: boolean; brackets?: string } = {}
+  ): string {
+    // カッコの設定
+    let left = "";
+    let right = "";
+    if (opt.brackets && opt.brackets.length == 2) {
+      [left, right] = [`\\left${opt.brackets[0]}`, `\\right${opt.brackets[1]}`];
+      opt.sign = true;
+    }
+
     // 係数を文字列化
     let coeff = opt.decimal ? this.c.toString() : this.c.toLatex();
     // +符号の強制表示
@@ -256,7 +266,7 @@ export class Term {
 
     // 0
     if (this.c.equals(0)) {
-      return coeff;
+      return "0";
     }
 
     // 文字を文字列化
@@ -264,17 +274,15 @@ export class Term {
 
     // 文字なしなら係数のみ返却
     if (!factors.length) {
-      return coeff;
+      return `${left} ${coeff} ${right}`.trim();
     }
 
     // 文字がある場合、"1"は表示しない
-    if (this.c.equals(1)) {
-      coeff = "";
-    } else if (this.c.equals(-1)) {
-      coeff = "-";
+    if (this.c.abs().equals(1)) {
+      coeff = coeff.replace("1", "");
     }
 
-    return coeff + factors;
+    return `${left} ${coeff} ${factors} ${right}`.trim();
   }
 
   // mul()

@@ -1,5 +1,6 @@
 import { MugenP, GeneratorFunc } from "~/components/mugenp";
-import { Monomial } from "~/utils/monomial";
+import { getRandomInt, randArray } from "~/utils";
+import { Term } from "~/utils/expression";
 
 // "id": "71212",
 // "module": "genpou_kihon",
@@ -10,27 +11,31 @@ import { Monomial } from "~/utils/monomial";
 // "title": "減法の基本",
 // "message": "次の計算をしなさい。"
 export const M71212 = () => {
-  return <MugenP maxLv={1} generator={genpou_kihon} />;
+  return <MugenP maxLv={3} generator={genpou_kihon} />;
 };
 
 // 減法の基本
 export const genpou_kihon: GeneratorFunc = (level) => {
-  const values: Monomial[] = [];
-  do {
-    const x = Monomial.create({
-      max: 9,
-      allowNegative: true,
-    });
-    values.push(x);
-  } while (values.length < 2);
+  // Lv1: −正の数
+  // Lv2: −負の数
+  // Lv3: ミックス
+  const lhs = getRandomInt(9) * randArray(1, -1, -1);
 
-  const question = values.map((x) => x.toLatex({ brackets: "()" })).join(" - ");
+  let rhs;
+  if (level == 1) {
+    rhs = getRandomInt(9, 1);
+  } else if (level == 2) {
+    rhs = getRandomInt(9, 1) * randArray(1, -1);
+  } else {
+    rhs = getRandomInt(9, lhs == 0 ? 1 : 0) * randArray(1, -1);
+  }
 
-  const aValue = values.reduce(
-    (pv, cv) => new Monomial(pv.coeff.sub(cv.coeff))
-  );
-  const showZero = true;
-  const answer = aValue.toLatex({ showZero });
+  const brackets = "()";
+  const question =
+    new Term(lhs).toLatex({ brackets }) +
+    " - " +
+    new Term(rhs).toLatex({ brackets });
+  const answer = new Term(lhs - rhs).toLatex();
 
   return { question, answer };
 };

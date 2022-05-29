@@ -1,6 +1,6 @@
 import { MugenP, GeneratorFunc } from "~/components/mugenp";
-import { randArray } from "~/utils";
-import { Monomial } from "~/utils/monomial";
+import { getRandomInt, randArray } from "~/utils";
+import { Term } from "~/utils/expression";
 
 // "id": "71221",
 // "module": "jyouhou",
@@ -19,25 +19,24 @@ const generatorFunc: GeneratorFunc = (level) => {
   // Lv1: 正の数をかける
   // Lv2: 負の数をかける
   // Lv3: 混合
-  const a = Monomial.create({
-    max: 9,
-    allowNegative: true,
-  });
-  let b = Monomial.create({
-    max: 9,
-    allowNegative: level > 2,
-  });
-  if (level === 2) {
-    // Lv2は符号反転することで必ず負の数にしている
-    b = b.neg();
+
+  const lhs = getRandomInt(9, 1) * randArray(1, -1);
+  let rhs;
+  if (level == 1) {
+    rhs = getRandomInt(9, 1);
+  } else if (level == 2) {
+    rhs = getRandomInt(-9, -1);
+  } else {
+    rhs = getRandomInt(9, 1) * randArray(1, -1);
   }
 
+  const getBrackets = (x: number) => (x < 0 ? "()" : randArray("", "()"));
   const question =
-    a.toLatex({ brackets: a.isNegative ? "()" : randArray("", "()") }) +
+    new Term(lhs).toLatex({ brackets: getBrackets(lhs) }) +
     " \\times " +
-    b.toLatex({ brackets: b.isNegative ? "()" : randArray("", "()") });
+    new Term(rhs).toLatex({ brackets: getBrackets(rhs) });
 
-  const answer = a.mul(b).toLatex();
+  const answer = new Term(lhs * rhs).toLatex();
 
   return { question, answer };
 };
