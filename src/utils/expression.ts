@@ -57,70 +57,92 @@ export class Term {
    * @param {?(number | string | Fraction)} [c]
    * @param {?(string | number)} [fs]
    */
-  constructor(c?: number | string | Fraction, fs?: string | number) {
-    if (typeof c == "number" && typeof fs == "number") {
-      this._coeff = new Fraction(c, fs);
-    } else if (typeof c == "number" || typeof c == "string") {
-      this._coeff = new Fraction(c);
-    } else if (c) {
-      this._coeff = c.clone();
-    }
-
-    if (typeof fs == "string") {
-      const regex = /([A-Za-z]|\\pi ?)(\^\{([^}]+)\})?/g;
-      let tmp;
-      let factors: Factor[] = [];
-      while ((tmp = regex.exec(fs)) !== null) {
-        // tmp[0]:全体
-        // tmp[1]:文字
-        // tmp[2]:^{指数}
-        // tmp[3]:指数
-        // console.log(tmp);
-
-        if (tmp[3] == null) {
-          tmp[3] = "1";
+  constructor(n: number, fs?: string);
+  constructor(s: string, fs?: string);
+  constructor(n: Fraction, fs?: string);
+  constructor(n: number, m?: number);
+  constructor(n: number, m?: number, fs?: string);
+  constructor(a: number | string | Fraction, b?: number | string, c?: string) {
+    let fs = "";
+    if (typeof a == "number") {
+      // 以下のいずれか
+      // constructor(n:number, fs:string)
+      // constructor(n:number, m:number)
+      // constructor(n:number, m:number, fs:string)
+      if (typeof b == "number") {
+        this._coeff = new Fraction(a, b);
+        if (typeof c == "string") {
+          fs = c;
         }
-
-        const char = tmp[1].trim();
-        const dim = new Fraction(tmp[3].trim());
-        const index = factors.findIndex((factor) => factor.char == char);
-        if (index != -1) {
-          factors[index].dim.add(dim);
-        } else {
-          factors.push({
-            char,
-            dim,
-          });
+      } else {
+        this._coeff = new Fraction(a);
+        if (typeof b == "string") {
+          fs = b;
         }
       }
-
-      // 0乗を除外
-      factors = factors.filter((f) => !f.dim.equals(0));
-
-      // アルファベット順にソート
-      factors.sort((a, b) => {
-        if (a.char == b.char) {
-          return 0;
-        }
-        if (a.char.match(/^\\pi ?$/)) {
-          return -1;
-        }
-        if (b.char.match(/^\\pi ?$/)) {
-          return 1;
-        }
-        const charA = a.char.toUpperCase();
-        const charB = b.char.toUpperCase();
-        if (charA < charB) {
-          return -1;
-        }
-        if (charA > charB) {
-          return 1;
-        }
-        return 0;
-      });
-
-      this._factors = factors;
+    } else {
+      // 以下のいずれか
+      // constructor(s:string, fs:string)
+      // constructor(n:Fraction, fs:string)
+      this._coeff = new Fraction(a);
+      if (typeof b == "string") {
+        fs = b;
+      }
     }
+
+    const regex = /([A-Za-z]|\\pi ?)(\^\{([^}]+)\})?/g;
+    let tmp;
+    let factors: Factor[] = [];
+    while ((tmp = regex.exec(fs)) !== null) {
+      // tmp[0]:全体
+      // tmp[1]:文字
+      // tmp[2]:^{指数}
+      // tmp[3]:指数
+      // console.log(tmp);
+
+      if (tmp[3] == null) {
+        tmp[3] = "1";
+      }
+
+      const char = tmp[1].trim();
+      const dim = new Fraction(tmp[3].trim());
+      const index = factors.findIndex((factor) => factor.char == char);
+      if (index != -1) {
+        factors[index].dim.add(dim);
+      } else {
+        factors.push({
+          char,
+          dim,
+        });
+      }
+    }
+
+    // 0乗を除外
+    factors = factors.filter((f) => !f.dim.equals(0));
+
+    // アルファベット順にソート
+    factors.sort((a, b) => {
+      if (a.char == b.char) {
+        return 0;
+      }
+      if (a.char.match(/^\\pi ?$/)) {
+        return -1;
+      }
+      if (b.char.match(/^\\pi ?$/)) {
+        return 1;
+      }
+      const charA = a.char.toUpperCase();
+      const charB = b.char.toUpperCase();
+      if (charA < charB) {
+        return -1;
+      }
+      if (charA > charB) {
+        return 1;
+      }
+      return 0;
+    });
+
+    this._factors = factors;
   }
 
   /**
@@ -264,8 +286,7 @@ export class Term {
    * @returns {Term}
    */
   clone(): Term {
-    const c = new Term();
-    c._coeff = this.c.clone();
+    const c = new Term(this.c);
     c._factors = [...this._factors];
     return c;
   }
