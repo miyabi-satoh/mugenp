@@ -44,7 +44,7 @@ describe("スクリーンショット", () => {
     page = await browser.newPage();
     await page.setViewport({
       width: 768,
-      height: 685,
+      height: 740,
     });
   }, timeout);
 
