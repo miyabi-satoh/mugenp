@@ -163,7 +163,9 @@ const Home: NextPage<PageProps> = ({ pages }) => {
             ))}
         </SimpleGrid>
       </Container>
-      <Adsense />
+      <Container my={4} maxW="container.md">
+        <Adsense />
+      </Container>
     </Layout>
   );
 };

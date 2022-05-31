@@ -85,7 +85,9 @@ const Mugen = (page: Page) => {
         />
         <MugenContainer />
       </Container>
-      <Adsense />
+      <Container maxW="container.md" mt="120px" mb={4}>
+        <Adsense />
+      </Container>
     </Layout>
   );
 };
