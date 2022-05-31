@@ -1,4 +1,4 @@
-import { Container, Heading, Icon, Link, Text } from "@chakra-ui/react";
+import { Center, Container, Heading, Icon, Link, Text } from "@chakra-ui/react";
 import { MathJax } from "better-react-mathjax";
 import type { NextPage } from "next";
 import dynamic from "next/dynamic";

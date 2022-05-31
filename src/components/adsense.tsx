@@ -1,4 +1,4 @@
-import { Center } from "@chakra-ui/react";
+import { Center, useMediaQuery } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 import { isDev } from "~/utils";
@@ -9,34 +9,38 @@ declare global {
 
 export const Adsense = () => {
   const { asPath } = useRouter();
+  const [isLandscape] = useMediaQuery("(orientation: landscape)");
 
   useEffect(() => {
-    try {
-      if (!isDev) {
-        (adsbygoogle = window.adsbygoogle || []).push({});
+    const timerId = setTimeout(() => {
+      try {
+        if (!isDev) {
+          (adsbygoogle = window.adsbygoogle || []).push({});
+        }
+      } catch (e) {
+        console.error(e);
       }
-    } catch (e) {
-      console.error(e);
-    }
-  }, [asPath]);
+    }, 100);
+
+    return () => {
+      clearTimeout(timerId);
+    };
+  }, [isLandscape, asPath]);
 
   if (isDev) {
     return null;
   }
 
   return (
-    <Center key={asPath} my={4}>
-      <ins
-        className="adsbygoogle"
-        style={{
-          display: "block",
-          width: "300px",
-        }}
-        data-ad-client="ca-pub-1226899637934496"
-        data-ad-slot="2305250435"
-        data-ad-format="rectangle"
-        data-adtest={isDev ? "on" : "off"}
-      ></ins>
-    </Center>
+    <ins
+      key={`${asPath}-${isLandscape}`}
+      className="adsbygoogle"
+      style={{ display: "block" }}
+      data-ad-client="ca-pub-1226899637934496"
+      data-ad-slot="2305250435"
+      data-ad-format="auto"
+      data-full-width-responsive="true"
+      data-adtest={isDev ? "on" : "off"}
+    ></ins>
   );
 };
