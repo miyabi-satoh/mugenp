@@ -1,7 +1,17 @@
-import { Box, Button, Flex, Select, SimpleGrid } from "@chakra-ui/react";
+import {
+  Box,
+  Button,
+  Flex,
+  Menu,
+  MenuButton,
+  MenuItem,
+  MenuList,
+  Select,
+  SimpleGrid,
+} from "@chakra-ui/react";
 import { MathJax } from "better-react-mathjax";
 import { ChangeEvent, useCallback, useEffect, useMemo, useState } from "react";
-import { FaArrowUp, FaArrowDown } from "react-icons/fa";
+import { FaArrowUp, FaArrowDown, FaChevronDown } from "react-icons/fa";
 import { dsp, isDev, minMax } from "~/utils";
 
 /**
@@ -164,21 +174,27 @@ export const MugenP = ({
         <Button id="toggle-answer" onClick={() => setShowAnswer(!showAnswer)}>
           解答を{`${showAnswer ? "隠す" : "表示"}`}
         </Button>
-        <Box mx={3}>正解数</Box>
-        <Select
-          id="select-score"
-          w="4em"
-          mr={4}
-          onChange={handleChangeScore}
-          value={score}
-        >
-          <option value="-1"></option>
-          {Array.from(Array(NUM_OF_Q + 1).keys()).map((i) => (
-            <option key={i} value={i}>
-              {i}
-            </option>
-          ))}
-        </Select>
+        <Box mx={3}>
+          <Menu placement="top">
+            <MenuButton
+              as={Button}
+              rightIcon={<FaChevronDown />}
+              colorScheme="teal"
+              variant="outline"
+              id="menu-score"
+            >
+              正解数{score < 0 ? "を選択" : `: ${score}`}
+            </MenuButton>
+            <MenuList>
+              <MenuItem onClick={() => setScore(-1)}>正解数を選択</MenuItem>
+              {Array.from(Array(NUM_OF_Q + 1).keys()).map((i) => (
+                <MenuItem key={i} id={`score-${i}`} onClick={() => setScore(i)}>
+                  {i}
+                </MenuItem>
+              ))}
+            </MenuList>
+          </Menu>
+        </Box>
         <Button id="button-next" disabled={score < 0} onClick={handleNext}>
           次の問題
         </Button>
