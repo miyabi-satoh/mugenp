@@ -70,7 +70,9 @@ describe("スクリーンショット", () => {
           break;
         }
 
-        await page.select("#select-score", score);
+        // await page.select("#select-score", score);
+        await page.click('button[aria-haspopup="menu"]');
+        await page.click('button[data-index="5"]');
         await page.click("#button-next");
       }
     },

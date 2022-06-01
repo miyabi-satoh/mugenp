@@ -85,7 +85,7 @@ const Mugen = (page: Page) => {
         />
         <MugenContainer />
       </Container>
-      <Container maxW="container.md" mt="120px" mb={4}>
+      <Container maxW="container.md" my={4}>
         <Adsense />
       </Container>
     </Layout>
