@@ -27,7 +27,8 @@ const generatorFunc: GeneratorFunc = (level) => {
   if (level == 1) {
     ans = new Term(getRandomInt(9, 1) * randArray(1, -1));
   } else {
-    ans = new Term(getRandomInt(16, 1) * randArray(1, -1), getRandomInt(9, 2));
+    const d = getRandomInt(9, level == 2 ? 2 : 1);
+    ans = new Term(getRandomInt(16, 1) * randArray(1, -1), d);
   }
   const lhs = new Term(rhs.c.mul(ans.c));
 
