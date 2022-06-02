@@ -1,7 +1,6 @@
 import { MugenP, GeneratorFunc } from "~/components/mugenp";
-import { getRandomInt, guard, randArray, shuffle } from "~/utils";
+import { getRandomInt, randArray, shuffle } from "~/utils";
 import { Term } from "~/utils/expression";
-import { Monomial } from "~/utils/monomial";
 
 // "id": "71225",
 // "module": "mul_div_mix",
