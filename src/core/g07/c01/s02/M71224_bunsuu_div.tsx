@@ -1,6 +1,6 @@
 import { MugenP, GeneratorFunc } from "~/components/mugenp";
-import { guard, randArray } from "~/utils";
-import { Monomial } from "~/utils/monomial";
+import { getRandomInt, guard, randArray } from "~/utils";
+import { Term } from "~/utils/expression";
 
 // "id": "71224",
 // "module": "bunsuu_div",
@@ -19,43 +19,53 @@ const generatorFunc: GeneratorFunc = (level) => {
   // Lv1: 整数÷分数=整数
   // Lv2: 整数÷分数=分数
   // Lv3: 分数÷分数
-  const idx = level - 1;
-  const a = Monomial.create({
-    max: 12,
-    maxD: guard(idx, 1, 1, 8),
-    maxN: 8,
-    allowNegative: level > 2,
-  });
-  const b = Monomial.create({
-    max: 12,
-    maxD: 8,
-    maxN: 8,
-    allowNegative: true,
-  });
-  if (b.d === 1) {
+  let rhs = new Term(
+    getRandomInt(12, 1) * randArray(1, -1),
+    getRandomInt(10, 2)
+  );
+  let ans;
+  if (level == 1) {
+    ans = new Term(getRandomInt(9, 1) * randArray(1, -1));
+  } else {
+    ans = new Term(getRandomInt(16, 1) * randArray(1, -1), getRandomInt(9, 2));
+  }
+  const lhs = new Term(rhs.c.mul(ans.c));
+
+  if (rhs.c.d == 1) {
     return null;
   }
-  const c = a.div(b);
-
-  if (level === 1) {
-    if (a.d !== 1) {
+  if (level == 1) {
+    // 整数÷分数＝整数
+    if (lhs.c.d != 1 || rhs.c.d == 1 || ans.c.d != 1) {
       return null;
     }
-    if (c.d !== 1) {
+    // 整数と分子が同じ数
+    if (lhs.c.n == rhs.c.n) {
       return null;
     }
   } else if (level === 2) {
-    if (a.d !== 1) {
+    // 整数÷分数＝分数
+    if (lhs.c.d != 1 || rhs.c.d == 1 || ans.c.d == 1) {
+      return null;
+    }
+    // 約分が発生しない
+    if (rhs.c.n == ans.c.d) {
+      return null;
+    }
+  } else {
+    // 約分が発生しない
+    if (lhs.c.d * rhs.c.n == ans.c.d) {
       return null;
     }
   }
 
+  const getBrackets = (x: number) => (x < 0 ? "()" : randArray("", "()"));
   const question =
-    a.toLatex({ brackets: a.isNegative ? "()" : randArray("", "()") }) +
+    lhs.toLatex({ brackets: getBrackets(lhs.c.s) }) +
     " \\div " +
-    b.toLatex({ brackets: b.isNegative ? "()" : randArray("", "()") });
+    rhs.toLatex({ brackets: getBrackets(rhs.c.s) });
 
-  const answer = c.toLatex();
+  const answer = ans.toLatex();
 
   return { question, answer };
 };
