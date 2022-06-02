@@ -30,7 +30,7 @@ const generatorFunc: GeneratorFunc = (level) => {
   } else {
     lhs = new Term(getRandomInt(18, 1) * randArray(1, -1), getRandomInt(12, 2));
   }
-  const ans = new Term(rhs.c.mul(lhs.c));
+  const ans = rhs.mul(lhs);
 
   if (level == 1) {
     // 整数×分数＝整数

@@ -20,23 +20,26 @@ const generatorFunc: GeneratorFunc = (level) => {
   // Lv2: 負の数をかける
   // Lv3: 混合
 
-  const lhs = getRandomInt(9, 1) * randArray(1, -1);
-  let rhs;
-  if (level == 1) {
-    rhs = getRandomInt(9, 1);
-  } else if (level == 2) {
-    rhs = getRandomInt(-9, -1);
-  } else {
-    rhs = getRandomInt(9, 1) * randArray(1, -1);
-  }
+  const rhsValue = () => {
+    if (level == 1) {
+      return getRandomInt(9, 1);
+    } else if (level == 2) {
+      return getRandomInt(-9, -1);
+    }
 
-  const getBrackets = (x: number) => (x < 0 ? "()" : randArray("", "()"));
+    return getRandomInt(9, 1) * randArray(1, -1);
+  };
+
+  const getBrackets = (x: Term) => (x.s < 0 ? "()" : randArray("", "()"));
+
+  const lhs = new Term(getRandomInt(9, 1) * randArray(1, -1));
+  const rhs = new Term(rhsValue());
   const question =
-    new Term(lhs).toLatex({ brackets: getBrackets(lhs) }) +
+    lhs.toLatex({ brackets: getBrackets(lhs) }) +
     " \\times " +
-    new Term(rhs).toLatex({ brackets: getBrackets(rhs) });
+    rhs.toLatex({ brackets: getBrackets(rhs) });
 
-  const answer = new Term(lhs * rhs).toLatex();
+  const answer = lhs.mul(rhs).toLatex();
 
   return { question, answer };
 };

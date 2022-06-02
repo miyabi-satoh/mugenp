@@ -30,7 +30,7 @@ const generatorFunc: GeneratorFunc = (level) => {
     const d = getRandomInt(9, level == 2 ? 2 : 1);
     ans = new Term(getRandomInt(16, 1) * randArray(1, -1), d);
   }
-  const lhs = new Term(rhs.c.mul(ans.c));
+  const lhs = rhs.mul(ans);
 
   if (rhs.c.d == 1) {
     return null;
