@@ -117,6 +117,28 @@ describe("class Term", () => {
     });
   });
 
+  describe("mul()", () => {
+    test("mul(0) => 0", () => {
+      const expr = new Term(2, "x");
+      const x = new Term(0);
+      expect(expr.mul(x).toString()).toBe("0");
+    });
+
+    test("mul(2yx) => 4x^{2}y", () => {
+      const expr = new Term(2, "x");
+      const x = new Term(2, "yx");
+      expect(expr.mul(x).toString()).toBe("4x^{2} y");
+    });
+  });
+
+  describe("div()", () => {
+    test("div(2yx) => 4x^{2}y", () => {
+      const expr = new Term(8, "x^{3}y^{2}");
+      const x = new Term(2, "yx");
+      expect(expr.div(x).toString()).toBe("4x^{2} y");
+    });
+  });
+
   describe("toLatex()", () => {
     test("() => \\frac{1}{2}", () => {
       const expr = new Term(1, 2);

@@ -339,7 +339,7 @@ export class Term {
     factors.forEach((factor) => {
       const index = mergedFactors.findIndex((x) => factor.char == x.char);
       if (index != -1) {
-        mergedFactors[index].dim.add(factor.dim);
+        mergedFactors[index].dim = mergedFactors[index].dim.add(factor.dim);
       } else {
         mergedFactors.push(factor);
       }
