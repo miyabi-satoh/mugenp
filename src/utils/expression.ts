@@ -106,43 +106,45 @@ export class Term {
 
       const char = tmp[1].trim();
       const dim = new Fraction(tmp[3].trim());
-      const index = factors.findIndex((factor) => factor.char == char);
-      if (index != -1) {
-        factors[index].dim.add(dim);
-      } else {
-        factors.push({
-          char,
-          dim,
-        });
-      }
+      factors.push({ char, dim });
+      // const index = factors.findIndex((factor) => factor.char == char);
+      // if (index != -1) {
+      //   factors[index].dim.add(dim);
+      // } else {
+      //   factors.push({
+      //     char,
+      //     dim,
+      //   });
+      // }
     }
+    this._factors = Term.mergeFactors(...factors);
 
-    // 0乗を除外
-    factors = factors.filter((f) => !f.dim.equals(0));
+    // // 0乗を除外
+    // factors = factors.filter((f) => !f.dim.equals(0));
 
-    // アルファベット順にソート
-    factors.sort((a, b) => {
-      if (a.char == b.char) {
-        return 0;
-      }
-      if (a.char.match(/^\\pi ?$/)) {
-        return -1;
-      }
-      if (b.char.match(/^\\pi ?$/)) {
-        return 1;
-      }
-      const charA = a.char.toUpperCase();
-      const charB = b.char.toUpperCase();
-      if (charA < charB) {
-        return -1;
-      }
-      if (charA > charB) {
-        return 1;
-      }
-      return 0;
-    });
+    // // アルファベット順にソート
+    // factors.sort((a, b) => {
+    //   if (a.char == b.char) {
+    //     return 0;
+    //   }
+    //   if (a.char.match(/^\\pi ?$/)) {
+    //     return -1;
+    //   }
+    //   if (b.char.match(/^\\pi ?$/)) {
+    //     return 1;
+    //   }
+    //   const charA = a.char.toUpperCase();
+    //   const charB = b.char.toUpperCase();
+    //   if (charA < charB) {
+    //     return -1;
+    //   }
+    //   if (charA > charB) {
+    //     return 1;
+    //   }
+    //   return 0;
+    // });
 
-    this._factors = factors;
+    // this._factors = factors;
   }
 
   /**
@@ -194,21 +196,37 @@ export class Term {
   add() {}
 
   /**
-   * 文字を文字列化する
-   * @date 5/28/2022 - 9:34:33 PM
+   * 乗算
+   * @date 6/3/2022 - 2:11:02 AM
    *
-   * @returns {string}
+   * @param {Term} other
+   * @returns {Term}
    */
-  factorsToString(): string {
-    return this._factors
-      .map((factor) => {
-        if (factor.dim.equals(1)) {
-          return factor.char;
-        }
-        return factor.char + `^{${factor.dim.toString()}}`;
+  mul(other: Term): Term {
+    const newTerm = new Term(this.c.mul(other.c));
+    newTerm._factors = Term.mergeFactors(...this._factors, ...other._factors);
+    return newTerm;
+  }
+
+  /**
+   * 除算
+   * @date 6/3/2022 - 2:11:14 AM
+   *
+   * @param {Term} other
+   * @returns {Term}
+   */
+  div(other: Term): Term {
+    const newTerm = new Term(this.c.div(other.c));
+    newTerm._factors = Term.mergeFactors(
+      ...this._factors,
+      ...other._factors.map((f) => {
+        return {
+          char: f.char,
+          dim: f.dim.neg(),
+        };
       })
-      .join(" ")
-      .trim();
+    );
+    return newTerm;
   }
 
   /**
@@ -285,8 +303,6 @@ export class Term {
     return `${left} ${coeff} ${factors} ${right}`.trim();
   }
 
-  // mul()
-
   /**
    * 複製を返す
    * @date 5/28/2022 - 9:21:15 PM
@@ -297,6 +313,64 @@ export class Term {
     const c = new Term(this.c);
     c._factors = [...this._factors];
     return c;
+  }
+
+  /**
+   * 文字を文字列化する
+   * @date 5/28/2022 - 9:34:33 PM
+   *
+   * @returns {string}
+   */
+  factorsToString(): string {
+    return this._factors
+      .map((factor) => {
+        if (factor.dim.equals(1)) {
+          return factor.char;
+        }
+        return factor.char + `^{${factor.dim.toString()}}`;
+      })
+      .join(" ")
+      .trim();
+  }
+
+  private static mergeFactors(...factors: Factor[]): Factor[] {
+    let mergedFactors: Factor[] = [];
+
+    factors.forEach((factor) => {
+      const index = mergedFactors.findIndex((x) => factor.char == x.char);
+      if (index != -1) {
+        mergedFactors[index].dim = mergedFactors[index].dim.add(factor.dim);
+      } else {
+        mergedFactors.push(factor);
+      }
+    });
+
+    // 0乗を除外
+    mergedFactors = mergedFactors.filter((f) => !f.dim.equals(0));
+
+    // アルファベット順にソート
+    mergedFactors.sort((a, b) => {
+      if (a.char == b.char) {
+        return 0;
+      }
+      if (a.char.match(/^\\pi ?$/)) {
+        return -1;
+      }
+      if (b.char.match(/^\\pi ?$/)) {
+        return 1;
+      }
+      const charA = a.char.toUpperCase();
+      const charB = b.char.toUpperCase();
+      if (charA < charB) {
+        return -1;
+      }
+      if (charA > charB) {
+        return 1;
+      }
+      return 0;
+    });
+
+    return mergedFactors;
   }
 }
 

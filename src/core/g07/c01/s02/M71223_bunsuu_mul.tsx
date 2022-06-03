@@ -30,27 +30,31 @@ const generatorFunc: GeneratorFunc = (level) => {
   } else {
     lhs = new Term(getRandomInt(18, 1) * randArray(1, -1), getRandomInt(12, 2));
   }
-  const ans = new Term(rhs.c.mul(lhs.c));
+  const ans = rhs.mul(lhs);
 
   if (level == 1) {
+    // 整数×分数＝整数
     if (lhs.c.d != 1 || rhs.c.d == 1 || ans.c.d != 1) {
       return null;
     }
-    if (lhs.c.abs().equals(rhs.c.d)) {
+    // 整数と分母が同じ数
+    if (lhs.c.n == rhs.c.d) {
       return null;
     }
   } else if (level === 2) {
+    // 整数×分数＝分数
     if (lhs.c.d != 1 || rhs.c.d == 1 || ans.c.d == 1) {
       return null;
     }
+    // 約分が発生しない
+    if (rhs.c.d == ans.c.d) {
+      return null;
+    }
   } else {
+    // 約分が発生しない
     if (lhs.c.d * rhs.c.d == ans.c.d) {
       return null;
     }
-  }
-
-  if (rhs.c.d == ans.c.d) {
-    return null;
   }
 
   const getBrackets = (x: number) => (x < 0 ? "()" : randArray("", "()"));
