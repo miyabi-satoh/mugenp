@@ -230,6 +230,26 @@ export class Term {
   }
 
   /**
+   * 累乗
+   * @date 6/5/2022 - 1:24:23 AM
+   *
+   * @param {number} n
+   * @returns {Term}
+   */
+  pow(n: number): Term {
+    const newTerm = new Term(this.c.pow(n));
+    newTerm._factors = Term.mergeFactors(
+      ...this._factors.map((f) => {
+        return {
+          char: f.char,
+          dim: f.dim.mul(n),
+        };
+      })
+    );
+    return newTerm;
+  }
+
+  /**
    * 文字列化する
    * @date 5/28/2022 - 9:34:58 PM
    *

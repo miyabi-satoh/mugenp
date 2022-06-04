@@ -139,6 +139,29 @@ describe("class Term", () => {
     });
   });
 
+  describe("pow()", () => {
+    test("pow(3) => 27x^{9} y^{6}", () => {
+      const expr = new Term(3, "x^{3}y^{2}");
+      expect(expr.pow(3).toString()).toBe("27x^{9} y^{6}");
+    });
+    test("pow(-3) => \\frac{1}{27}x^{-9} y^{-6}", () => {
+      const expr = new Term(3, "x^{3}y^{2}");
+      expect(expr.pow(-3).toLatex()).toBe("\\frac{1}{27} x^{-9} y^{-6}");
+    });
+    test("pow(1) => 3x^{3}y^{2}", () => {
+      const expr = new Term(3, "x^{3}y^{2}");
+      expect(expr.pow(1).toString()).toBe("3x^{3} y^{2}");
+    });
+    test("pow(-1) => \\frac{1}{3}x^{-3} y^{-2}", () => {
+      const expr = new Term(3, "x^{3}y^{2}");
+      expect(expr.pow(-1).toLatex()).toBe("\\frac{1}{3} x^{-3} y^{-2}");
+    });
+    test("pow(0) => 1", () => {
+      const expr = new Term(3, "x^{3}y^{2}");
+      expect(expr.pow(0).toString()).toBe("1");
+    });
+  });
+
   describe("toLatex()", () => {
     test("() => \\frac{1}{2}", () => {
       const expr = new Term(1, 2);
