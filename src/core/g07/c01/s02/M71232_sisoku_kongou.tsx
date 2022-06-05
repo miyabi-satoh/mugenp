@@ -1,0 +1,235 @@
+import { MugenP, GeneratorFunc } from "~/components/mugenp";
+import { getRandomInt, randArray, shuffle } from "~/utils";
+import { Term } from "~/utils/expression";
+
+// "id": "71232",
+// "module": "sisoku_kongou",
+// "grade": "中1",
+// "chapter": "正の数・負の数",
+// "section": "正の数・負の数の計算",
+// "subsection": "いろいろな計算",
+// "title": "四則混合",
+// "message": "次の計算をしなさい。"
+export const M71232 = () => {
+  return <MugenP maxLv={5} generator={generatorFunc} />;
+};
+
+// 四則混合
+const generatorFunc: GeneratorFunc = (level) => {
+  let pattern = pattern1;
+  if (level == 2) {
+    pattern = randArray(pattern1, pattern2);
+  } else if (level == 3) {
+    pattern = randArray(pattern2, pattern3);
+  } else if (level == 4) {
+    pattern = randArray(pattern3, pattern4);
+  } else if (level == 5) {
+    pattern = randArray(pattern4, pattern5);
+  }
+
+  return pattern();
+};
+
+const opAddSub = () => randArray("", "+", "-");
+const opMulDiv = () => randArray("\\times", "\\div");
+
+const termForAddSub = () => new Term(getRandomInt(9, 1) * randArray(1, -1));
+const termForMulDiv = () => new Term(getRandomInt(9, 2) * randArray(1, -1));
+
+const optForAddSub = (op: string) => {
+  return {
+    brackets: op ? "()" : "",
+    sign: op == "",
+  };
+};
+const optForMulDiv = (t: Term) => {
+  return { brackets: t.s > 0 ? "" : "()" };
+};
+
+const binaryResult = (lhs: Term, op: string, rhs: Term) => {
+  if (op == "\\div") {
+    return lhs.div(rhs);
+  } else if (op == "\\times") {
+    return lhs.mul(rhs);
+  } else if (op == "-") {
+    return new Term(lhs.c.sub(rhs.c));
+  }
+
+  return new Term(lhs.c.add(rhs.c));
+};
+
+// a [+-] b [*/] c
+const pattern1 = () => {
+  const terms: Term[] = [];
+  const operators: string[] = [];
+
+  terms.push(termForAddSub(), termForMulDiv(), termForMulDiv());
+  operators.push(opAddSub(), opMulDiv());
+
+  if (operators[1] == "\\div") {
+    terms[1] = terms[1].mul(terms[2]);
+  }
+  let ans = binaryResult(terms[1], operators[1], terms[2]);
+  ans = binaryResult(terms[0], operators[0], ans);
+
+  const question =
+    terms[0].toLatex() +
+    operators[0] +
+    " " +
+    terms[1].toLatex(optForAddSub(operators[0])) +
+    operators[1] +
+    " " +
+    terms[2].toLatex(optForMulDiv(terms[2]));
+
+  const answer = ans.toLatex();
+
+  return { question, answer };
+};
+
+// a [*/] b [+-] c
+const pattern2 = () => {
+  const terms: Term[] = [];
+  const operators: string[] = [];
+
+  terms.push(termForMulDiv(), termForMulDiv(), termForAddSub());
+  operators.push(opMulDiv(), opAddSub());
+
+  if (operators[0] == "\\div") {
+    terms[0] = terms[0].mul(terms[1]);
+  }
+  let ans = binaryResult(terms[0], operators[0], terms[1]);
+  ans = binaryResult(ans, operators[1], terms[2]);
+
+  const question =
+    terms[0].toLatex() +
+    operators[0] +
+    " " +
+    terms[1].toLatex(optForMulDiv(terms[1])) +
+    operators[1] +
+    " " +
+    terms[2].toLatex(optForAddSub(operators[1]));
+
+  const answer = ans.toLatex();
+
+  return { question, answer };
+};
+
+// a [+-] b [*/] c [+-] d
+const pattern3 = () => {
+  const terms: Term[] = [];
+  let operators: string[] = [];
+
+  terms.push(
+    termForAddSub(),
+    termForMulDiv(),
+    termForMulDiv(),
+    termForAddSub()
+  );
+  operators = shuffle("", "+", "-");
+  operators = [operators[0], opMulDiv(), operators[1]];
+
+  if (operators[1] == "\\div") {
+    terms[1] = terms[1].mul(terms[2]);
+  }
+  let ans = binaryResult(terms[1], operators[1], terms[2]);
+  ans = binaryResult(terms[0], operators[0], ans);
+  ans = binaryResult(ans, operators[2], terms[3]);
+
+  const question =
+    terms[0].toLatex() +
+    operators[0] +
+    " " +
+    terms[1].toLatex(optForAddSub(operators[0])) +
+    operators[1] +
+    " " +
+    terms[2].toLatex(optForMulDiv(terms[2])) +
+    operators[2] +
+    " " +
+    terms[3].toLatex(optForAddSub(operators[2]));
+
+  const answer = ans.toLatex();
+
+  return { question, answer };
+};
+
+// a [*/] b [+-] c [*/] d
+const pattern4 = () => {
+  const terms: Term[] = [];
+  let operators: string[] = [];
+
+  terms.push(
+    termForMulDiv(),
+    termForMulDiv(),
+    termForMulDiv(),
+    termForMulDiv()
+  );
+  operators = shuffle("\\times", "\\div");
+  operators = [operators[0], opAddSub(), operators[1]];
+
+  if (operators[0] == "\\div") {
+    terms[0] = terms[0].mul(terms[1]);
+  }
+  if (operators[2] == "\\div") {
+    terms[2] = terms[2].mul(terms[3]);
+  }
+  const left = binaryResult(terms[0], operators[0], terms[1]);
+  const right = binaryResult(terms[2], operators[2], terms[3]);
+  const ans = binaryResult(left, operators[1], right);
+
+  const question =
+    terms[0].toLatex() +
+    operators[0] +
+    " " +
+    terms[1].toLatex(optForMulDiv(terms[1])) +
+    operators[1] +
+    " " +
+    terms[2].toLatex(optForAddSub(operators[1])) +
+    operators[2] +
+    " " +
+    terms[3].toLatex(optForMulDiv(terms[3]));
+
+  const answer = ans.toLatex();
+
+  return { question, answer };
+};
+
+// a [+-] b [*/] c [*/] d
+const pattern5 = () => {
+  const terms: Term[] = [];
+  let operators: string[] = [];
+
+  terms.push(
+    termForAddSub(),
+    termForMulDiv(),
+    termForMulDiv(),
+    termForMulDiv()
+  );
+  operators = shuffle("\\times", "\\div");
+  operators = [opAddSub(), ...operators];
+
+  if (operators[1] == "\\div") {
+    terms[1] = terms[1].mul(terms[2]);
+  }
+  if (operators[2] == "\\div") {
+    terms[2] = terms[2].mul(terms[3]);
+  }
+  let ans = binaryResult(terms[1], operators[1], terms[2]);
+  ans = binaryResult(ans, operators[2], terms[3]);
+  ans = binaryResult(terms[0], operators[0], ans);
+
+  const question =
+    terms[0].toLatex() +
+    operators[0] +
+    " " +
+    terms[1].toLatex(optForAddSub(operators[0])) +
+    operators[1] +
+    " " +
+    terms[2].toLatex(optForMulDiv(terms[2])) +
+    operators[2] +
+    " " +
+    terms[3].toLatex(optForMulDiv(terms[3]));
+
+  const answer = ans.toLatex();
+
+  return { question, answer };
+};
