@@ -197,12 +197,15 @@ export class Term {
 
   /**
    * 乗算
-   * @date 6/3/2022 - 2:11:02 AM
+   * @date 6/16/2022 - 10:53:58 AM
    *
-   * @param {Term} other
+   * @param {(Term | number)} other
    * @returns {Term}
    */
-  mul(other: Term): Term {
+  mul(other: Term | number): Term {
+    if (!(other instanceof Term)) {
+      other = new Term(other);
+    }
     const newTerm = new Term(this.c.mul(other.c));
     newTerm._factors = Term.mergeFactors(...this._factors, ...other._factors);
     return newTerm;
@@ -210,12 +213,15 @@ export class Term {
 
   /**
    * 除算
-   * @date 6/3/2022 - 2:11:14 AM
+   * @date 6/16/2022 - 10:54:32 AM
    *
-   * @param {Term} other
+   * @param {(Term | number)} other
    * @returns {Term}
    */
-  div(other: Term): Term {
+  div(other: Term | number): Term {
+    if (!(other instanceof Term)) {
+      other = new Term(other);
+    }
     const newTerm = new Term(this.c.div(other.c));
     newTerm._factors = Term.mergeFactors(
       ...this._factors,
@@ -353,6 +359,15 @@ export class Term {
       .trim();
   }
 
+  /**
+   * 文字をまとめる
+   * @date 6/5/2022 - 10:15:10 PM
+   *
+   * @private
+   * @static
+   * @param {...Factor[]} factors
+   * @returns {Factor[]}
+   */
   private static mergeFactors(...factors: Factor[]): Factor[] {
     let mergedFactors: Factor[] = [];
 

@@ -35,6 +35,7 @@ export * from "./M71225_mul_div_mix";
 export * from "./M71231_sisuu";
 // ・四則をふくむ式の計算
 export * from "./M71232_sisoku_kongou";
+export * from "./M71233_sisoku_kongou_sisuu";
 // ・分配法則
 
 // 4項 数の世界のひろがり

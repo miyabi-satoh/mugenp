@@ -118,13 +118,12 @@ describe("class Term", () => {
   });
 
   describe("mul()", () => {
-    test("mul(0) => 0", () => {
+    test("2x.mul(0) => 0", () => {
       const expr = new Term(2, "x");
-      const x = new Term(0);
-      expect(expr.mul(x).toString()).toBe("0");
+      expect(expr.mul(0).toString()).toBe("0");
     });
 
-    test("mul(2yx) => 4x^{2}y", () => {
+    test("2x.mul(2yx) => 4x^{2}y", () => {
       const expr = new Term(2, "x");
       const x = new Term(2, "yx");
       expect(expr.mul(x).toString()).toBe("4x^{2} y");
@@ -132,7 +131,11 @@ describe("class Term", () => {
   });
 
   describe("div()", () => {
-    test("div(2yx) => 4x^{2}y", () => {
+    test("2x.div(1) => 2x", () => {
+      const expr = new Term(2, "x");
+      expect(expr.div(1).toString()).toBe("2x");
+    });
+    test("8x^{3}y^{2}.div(2yx) => 4x^{2}y", () => {
       const expr = new Term(8, "x^{3}y^{2}");
       const x = new Term(2, "yx");
       expect(expr.div(x).toString()).toBe("4x^{2} y");
