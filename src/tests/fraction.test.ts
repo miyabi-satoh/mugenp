@@ -1,3 +1,4 @@
+import { expect, test, describe } from 'vitest'
 import Fraction from "fraction.js";
 
 describe("Fractionクラス", () => {

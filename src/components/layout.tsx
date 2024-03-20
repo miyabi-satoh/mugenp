@@ -81,16 +81,16 @@ const Header = () => {
   return (
     <Flex shadow="sm" py={2} px={[2, 4]} alignItems="center">
       <Heading as="h1" size="lg">
-        <NextLink href="/" passHref>
-          <Link _hover={{ textDecorationLine: "none" }}>MuGenP</Link>
-        </NextLink>
+        <Link href="/" as={NextLink} _hover={{ textDecorationLine: "none" }}>
+          MuGenP
+        </Link>
       </Heading>
       <Center flexGrow="1">
         <HStack spacing={2} mx={[2, 4]}>
           <Show above="sm">
             <Box>SNSでシェア</Box>
           </Show>
-          <FacebookShareButton url={shareUrl} quote={title}>
+          <FacebookShareButton url={shareUrl} title={title}>
             <FacebookIcon size={32} round />
           </FacebookShareButton>
           <TwitterShareButton url={shareUrl} title={title}>
@@ -101,11 +101,14 @@ const Header = () => {
           </LineShareButton>
         </HStack>
       </Center>
-      <NextLink href="/about" passHref>
-        <Link display="inline-flex" alignItems="center">
-          <Icon as={FaInfoCircle} mr={1} /> About
-        </Link>
-      </NextLink>
+      <Link
+        href="/about"
+        as={NextLink}
+        display="inline-flex"
+        alignItems="center"
+      >
+        <Icon as={FaInfoCircle} mr={1} /> About
+      </Link>
     </Flex>
   );
 };

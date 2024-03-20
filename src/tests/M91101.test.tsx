@@ -1,15 +1,18 @@
-import {
-  act,
-  render,
-  RenderResult,
-  screen,
-  waitFor,
-} from "@testing-library/react";
+import { expect, test, describe, beforeEach, afterEach } from "vitest";
 import { MathJaxContext } from "better-react-mathjax";
 import { M91111 } from "~/core";
+import {
+  RenderResult,
+  act,
+  render,
+  waitFor,
+  screen,
+} from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 
 describe.skip("M91101コンポーネント", () => {
+  const user = userEvent.setup();
+
   let renderResult: RenderResult;
   beforeEach(() => {
     // 準備処理 テスト対象Componentの描画
@@ -36,14 +39,14 @@ describe.skip("M91101コンポーネント", () => {
         // screen.debug(score);
 
         await act(async () => {
-          await userEvent.selectOptions(
+          await user.selectOptions(
             // Find the select element
             screen.getByRole("combobox"),
             // Find and select the Ireland option
             screen.getByRole("option", { name: "6" })
           );
           const submit = screen.getByText("次の問題");
-          await userEvent.click(submit);
+          await user.click(submit);
         });
       }
     }, 8000);

@@ -1,3 +1,4 @@
+import { expect, test, describe } from 'vitest'
 import { Term } from "~/utils/expression";
 
 describe("class Term", () => {

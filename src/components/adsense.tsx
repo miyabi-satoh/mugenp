@@ -1,5 +1,7 @@
+"use client";
+
 import { Center, useMediaQuery } from "@chakra-ui/react";
-import { useRouter } from "next/router";
+import { usePathname, useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { isDev } from "~/utils";
 
@@ -8,7 +10,7 @@ declare global {
 }
 
 export const Adsense = () => {
-  const { asPath } = useRouter();
+  const asPath = usePathname();
   const [isLandscape] = useMediaQuery("(orientation: landscape)");
 
   useEffect(() => {

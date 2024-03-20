@@ -1,3 +1,4 @@
+import { expect, test, describe } from 'vitest'
 import { gcd, randArray } from "~/utils";
 
 describe("ユーティリティ関数のテスト", () => {

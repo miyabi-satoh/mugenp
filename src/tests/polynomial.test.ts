@@ -1,3 +1,4 @@
+import { expect, test, describe } from 'vitest'
 import { Monomial } from "~/utils/monomial";
 import { Polynomial } from "~/utils/polynomial";
 

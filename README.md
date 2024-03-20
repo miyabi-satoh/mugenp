@@ -1,6 +1,14 @@
-2022.05.16
-
 ![OGP Image](public/mugenp.png)
+
+2024.03.20
+
+Node.js v20 環境に変更。<br />
+Next.js v14 に変更。<br />
+Page Router から App Router に変更。<br />
+Jest から Vitest に変更。<br />
+ToDo: Puppeteer から Playwright に変更。<br />
+
+2022.05.16
 
 [Node.js](https://nodejs.org/) v16 環境で開発・運用しています。<br />
 公開サイトは https://mugenp.amiiby.com です。
